@@ -5,6 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+builder.Services.AddRequestTimeouts();
+builder.Services.AddOutputCache();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -28,5 +31,8 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseRequestTimeouts();
+app.UseOutputCache();
 
 app.Run();
