@@ -12,6 +12,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["PABC.Server/PABC.Server.csproj", "PABC.Server/"]
+COPY ["PABC.Data/PABC.Data.csproj", "PABC.Data/"]
+COPY ["PABC.ServiceDefaults/PABC.ServiceDefaults.csproj", "PABC.ServiceDefaults/"]
 RUN dotnet restore "./PABC.Server/PABC.Server.csproj"
 COPY . .
 WORKDIR "/src/PABC.Server"

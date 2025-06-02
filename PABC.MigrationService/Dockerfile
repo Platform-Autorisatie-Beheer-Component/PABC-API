@@ -11,6 +11,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["PABC.MigrationService/PABC.MigrationService.csproj", "PABC.MigrationService/"]
+COPY ["PABC.Data/PABC.Data.csproj", "PABC.Data/"]
+COPY ["PABC.ServiceDefaults/PABC.ServiceDefaults.csproj", "PABC.ServiceDefaults/"]
 RUN dotnet restore "./PABC.MigrationService/PABC.MigrationService.csproj"
 COPY . .
 WORKDIR "/src/PABC.MigrationService"
