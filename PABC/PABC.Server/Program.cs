@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using PABC.Server.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<PabcDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PabcConnection")));
 
 var app = builder.Build();
 
