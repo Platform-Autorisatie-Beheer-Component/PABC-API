@@ -3,6 +3,8 @@ using PABC.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -20,6 +22,9 @@ if (args.Contains("migrations"))
     await scope.ServiceProvider.GetRequiredService<PabcDbContext>().Database.MigrateAsync();
     return;
 }
+
+app.MapDefaultEndpoints();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
