@@ -14,6 +14,12 @@ builder.Services.AddDbContext<PabcDbContext>(options => options.UseNpgsql(builde
 
 var app = builder.Build();
 
+if (args.Contains("migrations"))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    await scope.ServiceProvider.GetRequiredService<PabcDbContext>().Database.MigrateAsync();
+    return;
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
