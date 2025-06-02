@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.AppHost", "PABC.AppHos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.ServiceDefaults", "PABC.ServiceDefaults\PABC.ServiceDefaults.csproj", "{22148183-AA1B-A4B1-5868-6C15978D4EBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.MigrationService", "PABC.MigrationService\PABC.MigrationService.csproj", "{FEB7BCF2-BBB4-FD6C-6FA4-4CAAA4DF555C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Data", "PABC.Data\PABC.Data.csproj", "{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{22148183-AA1B-A4B1-5868-6C15978D4EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22148183-AA1B-A4B1-5868-6C15978D4EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22148183-AA1B-A4B1-5868-6C15978D4EBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEB7BCF2-BBB4-FD6C-6FA4-4CAAA4DF555C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEB7BCF2-BBB4-FD6C-6FA4-4CAAA4DF555C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEB7BCF2-BBB4-FD6C-6FA4-4CAAA4DF555C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEB7BCF2-BBB4-FD6C-6FA4-4CAAA4DF555C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

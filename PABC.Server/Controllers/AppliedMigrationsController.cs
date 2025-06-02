@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PABC.Server.Data;
+using PABC.Data;
 
 namespace PABC.Server.Controllers
 {

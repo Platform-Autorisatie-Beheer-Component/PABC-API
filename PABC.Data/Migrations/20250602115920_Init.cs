@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace PABC.Server.Migrations
+namespace PABC.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration

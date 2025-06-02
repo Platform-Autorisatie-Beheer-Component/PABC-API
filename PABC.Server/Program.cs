@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using PABC.Server.Data;
+using PABC.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +15,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PabcDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PabcConnection")));
 
 var app = builder.Build();
-
-if (args.Contains("migrations"))
-{
-    await using var scope = app.Services.CreateAsyncScope();
-    await scope.ServiceProvider.GetRequiredService<PabcDbContext>().Database.MigrateAsync();
-    return;
-}
 
 app.MapDefaultEndpoints();
 

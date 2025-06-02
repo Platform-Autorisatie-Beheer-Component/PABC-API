@@ -3,8 +3,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var postgres = builder.AddPostgres("postgres").WithPgAdmin();
 var postgresdb = postgres.AddDatabase("PabcConnection");
 
-var migrations = builder.AddProject<Projects.PABC_Server>("migrations")
-    .WithArgs("migrations")
+var migrations = builder.AddProject<Projects.PABC_MigrationService>("migrations")
     .WithReference(postgresdb)
     .WaitFor(postgresdb);
 
