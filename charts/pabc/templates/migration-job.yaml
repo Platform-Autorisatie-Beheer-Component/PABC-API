@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "pabc.fullname" . }}-migrations
+  labels:
+    {{- include "pabc.labels" . | nindent 4 }}
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        {{- include "pabc.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.migrations.repository }}:{{ .Values.migrations.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+          - secretRef:
+              name: {{ .Values.existingSecret | default (include "pabc.fullname" .) }}
+          - configMapRef:
+              name: {{ include "pabc.fullname" . }}
+      restartPolicy: {{ .Values.migrations.restartPolicy }}

@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: "ghcr.io/gpp-woo/pabc"
+  repository: "ghcr.io/PodiumD-Autorisatie-Beheer-Component/pabc-api"
   pullPolicy: IfNotPresent
   tag: ""
 
@@ -150,15 +150,21 @@ settings:
     environment: ""
     httpPorts: ""
 
-##################
+migrations:
+  repository: "ghcr.io/PodiumD-Autorisatie-Beheer-Component/pabc-migrations"
+  pullPolicy: IfNotPresent
+  tag: ""
+  restartPolicy: Never
+
+#####################
 # Postgres subchart #
-##################
+#####################
 postgresql:
   enabled: true
   auth:
     username: ""
     password: ""
-    database: "pabc"
+    database: ""
     postgresPassword: ""
   primary:
     persistence:

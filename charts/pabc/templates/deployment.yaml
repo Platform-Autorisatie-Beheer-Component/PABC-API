@@ -34,6 +34,13 @@ spec:
       serviceAccountName: {{ include "pabc.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: "{{ .Chart.Name }}-init"
+        image: "groundnuty/k8s-wait-for:2.0"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: 
+        - "job"
+        - "{{ include "pabc.fullname" . }}-migrations"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
