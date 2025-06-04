@@ -4,14 +4,8 @@ metadata:
   name: {{ include "pabc.fullname" . }}-service-job-reader
 rules:
 - apiGroups: [""]
-  #
-  # at the HTTP level, the name of the resource for accessing Pod
-  # objects is "pods"
   resources: ["services", "pods"]
   verbs: ["get", "list", "watch"]
 - apiGroups: ["batch"]
-  #
-  # at the HTTP level, the name of the resource for accessing Job
-  # objects is "jobs"
   resources: ["jobs"]
   verbs: ["get", "list", "watch"]
