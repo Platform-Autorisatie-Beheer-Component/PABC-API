@@ -1,6 +1,9 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var postgres = builder.AddPostgres("postgres").WithPgAdmin();
+var postgres = builder.AddPostgres("postgres")
+    .WithDataVolume()
+    .WithPgAdmin();
+
 var postgresdb = postgres.AddDatabase("PabcConnection");
 
 var migrations = builder.AddProject<Projects.PABC_MigrationService>("migrations")
