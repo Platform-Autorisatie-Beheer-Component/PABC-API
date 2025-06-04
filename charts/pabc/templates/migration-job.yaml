@@ -11,6 +11,7 @@ spec:
       labels:
         {{- include "pabc.selectorLabels" . | nindent 8 }}
     spec:
+      serviceAccountName: {{ include "pabc.serviceAccountName" . }}
       containers:
       - name: {{ .Chart.Name }}-migrations
         image: "{{ .Values.migrations.image.repository }}:{{ .Values.migrations.image.tag | default .Chart.AppVersion }}"
