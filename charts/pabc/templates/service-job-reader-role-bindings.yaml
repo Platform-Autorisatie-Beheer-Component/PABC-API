@@ -4,7 +4,7 @@ metadata:
   name: {{ include "pabc.fullname" . }}-service-job-reader-binding
 subjects:
   - kind: ServiceAccount
-    name: serviceAccountName: {{ include "pabc.serviceAccountName" . }}
+    name: {{ include "pabc.serviceAccountName" . }}
 roleRef:
   kind: Role
   name: {{ include "pabc.fullname" . }}-service-job-reader
