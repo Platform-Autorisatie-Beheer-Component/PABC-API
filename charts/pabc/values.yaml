@@ -151,9 +151,10 @@ settings:
     httpPorts: ""
 
 migrations:
-  repository: "ghcr.io/podiumd-autorisatie-beheer-component/pabc-migrations"
-  pullPolicy: IfNotPresent
-  tag: ""
+  image:
+    repository: "ghcr.io/podiumd-autorisatie-beheer-component/pabc-migrations"
+    pullPolicy: IfNotPresent
+    tag: ""
   restartPolicy: Never
 
 #####################

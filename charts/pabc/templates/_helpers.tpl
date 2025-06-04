@@ -64,8 +64,8 @@ Create the name of the service account to use
 {{/* Database connection string helper */}}
 {{- define "pabc.databaseConnectionString" -}}
 {{- if .Values.postgresql.enabled -}}
-  {{- printf "Host=%s-postgresql;Port=%s;Database=%s;Username=%s;Password=%s;" .Release.Name .Values.settings.database.port .Values.settings.database.name .Values.settings.database.username .Values.settings.database.password -}}
+  {{- printf "Host=%s-postgresql;Port=%d;Database=%s;Username=%s;Password=%s;" .Release.Name (.Values.settings.database.port | int) .Values.settings.database.name .Values.settings.database.username .Values.settings.database.password -}}
 {{- else -}}
-  {{- printf "Host=%s;Port=%s;Database=%s;Username=%s;Password=%s;" .Values.settings.database.host .Values.settings.database.port .Values.settings.database.name .Values.settings.database.username .Values.settings.database.password -}}
+  {{- printf "Host=%s;Port=%d;Database=%s;Username=%s;Password=%s;" .Values.settings.database.host (.Values.settings.database.port | int) .Values.settings.database.name .Values.settings.database.username .Values.settings.database.password -}}
 {{- end -}}
 {{- end -}}

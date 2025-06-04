@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "pabc.fullname" . }}-migrations
+  name: {{ include "pabc.fullname" . }}-migrations-{{ .Release.Revision }}
   labels:
     {{- include "pabc.labels" . | nindent 4 }}
 spec:
@@ -12,12 +12,21 @@ spec:
         {{- include "pabc.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.migrations.repository }}:{{ .Values.migrations.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+      - name: {{ .Chart.Name }}-migrations
+        image: "{{ .Values.migrations.image.repository }}:{{ .Values.migrations.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.migrations.image.pullPolicy }}
         envFrom:
           - secretRef:
               name: {{ .Values.existingSecret | default (include "pabc.fullname" .) }}
           - configMapRef:
               name: {{ include "pabc.fullname" . }}
+    {{- if .Values.postgresql.enabled }}
+      initContainers:
+      - name: "{{ .Chart.Name }}-wait-for-postgresql"
+        image: "ghcr.io/groundnuty/k8s-wait-for:v2.0"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: 
+        - "service"
+        - "{{ .Release.Name }}-postgresql"
+    {{- end }}
       restartPolicy: {{ .Values.migrations.restartPolicy }}

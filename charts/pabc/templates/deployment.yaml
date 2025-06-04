@@ -35,12 +35,12 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-      - name: "{{ .Chart.Name }}-init"
-        image: "groundnuty/k8s-wait-for:2.0"
+      - name: "{{ .Chart.Name }}-wait-for-migrations"
+        image: "ghcr.io/groundnuty/k8s-wait-for:v2.0"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args: 
         - "job"
-        - "{{ include "pabc.fullname" . }}-migrations"
+        - "{{ include "pabc.fullname" . }}-migrations-{{ .Release.Revision }}"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
