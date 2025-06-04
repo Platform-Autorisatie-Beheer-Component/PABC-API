@@ -7,7 +7,7 @@ rules:
   #
   # at the HTTP level, the name of the resource for accessing Pod
   # objects is "pods"
-  resources: ["services"]
+  resources: ["services", "pods"]
   verbs: ["get", "list", "watch"]
 - apiGroups: ["batch"]
   #
