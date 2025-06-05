@@ -1,0 +1,14 @@
+apiVersion: v2
+name: pabc
+description: A helm chart for the PodiumD Autorisatie Beheer Component.
+
+type: application
+
+# Chart version 
+version: 0.1.0
+appVersion: 0.0.0
+dependencies:
+  - name: postgresql
+    version: 12.5.6
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled

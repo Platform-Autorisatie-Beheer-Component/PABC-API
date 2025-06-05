@@ -1,0 +1,155 @@
+name: Build & Release PABC
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*.*.*"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:   
+
+env:
+  REGISTRY: ghcr.io
+  WEB_IMAGE: ghcr.io/podiumd-autorisatie-beheer-component/pabc-api
+  MIGRATIONS_IMAGE: ghcr.io/podiumd-autorisatie-beheer-component/pabc-migrations
+  CHART_URL: ghcr.io/podiumd-autorisatie-beheer-component
+  SHOULD_PUSH: ${{ github.event_name != 'pull_request' }}
+  SHOULD_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
+  IS_LATEST: false
+  CHART_NAME: pabc
+  VERSION: ""
+  REVISION: ""
+
+permissions:
+  contents: write
+  packages: write
+  attestations: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Find the latest release tag (determined by semver sort)"
+        id: latest-semver
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          REPO_URL: ${{ github.event.repository.html_url }}
+          TAG_FILTER: '^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$'
+        run: |
+          TAG=$(\
+            git ls-remote --exit-code --refs --tags --sort='-v:refname' "$REPO_URL" \
+            | awk '{print $2}' | grep -E "$TAG_FILTER" | head -n 1
+          )
+          echo "tag-ref=${TAG}" >> "$GITHUB_OUTPUT"
+          if [ "$TAG" = "${{ github.ref }}" ] ; then
+              echo "IS_LATEST=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        if: ${{ fromJson(env.SHOULD_PUSH) }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Separate metadata action for Web image
+      - name: Extract Docker metadata for Web
+        id: meta-web
+        uses: docker/metadata-action@v5
+        with:
+          flavor: |
+            latest=${{ env.IS_LATEST }}
+          images: |
+            ${{ env.WEB_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+      # Separate metadata action for Migrations image
+      - name: Extract Docker metadata for Migrations
+        id: meta-migrations
+        uses: docker/metadata-action@v5
+        with:
+          flavor: |
+            latest=${{ env.IS_LATEST }}
+          images: |
+            ${{ env.MIGRATIONS_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+      - name: set version and revision in env
+        run: |
+          echo "VERSION=${{ fromJson(env.SHOULD_RELEASE) && fromJSON(steps.meta-web.outputs.json).labels['org.opencontainers.image.version'] || '0.0.0' }}" >> "$GITHUB_ENV"
+          echo "REVISION=${{ fromJSON(steps.meta-web.outputs.json).labels['org.opencontainers.image.revision'] }}" >> "$GITHUB_ENV"
+
+      - name: Build & push Web image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: PABC.Server/Dockerfile
+          push: ${{ fromJSON(env.SHOULD_PUSH) }}
+          tags: ${{ steps.meta-web.outputs.tags }}
+          labels: ${{ steps.meta-web.outputs.labels }}
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            REVISION=${{ env.REVISION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build & push migration image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: PABC.MigrationService/Dockerfile
+          push: ${{ fromJSON(env.SHOULD_PUSH) }}
+          tags: ${{ steps.meta-migrations.outputs.tags }}
+          labels: ${{ steps.meta-migrations.outputs.labels }}
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            REVISION=${{ env.REVISION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.8.1
+      
+      - name: Update chart dependencies
+        working-directory: charts/${{ env.CHART_NAME }}
+        run: helm dependency update
+
+      - name: test helm chart
+        working-directory: charts/${{ env.CHART_NAME }}
+        run: helm template . --debug
+
+      - name: Update chart values with new image tag
+        if: ${{ fromJson(env.SHOULD_RELEASE) }}
+        uses: mikefarah/yq@v4.34.1
+        with:
+          cmd: |
+            yq eval '.appVersion = "${{ env.VERSION }}"' -i charts/${{ env.CHART_NAME }}/Chart.yaml
+            yq eval '.version = "${{ env.VERSION }}"' -i charts/${{ env.CHART_NAME }}/Chart.yaml
+            yq eval '.web.image.tag = "${{ env.VERSION }}"' -i charts/${{ env.CHART_NAME }}/values.yaml
+            yq eval '.poller.image.tag = "${{ env.VERSION }}"' -i charts/${{ env.CHART_NAME }}/values.yaml
+
+      - name: push helm chart to oci
+        if: ${{ fromJson(env.SHOULD_RELEASE) }}
+        working-directory: charts
+        run: |
+          helm package ./${{env.CHART_NAME}}
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ${{ env.CHART_URL }} --username ${{ github.actor }} --password-stdin
+          helm push ${{env.CHART_NAME}}-${{ env.VERSION }}.tgz oci://${{ env.CHART_URL }}
