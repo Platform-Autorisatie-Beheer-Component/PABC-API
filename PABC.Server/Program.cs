@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddNpgsqlDbContext<PabcDbContext>(connectionName: "PabcConnection");
 
 builder.Services.AddRequestTimeouts();
 builder.Services.AddOutputCache();
@@ -15,7 +15,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<PabcDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PabcConnection")));
 
 var app = builder.Build();
 
