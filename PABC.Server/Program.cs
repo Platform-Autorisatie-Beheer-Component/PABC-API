@@ -1,4 +1,5 @@
 using PABC.Data;
+using PABC.Server.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddApiKeyAuth(builder.Configuration.GetSection("API_KEY")
+    .AsEnumerable()
+    .Select(x => x.Value)
+    .OfType<string>()
+    .ToArray());
 
 var app = builder.Build();
 
