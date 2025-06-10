@@ -1,13 +1,16 @@
 @PABC.Server_HostAddress = http://localhost:5211
 
-GET {{PABC.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
 
 POST {{PABC.Server_HostAddress}}/api/v1/application-roles-per-entity-type/
 X-API-KEY: unsafe-test-api-key
 Content-Type: application/json
 {
-  "FunctionalRoleNames": ["aaa", "bbb"]
+  "FunctionalRoleNames": ["MyFuncRole1", "MyFuncRole2"]
 }
+
+
+###
+
+
+GET {{PABC.Server_HostAddress}}/api/v1/seed
+X-API-KEY: unsafe-test-api-key

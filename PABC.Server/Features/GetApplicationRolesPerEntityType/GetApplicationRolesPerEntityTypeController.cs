@@ -41,11 +41,15 @@ public class GetApplicationRolesPerEntityTypeController(PabcDbContext db) : Cont
                 result.Add(item.Id, val);
             }
 
-            val.ApplicationRoles.Add(new()
+            var isApplicationRoleNotInList = val.ApplicationRoles.Find(x => x.Name == item.ApplicationRole.Name && x.Application == item.ApplicationRole.Application) == null;
+            if (isApplicationRoleNotInList)
             {
-                Application = item.ApplicationRole.Application,
-                Name = item.ApplicationRole.Name
-            });
+                val.ApplicationRoles.Add(new()
+                {
+                    Application = item.ApplicationRole.Application,
+                    Name = item.ApplicationRole.Name
+                });
+            }
         }
 
         return new GetApplicationRolesResponse() { Results = result.Values };
