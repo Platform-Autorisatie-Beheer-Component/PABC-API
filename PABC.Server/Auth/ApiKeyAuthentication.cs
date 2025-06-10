@@ -2,6 +2,7 @@
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -59,6 +60,17 @@ namespace PABC.Server.Auth
                     var ticket = new AuthenticationTicket(claimsPrincipal, ApiKeyAuthentication.Scheme);
                     return AuthenticateResult.Success(ticket);
                 }
+                var authLogger = logger.CreateLogger<Handler>();
+                
+                if(apiKey != null)
+                {
+                    authLogger.LogWarning("Authentication attempt with invalid API key: {apiKey}", apiKey);
+                }
+                else
+                {
+                    authLogger.LogWarning("Authentication attempt with missing API key");
+                }                
+
                 return AuthenticateResult.NoResult();
             }
         }
