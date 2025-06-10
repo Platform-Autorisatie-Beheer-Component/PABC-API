@@ -4,7 +4,7 @@ using PABC.Server.Auth;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddNpgsqlDbContext<PabcDbContext>(connectionName: "PabcConnection");
+builder.AddNpgsqlDbContext<PabcDbContext>(connectionName: "Pabc");
 
 builder.Services.AddRequestTimeouts();
 builder.Services.AddOutputCache();

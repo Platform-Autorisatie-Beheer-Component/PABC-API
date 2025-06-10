@@ -4,7 +4,7 @@ var postgres = builder.AddPostgres("postgres")
     .WithDataVolume()
     .WithPgAdmin();
 
-var postgresdb = postgres.AddDatabase("PabcConnection");
+var postgresdb = postgres.AddDatabase("Pabc");
 
 var migrations = builder.AddProject<Projects.PABC_MigrationService>("migrations")
     .WithReference(postgresdb)
