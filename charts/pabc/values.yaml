@@ -145,6 +145,9 @@ settings:
     password: ""
     name: "pabc"
 
+  # -- List of issued API keys. <details> <summary>More information </summary>The API keys can have any arbitrary value. Calls to the API must include an 'X-API-KEY' header with one of these API keys as the value.</details>
+  apiKeys: []
+
   aspnetcore:
     forwardedHeadersEnabled: true
     environment: ""
