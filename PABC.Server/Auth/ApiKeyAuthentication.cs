@@ -91,18 +91,31 @@ namespace PABC.Server.Auth
         {
             protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ApiKeyRequirement requirement)
             {
-                if (IsAuthorized(context, requirement))
+                var apiKeys = GetApiKeyClaimValues(context);
+                if (requirement.ApiKeys.Any(apiKeys.Contains))
                 {
                     context.Succeed(requirement);
+                    return Task.CompletedTask;
+                }
+                var invalidKeys = apiKeys.Where(x=> !apiKeys.Contains(x)).ToList();
+                if (invalidKeys.Count == 0)
+                {
+                    logger.LogWarning("Authentication attempt with missing API key");
                 }
                 else
                 {
-                    logger.LogWarning("Authentication attempt with missing API key");
+                    foreach (var apiKey in invalidKeys)
+                    {
+                        logger.LogWarning("Authentication attempt with invalid API key: {apiKey}", apiKey[..(apiKey.Length < 5 ? apiKey.Length : 4)]);
+                    }
                 }
                 return Task.CompletedTask;
             }
 
-            private static bool IsAuthorized(AuthorizationHandlerContext context, ApiKeyRequirement requirement) => context.User.HasClaim(c => c.Type == ApiKeyAuthentication.ClaimType && requirement.ApiKeys.Contains(c.Value));
+            private static IReadOnlyList<string> GetApiKeyClaimValues(AuthorizationHandlerContext context) => context.User
+                .FindAll(ApiKeyAuthentication.ClaimType)
+                .Select(x=> x.Value)
+                .ToList();
         }
     }
 }
