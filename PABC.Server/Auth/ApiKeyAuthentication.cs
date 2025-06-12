@@ -11,8 +11,8 @@ namespace PABC.Server.Auth
 {
     public static class ApiKeyAuthentication
     {
-        private const string API_KEY_HEADER_NAME = "X-API-KEY";
-        private const string Scheme = "ApiKey";
+        internal const string API_KEY_HEADER_NAME = "X-API-KEY";
+        internal const string Scheme = "ApiKey";
         public const string Policy = "ApiKeyPolicy";
 
         public static void AddApiKeyAuth(this IServiceCollection services, IReadOnlyList<string> apiKeys)
@@ -42,12 +42,12 @@ namespace PABC.Server.Auth
         }
 
 
-        private class ApiKeyOptions : AuthenticationSchemeOptions
+        internal class ApiKeyOptions : AuthenticationSchemeOptions
         {
             public IReadOnlyList<string> ApiKeys { get; set; } = [];
         }
 
-        private class Handler(IOptionsMonitor<ApiKeyOptions> options, ILoggerFactory logger, UrlEncoder encoder) : AuthenticationHandler<ApiKeyOptions>(options, logger, encoder)
+        internal class Handler(IOptionsMonitor<ApiKeyOptions> options, ILoggerFactory logger, UrlEncoder encoder) : AuthenticationHandler<ApiKeyOptions>(options, logger, encoder)
         {
             protected override Task<AuthenticateResult> HandleAuthenticateAsync() => Task.FromResult(SucceedRequirementIfApiKeyPresentAndValid());
 
