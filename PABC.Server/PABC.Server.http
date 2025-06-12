@@ -5,7 +5,7 @@ POST {{PABC.Server_HostAddress}}/api/v1/application-roles-per-entity-type/
 X-API-KEY: unsafe-test-api-key
 Content-Type: application/json
 {
-  "FunctionalRoleNames": ["MyFuncRole1", "MyFuncRole2"]
+  "FunctionalRoleNames": ["GemeenteRol1", "GemeenteRol2"]
 }
 
 
