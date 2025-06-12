@@ -4,7 +4,7 @@ using PABC.MigrationService;
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddNpgsqlDbContext<PabcDbContext>(connectionName: "PabcConnection");
+builder.AddNpgsqlDbContext<PabcDbContext>(connectionName: "Pabc");
 builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddOpenTelemetry()

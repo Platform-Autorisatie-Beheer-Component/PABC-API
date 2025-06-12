@@ -28,7 +28,7 @@ A helm chart for the PodiumD Autorisatie Beheer Component.
 | extraIngress | list | `[]` | Specify extra ingresses, for example if you have multiple ingress classes |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"ghcr.io/PodiumD-Autorisatie-Beheer-Component/pabc-api"` |  |
+| image.repository | string | `"ghcr.io/podiumd-autorisatie-beheer-component/pabc-api"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
@@ -41,10 +41,10 @@ A helm chart for the PodiumD Autorisatie Beheer Component.
 | livenessProbe.periodSeconds | int | `10` |  |
 | livenessProbe.successThreshold | int | `1` |  |
 | livenessProbe.timeoutSeconds | int | `5` |  |
-| migrations.pullPolicy | string | `"IfNotPresent"` |  |
-| migrations.repository | string | `"ghcr.io/PodiumD-Autorisatie-Beheer-Component/pabc-migrations"` |  |
+| migrations.image.pullPolicy | string | `"IfNotPresent"` |  |
+| migrations.image.repository | string | `"ghcr.io/podiumd-autorisatie-beheer-component/pabc-migrations"` |  |
+| migrations.image.tag | string | `""` |  |
 | migrations.restartPolicy | string | `"Never"` |  |
-| migrations.tag | string | `""` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | pdb.create | bool | `false` |  |
@@ -82,6 +82,7 @@ A helm chart for the PodiumD Autorisatie Beheer Component.
 | serviceAccount.automountServiceAccountToken | bool | `true` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
+| settings.apiKeys | list | `[]` | List of issued API keys. <details> <summary>More information </summary>The API keys can have any arbitrary value. Calls to the API must include an 'X-API-KEY' header with one of these API keys as the value.</details> |
 | settings.aspnetcore.environment | string | `""` |  |
 | settings.aspnetcore.forwardedHeadersEnabled | bool | `true` |  |
 | settings.aspnetcore.httpPorts | string | `""` |  |
