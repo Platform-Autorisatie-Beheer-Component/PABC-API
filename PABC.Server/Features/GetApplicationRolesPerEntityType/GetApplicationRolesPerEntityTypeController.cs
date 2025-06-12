@@ -21,7 +21,7 @@ public class GetApplicationRolesPerEntityTypeController(PabcDbContext db) : Cont
     {
         var query = db.Mappings
             .Where(x => request.FunctionalRoleNames.Contains(x.FunctionalRole.Name))
-            .SelectMany(x => x.Domain.EntityTypes, (m, e) => new { m.ApplicationRole, e.Id, e.Type, e.EntityTypeId });
+            .SelectMany(x => x.Domain.EntityTypes, (m, e) => new { ApplicationRoleName = m.ApplicationRole.Name, m.ApplicationRole.Application, e.Id, e.Type, e.EntityTypeId, EntityTypeName = e.Name });
 
         var result = new Dictionary<Guid, GetApplicationRolesResponseModel>();
 
@@ -35,19 +35,20 @@ public class GetApplicationRolesPerEntityTypeController(PabcDbContext db) : Cont
                     EntityType = new()
                     {
                         Id = item.EntityTypeId,
-                        Type = item.Type
+                        Type = item.Type,
+                        Name = item.EntityTypeName,
                     }
                 };
                 result.Add(item.Id, val);
             }
 
-            var isApplicationRoleNotInList = val.ApplicationRoles.Find(x => x.Name == item.ApplicationRole.Name && x.Application == item.ApplicationRole.Application) == null;
+            var isApplicationRoleNotInList = val.ApplicationRoles.Find(x => x.Name == item.ApplicationRoleName && x.Application == item.Application) == null;
             if (isApplicationRoleNotInList)
             {
                 val.ApplicationRoles.Add(new()
                 {
-                    Application = item.ApplicationRole.Application,
-                    Name = item.ApplicationRole.Name
+                    Application = item.Application,
+                    Name = item.ApplicationRoleName
                 });
             }
         }

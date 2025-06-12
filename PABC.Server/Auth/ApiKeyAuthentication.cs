@@ -35,6 +35,7 @@ namespace PABC.Server.Auth
                     Type = SecuritySchemeType.ApiKey,
                     In = ParameterLocation.Header,
                     Name = API_KEY_HEADER_NAME,
+                    Description = "use unsafe-test-api-key during development"
                 });
                 options.OperationFilter<ApiKeySwaggerOperationFilter>();
             });

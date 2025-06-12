@@ -44,18 +44,17 @@ namespace PABC.Server.Features.Seed
 
             var appRoleApp2 = new ApplicationRole { Id = Guid.NewGuid(), Application = "MyApplication2", Name = "MyAppRole2" };
 
-            var funcRole1 = new FunctionalRole { Id = Guid.NewGuid(), Name = "MyFuncRole1" };
-            var funcRole2 = new FunctionalRole { Id = Guid.NewGuid(), Name = "MyFuncRole2" };
+            var funcRole1 = new FunctionalRole { Id = Guid.NewGuid(), Name = "GemeenteRol1" };
+            var funcRole2 = new FunctionalRole { Id = Guid.NewGuid(), Name = "GemeenteRol2" };
 
-            var entityType1 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "My Zaaktype 1" };
-            var entityType2 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "My Zaaktype 2" };
-            var entityType3 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "My Zaaktype 3" };
-            var entityType4 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "My Zaaktype 4" };
-            var entityType5 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "My Zaaktype 5" };
+            var entityType1 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "Melding klein kansspel" };
+            var entityType2 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "Aanvraag ontheffing bedrijfsvoertuigen behandelen" };
+            var entityType3 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "Aanvraag subsidieregeling Energieneutraal Ten Post behandelen" };
+            var entityType4 = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Type = "zaaktype", Name = "Melding flyeren en samplen behandelen" };
 
             var domain1 = new Domain { Id = Guid.NewGuid(), Description = "Domein bedrijfsvoering gaat over bedrijfsvoering", Name = "Bedrijfsvoering", EntityTypes = [entityType1, entityType2, entityType3] };
-            var domain2 = new Domain { Id = Guid.NewGuid(), Description = "Domein leefomgeving gaat over leefomgeving", Name = "Leefomgeving", EntityTypes = [entityType3, entityType4, entityType5] };
-            var domain3 = new Domain { Id = Guid.NewGuid(), Description = "Domein ruimte gaat over ruimte", Name = "Ruimte", EntityTypes = [entityType3, entityType4, entityType5] };
+            var domain2 = new Domain { Id = Guid.NewGuid(), Description = "Domein leefomgeving gaat over leefomgeving", Name = "Leefomgeving", EntityTypes = [entityType3, entityType4] };
+            var domain3 = new Domain { Id = Guid.NewGuid(), Description = "Domein ruimte gaat over ruimte", Name = "Ruimte", EntityTypes = [entityType3, entityType4] };
 
             var mapping1 = new Mapping { Id = Guid.NewGuid(), ApplicationRole = appRoleZac1, Domain = domain1, FunctionalRole = funcRole1 };
             var mapping2 = new Mapping { Id = Guid.NewGuid(), ApplicationRole = appRoleZac2, Domain = domain2, FunctionalRole = funcRole2 };
