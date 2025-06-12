@@ -45,7 +45,6 @@ A helm chart for the PodiumD Autorisatie Beheer Component.
 | migrations.image.repository | string | `"ghcr.io/podiumd-autorisatie-beheer-component/pabc-migrations"` |  |
 | migrations.image.tag | string | `""` |  |
 | migrations.restartPolicy | string | `"Never"` |  |
-| migrations.settings.otel.serviceName | string | `"pabc-migrations"` | The service name of the pabc database migration service for open telemetry |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | pdb.create | bool | `false` |  |
@@ -92,9 +91,6 @@ A helm chart for the PodiumD Autorisatie Beheer Component.
 | settings.database.password | string | `""` |  |
 | settings.database.port | int | `5432` |  |
 | settings.database.username | string | `""` |  |
-| settings.otel.otlpExporter.endpoint | string | `""` | The base endpoint URL for all open telemetry data, with an optionally-specified port number. |
-| settings.otel.otlpExporter.protocol | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. |
-| settings.otel.serviceName | string | `"pabc-server"` | The service name of the pabc backend for open telemetry |
 | tolerations | list | `[]` |  |
 
 ----------------------------------------------
