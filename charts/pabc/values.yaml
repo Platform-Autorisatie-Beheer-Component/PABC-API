@@ -148,6 +148,15 @@ settings:
   # -- List of issued API keys. <details> <summary>More information </summary>The API keys can have any arbitrary value. Calls to the API must include an 'X-API-KEY' header with one of these API keys as the value.</details>
   apiKeys: []
 
+  otel:
+    # -- The service name of the pabc backend for open telemetry
+    serviceName: "pabc-server"
+    otlpExporter:
+      # -- The base endpoint URL for all open telemetry data, with an optionally-specified port number.
+      endpoint: ""
+      # -- Specifies the OTLP transport protocol to be used for all telemetry data.
+      protocol: "grpc"
+
   aspnetcore:
     forwardedHeadersEnabled: true
     environment: ""
@@ -159,6 +168,10 @@ migrations:
     pullPolicy: IfNotPresent
     tag: ""
   restartPolicy: Never
+  settings:
+    otel:
+      # -- The service name of the pabc database migration service for open telemetry
+      serviceName: "pabc-migrations"
 
 #####################
 # Postgres subchart #
