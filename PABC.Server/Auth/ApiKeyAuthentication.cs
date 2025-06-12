@@ -1,11 +1,10 @@
-﻿using System.Security.Claims;
-using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 
 namespace PABC.Server.Auth
 {
@@ -14,19 +13,18 @@ namespace PABC.Server.Auth
         internal const string API_KEY_HEADER_NAME = "X-API-KEY";
         internal const string Scheme = "ApiKey";
         public const string Policy = "ApiKeyPolicy";
+        public const string ClaimType = "ApiKeyClaim";
 
         public static void AddApiKeyAuth(this IServiceCollection services, IReadOnlyList<string> apiKeys)
         {
-            services.AddAuthentication().AddScheme<ApiKeyOptions, Handler>(Scheme, opt =>
-            {
-                opt.ApiKeys = apiKeys;
-            });
+            services.AddAuthentication().AddScheme<ApiKeyOptions, Handler>(Scheme, null);
 
             services.AddAuthorizationBuilder()
                 .AddPolicy(Policy, policyBuilder => policyBuilder
                     .AddAuthenticationSchemes(Scheme)
-                    .RequireAuthenticatedUser()
+                    .AddRequirements(new ApiKeyRequirement(apiKeys))
                     );
+            services.AddSingleton<IAuthorizationHandler, ApiKeyRequirement.Handler>();
 
             services.ConfigureSwaggerGen(options =>
             {
@@ -35,18 +33,17 @@ namespace PABC.Server.Auth
                     Type = SecuritySchemeType.ApiKey,
                     In = ParameterLocation.Header,
                     Name = API_KEY_HEADER_NAME,
+                    #if DEBUG
                     Description = "use unsafe-test-api-key during development"
+                    #endif
                 });
                 options.OperationFilter<ApiKeySwaggerOperationFilter>();
             });
         }
 
+        internal class ApiKeyOptions : AuthenticationSchemeOptions;
 
-        internal class ApiKeyOptions : AuthenticationSchemeOptions
-        {
-            public IReadOnlyList<string> ApiKeys { get; set; } = [];
-        }
-
+        // this handler is only responsible for authentication: it checks if there is an api key and adds it to the claimsprincipal
         internal class Handler(IOptionsMonitor<ApiKeyOptions> options, ILoggerFactory logger, UrlEncoder encoder) : AuthenticationHandler<ApiKeyOptions>(options, logger, encoder)
         {
             protected override Task<AuthenticateResult> HandleAuthenticateAsync() => Task.FromResult(SucceedRequirementIfApiKeyPresentAndValid());
@@ -54,24 +51,13 @@ namespace PABC.Server.Auth
             private AuthenticateResult SucceedRequirementIfApiKeyPresentAndValid()
             {
                 var apiKey = Request.Headers[API_KEY_HEADER_NAME].FirstOrDefault();
-                if (apiKey != null && Options.ApiKeys.Any(requiredApiKey => apiKey == requiredApiKey))
+                if (apiKey != null)
                 {
-                    var identity = new ClaimsIdentity([], ApiKeyAuthentication.Scheme);
+                    var identity = new ClaimsIdentity([new(ClaimType, apiKey)], ApiKeyAuthentication.Scheme);
                     var claimsPrincipal = new ClaimsPrincipal(identity);
                     var ticket = new AuthenticationTicket(claimsPrincipal, ApiKeyAuthentication.Scheme);
                     return AuthenticateResult.Success(ticket);
                 }
-                var authLogger = logger.CreateLogger<Handler>();
-                
-                if(apiKey != null)
-                {
-                    authLogger.LogWarning("Authentication attempt with invalid API key: {apiKey}", apiKey[..(apiKey.Length < 5 ?  apiKey.Length  : 4)]);
-                }
-                else
-                {
-                    authLogger.LogWarning("Authentication attempt with missing API key");
-                }                
-
                 return AuthenticateResult.NoResult();
             }
         }
@@ -95,6 +81,28 @@ namespace PABC.Server.Auth
                 context.ApiDescription.ActionDescriptor.EndpointMetadata
                     .OfType<AuthorizeAttribute>()
                     .Any(x => x.Policy == Policy);
+        }
+    }
+
+    public record ApiKeyRequirement(IReadOnlyList<string> ApiKeys) : IAuthorizationRequirement
+    {
+        // this handler is responsible for authorization: for specific routes, it checks if the claimsprincipal has a valid api key
+        public class Handler(ILogger<Handler> logger) : AuthorizationHandler<ApiKeyRequirement>
+        {
+            protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ApiKeyRequirement requirement)
+            {
+                if (IsAuthorized(context, requirement))
+                {
+                    context.Succeed(requirement);
+                }
+                else
+                {
+                    logger.LogWarning("Authentication attempt with missing API key");
+                }
+                return Task.CompletedTask;
+            }
+
+            private static bool IsAuthorized(AuthorizationHandlerContext context, ApiKeyRequirement requirement) => context.User.HasClaim(c => c.Type == ApiKeyAuthentication.ClaimType && requirement.ApiKeys.Contains(c.Value));
         }
     }
 }
