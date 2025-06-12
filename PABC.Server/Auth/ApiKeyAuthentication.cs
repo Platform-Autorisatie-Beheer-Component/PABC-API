@@ -65,7 +65,7 @@ namespace PABC.Server.Auth
                 
                 if(apiKey != null)
                 {
-                    authLogger.LogWarning("Authentication attempt with invalid API key: {apiKey}", apiKey);
+                    authLogger.LogWarning("Authentication attempt with invalid API key: {apiKey}", apiKey[..(apiKey.Length < 5 ?  apiKey.Length  : 4)]);
                 }
                 else
                 {
