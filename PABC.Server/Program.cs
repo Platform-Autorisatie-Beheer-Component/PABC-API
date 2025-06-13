@@ -39,11 +39,16 @@ var app = builder.Build();
 app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
-app.UseSwagger();
+app.UseSwagger( x=> x.RouteTemplate = "api/{documentName}/specs.json"); //documetnname = v1
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(x =>
+    {
+        x.SwaggerEndpoint("/api/v1/specs.json", "PABC API specs");
+        x.RoutePrefix = "swagger";
+
+    });
 }
 
 app.UseAuthorization();
