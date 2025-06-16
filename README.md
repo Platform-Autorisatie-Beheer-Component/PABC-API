@@ -8,7 +8,6 @@ Deze sectie toont de API specificatie van de **actieve ontwikkelbranch** waarop 
 
 | API Specificatie |
 |------------------|
-| [ReDoc](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/PC-1466/docs/swagger.yaml) |
 | [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/PC-1466/docs/swagger.yaml) |
 
 *Opmerking: Deze links verwijzen direct naar de `PC-1466` branch. Ze zullen alleen werken als de `docs/swagger.yaml` is gegenereerd en gepushed naar deze specifieke branch.*
@@ -19,7 +18,5 @@ Deze sectie toont de API specificatie van de **stabiele `main` branch**. Dit rep
 
 | API Specificatie |
 |------------------|
-| [ReDoc](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/main/docs/swagger.yaml) |
 | [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/main/docs/swagger.yaml) |
-
-*Note: For older versions to be viewable, ensure the `docs/swagger.yaml`
+ 
