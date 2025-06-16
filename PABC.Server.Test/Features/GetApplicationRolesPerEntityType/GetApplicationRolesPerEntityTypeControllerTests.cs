@@ -1,16 +1,130 @@
-﻿using PABC.Server.Features.GetApplicationRolesPerEntityType;
-using PABC.Server.Test.TestConfig;
+﻿using PABC.Data;
+using PABC.Data.Entities;
+using PABC.Server.Features.GetApplicationRolesPerEntityType;
+using PABC.Server.Test.TestConfig; 
 
 namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
+{ 
+     
+public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fixture)
+    : IClassFixture<PostgresFixture>, IAsyncLifetime
 {
-    public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture postgresFixture) : IClassFixture<PostgresFixture>
+    private readonly PabcDbContext _dbContext = fixture.DbContext;
+
+    private static readonly string ValidFunctionalRole = "FunctionalRoleA";
+    private static readonly string InvalidFunctionalRole = "NonExistingRole";
+    private static readonly string ApplicationRoleName = "AppRoleA";
+    private static readonly string ApplicationName = "AppA";
+    private static readonly string EntityTypeName = "EntityTypeA";
+    private static readonly string EntityTypeType = "TypeA";
+
+    public async Task InitializeAsync()
     {
-        [Fact]
-        public async Task DummyTest()
+        await ClearDatabaseAsync();
+        await SeedTestDataAsync(); 
+    }
+
+    public Task DisposeAsync() => Task.CompletedTask;
+
+    private GetApplicationRolesPerEntityTypeController CreateController()
+        => new(_dbContext);
+
+    private GetApplicationRolesRequest CreateRequest(params string[] roles)
+        => new() { FunctionalRoleNames = roles };
+
+    private async Task ClearDatabaseAsync()
+    {
+        _dbContext.ChangeTracker.Clear();
+        _dbContext.Mappings.RemoveRange(_dbContext.Mappings);
+        _dbContext.Domains.RemoveRange(_dbContext.Domains);
+        _dbContext.EntityTypes.RemoveRange(_dbContext.EntityTypes);
+        _dbContext.FunctionalRoles.RemoveRange(_dbContext.FunctionalRoles);
+        _dbContext.ApplicationRoles.RemoveRange(_dbContext.ApplicationRoles);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task SeedTestDataAsync()
+    {
+        var functionalRole = new FunctionalRole { Id = Guid.NewGuid(), Name = ValidFunctionalRole };
+        var applicationRole = new ApplicationRole { Id = Guid.NewGuid(), Name = ApplicationRoleName, Application = ApplicationName };
+        var entityType = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Name = EntityTypeName, Type = EntityTypeType };
+        var domain = new Domain { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = string.Empty };
+
+        var mappings = new List<Mapping>
         {
-            var controller = new GetApplicationRolesPerEntityTypeController(postgresFixture.DbContext);
-            var result = await controller.Post(new GetApplicationRolesRequest { FunctionalRoleNames = [] });
-            Assert.NotNull(result);
-        }
+            new() { Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole, Domain = domain },
+            new() { Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole, Domain = domain } // duplicate
+        };
+
+        _dbContext.AddRange(functionalRole, applicationRole, entityType, domain);
+        _dbContext.AddRange(mappings);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    [Fact]
+    public async Task Post_ReturnsExpectedData_ForValidFunctionalRole()
+    {
+        var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+        var role = Assert.Single(response.Results).ApplicationRoles.Single();
+
+        Assert.Equal(ApplicationRoleName, role.Name);
+        Assert.Equal(ApplicationName, role.Application);
+    }
+
+    [Fact]
+    public async Task Post_ReturnsEmpty_WhenFunctionalRoleDoesNotExist()
+    {
+        var result = await CreateController().Post(CreateRequest(InvalidFunctionalRole));
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+        Assert.Empty(response.Results);
+    }
+
+    [Fact]
+    public async Task Post_ReturnsEmpty_WhenFunctionalRoleNamesIsEmpty()
+    {
+        var result = await CreateController().Post(CreateRequest());
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+        Assert.Empty(response.Results);
+    }
+
+    [Fact]
+    public async Task Post_HandlesDuplicateFunctionalRoleNames_WithoutDuplication()
+    {
+        var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, ValidFunctionalRole));
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+
+        Assert.Single(response.Results);
+        Assert.Single(response.Results.First().ApplicationRoles);
+    }
+
+    [Fact]
+    public async Task Post_HandlesDuplicateMappings_WithoutDuplicateApplicationRoles()
+    {
+        var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+
+        Assert.Single(response.Results);
+        Assert.Single(response.Results.First().ApplicationRoles);
+    }
+
+    [Fact]
+    public async Task Post_ReturnsOnlyValidRoles_WhenMixedValidAndInvalid()
+    {
+        var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, InvalidFunctionalRole));
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+        Assert.Single(response.Results);
+    }
+
+    [Fact]
+    public async Task Post_ReturnsEmpty_ForNullFunctionalRoleNames()
+    {
+        var result = await CreateController().Post(new GetApplicationRolesRequest { FunctionalRoleNames = null! });
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+        Assert.Empty(response.Results);
     }
 }
+
+ 
+}
+
