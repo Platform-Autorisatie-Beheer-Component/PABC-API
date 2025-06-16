@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PABC.Data;
@@ -11,9 +12,11 @@ using PABC.Data;
 namespace PABC.Data.Migrations
 {
     [DbContext(typeof(PabcDbContext))]
-    partial class PabcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250616081818_AddUniqueConstraintToMappingTable")]
+    partial class AddUniqueConstraintToMappingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

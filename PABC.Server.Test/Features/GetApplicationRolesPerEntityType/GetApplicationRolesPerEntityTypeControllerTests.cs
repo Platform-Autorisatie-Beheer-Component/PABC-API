@@ -48,15 +48,16 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         var functionalRole = new FunctionalRole { Id = Guid.NewGuid(), Name = ValidFunctionalRole };
         var applicationRole = new ApplicationRole { Id = Guid.NewGuid(), Name = ApplicationRoleName, Application = ApplicationName };
         var entityType = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Name = EntityTypeName, Type = EntityTypeType };
-        var domain = new Domain { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = string.Empty };
+        var domain1 = new Domain { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = "Domain 1" };
+        var domain2 = new Domain { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = "Domain 2" };
 
         var mappings = new List<Mapping>
         {
-            new() { Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole, Domain = domain },
-            new() { Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole, Domain = domain } // duplicate
+            new() { Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole, Domain = domain1 },
+            new() { Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole, Domain = domain2 } // will result in duplicate result in the query if we don't handle it explicitly
         };
 
-        _dbContext.AddRange(functionalRole, applicationRole, entityType, domain);
+        _dbContext.AddRange(functionalRole, applicationRole, entityType, domain1, domain2);
         _dbContext.AddRange(mappings);
         await _dbContext.SaveChangesAsync();
     }
