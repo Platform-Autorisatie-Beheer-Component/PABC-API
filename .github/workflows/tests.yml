@@ -1,0 +1,31 @@
+name: Run tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:   
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+      - run: dotnet restore
+        working-directory: PABC.Server.Test
+      - run: dotnet build --no-restore
+        working-directory: PABC.Server.Test
+      - run: dotnet test --no-build --verbosity normal --logger trx
+        working-directory: PABC.Server.Test
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: "${{ github.workspace }}/**/*.trx"
