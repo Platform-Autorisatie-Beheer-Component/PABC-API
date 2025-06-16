@@ -94,19 +94,21 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
     {
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, ValidFunctionalRole));
         var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+        var results = Assert.Single(response.Results);
 
         Assert.Single(response.Results);
-        Assert.Single(response.Results.First().ApplicationRoles);
+        Assert.Single(results.ApplicationRoles);
     }
 
     [Fact]
     public async Task Post_HandlesDuplicateMappings_WithoutDuplicateApplicationRoles()
     {
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
-        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
-
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value); 
+        var results = Assert.Single(response.Results);
+ 
         Assert.Single(response.Results);
-        Assert.Single(response.Results.First().ApplicationRoles);
+        Assert.Single(results.ApplicationRoles);
     }
 
     [Fact]
