@@ -1,13 +1,7 @@
-.. _`Common Ground`: https://commonground.nl/
-
-PodiumD Autorisatie Beheer Component (PABC)
-===========================================
-
+API
+===
 .. toctree::
-   :caption: ITA Documentatie
-   :maxdepth: 2
-   :hidden:
+   :maxdepth: 1
+   :caption: Lees meer
    
-   installation/index
-   manual/index
-   api/index
+   specificatie.md
