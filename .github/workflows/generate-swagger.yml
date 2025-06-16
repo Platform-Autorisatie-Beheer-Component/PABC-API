@@ -1,0 +1,97 @@
+name: Generate and Commit Swagger YAML
+
+on:
+  push:
+    branches: ["**"]  # Run on every branch
+  pull_request:
+    branches: ["**"]  # Run on every branch
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-commit-swagger:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore PABC.sln
+
+      - name: Build project
+        run: dotnet build PABC.Server/PABC.Server.csproj --configuration Release --no-restore
+
+      - name: Generate Swagger YAML
+        run: |
+          echo "Starting application to generate Swagger YAML..."
+          echo "The application will automatically generate swagger.yaml in the Docs/ directory"
+          
+          cd PABC.Server/bin/Release/net8.0/
+          
+          # Start the application in background
+          dotnet PABC.Server.dll --urls "http://localhost:5000" &
+          APP_PID=$!
+          
+          echo "Waiting for application to start and generate Swagger..."
+          sleep 20
+          
+          echo "Checking if Swagger YAML was generated..."
+          ls -la Docs/ || echo "Docs directory not found"
+          
+          if [ -f "Docs/swagger.yaml" ]; then
+            echo "Swagger YAML generated successfully at Docs/swagger.yaml"
+            head -10 Docs/swagger.yaml
+          else
+            echo "Swagger YAML not found, trying alternative approach..."
+            # Fallback: download from API endpoint
+            curl -f http://localhost:5000/api/v1/specs.json -o swagger.json
+            sudo apt-get update && sudo apt-get install -y yq
+            yq eval -P swagger.json > swagger.yaml
+            mkdir -p Docs
+            mv swagger.yaml Docs/
+            echo "Swagger YAML generated via API endpoint"
+          fi
+          
+          echo "Stopping application..."
+          kill $APP_PID || true
+          
+          # Copy to repository root for next step
+          cp Docs/swagger.yaml ../../../docs/swagger.yaml
+
+      - name: Create docs directory
+        run: mkdir -p docs
+
+      - name: Commit and push Swagger YAML
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          echo "Adding Swagger YAML to git..."
+          git add docs/swagger.yaml
+          
+          echo "Checking if file has changed..."
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            echo "Committing Swagger YAML..."
+            git commit -m "Update Swagger YAML documentation [skip ci]"
+            git push origin ${{ github.ref }}
+            echo "Swagger YAML committed successfully to ${{ github.ref }}"
+          fi
+
+      - name: Upload Swagger YAML as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: swagger-yaml
+          path: docs/swagger.yaml
+          retention-days: 30 
