@@ -39,6 +39,10 @@ jobs:
           echo "Starting application to generate Swagger YAML..."
           echo "The application will automatically generate swagger.yaml in the Docs/ directory"
           
+          # Store the repository root path
+          REPO_ROOT=$(pwd)
+          echo "Repository root: $REPO_ROOT"
+          
           cd PABC.Server/bin/Release/net8.0/
           
           # Start the application in background
@@ -70,8 +74,14 @@ jobs:
           
           # Copy to repository root for next step
           echo "Copying Swagger YAML to repository root..."
-          cp Docs/swagger.yaml ../../../docs/swagger.yaml
+          echo "Source: $(pwd)/Docs/swagger.yaml"
+          echo "Target: $REPO_ROOT/docs/swagger.yaml"
+          
+          cp Docs/swagger.yaml "$REPO_ROOT/docs/swagger.yaml"
           echo "Swagger YAML copied successfully"
+          
+          # Verify the file was copied
+          ls -la "$REPO_ROOT/docs/swagger.yaml"
 
       - name: Commit and push Swagger YAML
         run: |
@@ -96,4 +106,4 @@ jobs:
         with:
           name: swagger-yaml
           path: docs/swagger.yaml
-          retention-days: 30 
+          retention-days: 30
