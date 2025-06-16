@@ -31,6 +31,9 @@ jobs:
       - name: Build project
         run: dotnet build PABC.Server/PABC.Server.csproj --configuration Release --no-restore
 
+      - name: Create docs directory
+        run: mkdir -p docs
+
       - name: Generate Swagger YAML
         run: |
           echo "Starting application to generate Swagger YAML..."
@@ -66,10 +69,9 @@ jobs:
           kill $APP_PID || true
           
           # Copy to repository root for next step
+          echo "Copying Swagger YAML to repository root..."
           cp Docs/swagger.yaml ../../../docs/swagger.yaml
-
-      - name: Create docs directory
-        run: mkdir -p docs
+          echo "Swagger YAML copied successfully"
 
       - name: Commit and push Swagger YAML
         run: |
