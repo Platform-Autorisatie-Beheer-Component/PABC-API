@@ -11,3 +11,4 @@ PodiumD Autorisatie Beheer Component (PABC)
 
    installation/index
    manual/index
+   api/index
