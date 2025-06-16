@@ -1,36 +1,41 @@
 ﻿using PABC.Data;
 using PABC.Data.Entities;
 using PABC.Server.Features.GetApplicationRolesPerEntityType;
-using PABC.Server.Test.TestConfig; 
+using PABC.Server.Test.TestConfig;
 
-namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
-{ 
-     
+namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType;
+
 public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fixture)
     : IClassFixture<PostgresFixture>, IAsyncLifetime
 {
-    private readonly PabcDbContext _dbContext = fixture.DbContext;
-
     private static readonly string ValidFunctionalRole = "FunctionalRoleA";
     private static readonly string InvalidFunctionalRole = "NonExistingRole";
     private static readonly string ApplicationRoleName = "AppRoleA";
     private static readonly string ApplicationName = "AppA";
     private static readonly string EntityTypeName = "EntityTypeA";
     private static readonly string EntityTypeType = "TypeA";
+    private readonly PabcDbContext _dbContext = fixture.DbContext;
 
     public async Task InitializeAsync()
     {
         await ClearDatabaseAsync();
-        await SeedTestDataAsync(); 
+        await SeedTestDataAsync();
     }
 
-    public Task DisposeAsync() => Task.CompletedTask;
+    public Task DisposeAsync()
+    {
+        return Task.CompletedTask;
+    }
 
     private GetApplicationRolesPerEntityTypeController CreateController()
-        => new(_dbContext);
+    {
+        return new GetApplicationRolesPerEntityTypeController(_dbContext);
+    }
 
     private GetApplicationRolesRequest CreateRequest(params string[] roles)
-        => new() { FunctionalRoleNames = roles };
+    {
+        return new GetApplicationRolesRequest { FunctionalRoleNames = roles };
+    }
 
     private async Task ClearDatabaseAsync()
     {
@@ -46,15 +51,29 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
     private async Task SeedTestDataAsync()
     {
         var functionalRole = new FunctionalRole { Id = Guid.NewGuid(), Name = ValidFunctionalRole };
-        var applicationRole = new ApplicationRole { Id = Guid.NewGuid(), Name = ApplicationRoleName, Application = ApplicationName };
-        var entityType = new EntityType { Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Name = EntityTypeName, Type = EntityTypeType };
-        var domain1 = new Domain { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = "Domain 1" };
-        var domain2 = new Domain { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = "Domain 2" };
+        var applicationRole = new ApplicationRole
+            { Id = Guid.NewGuid(), Name = ApplicationRoleName, Application = ApplicationName };
+        var entityType = new EntityType
+        {
+            Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Name = EntityTypeName, Type = EntityTypeType
+        };
+        var domain1 = new Domain
+            { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = "Domain 1" };
+        var domain2 = new Domain
+            { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = "Domain 2" };
 
         var mappings = new List<Mapping>
         {
-            new() { Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole, Domain = domain1 },
-            new() { Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole, Domain = domain2 } // will result in duplicate result in the query if we don't handle it explicitly
+            new()
+            {
+                Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole,
+                Domain = domain1
+            },
+            new()
+            {
+                Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole,
+                Domain = domain2
+            } // will result in duplicate result in the query if we don't handle it explicitly
         };
 
         _dbContext.AddRange(functionalRole, applicationRole, entityType, domain1, domain2);
@@ -68,7 +87,6 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
         var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
         var role = Assert.Single(response.Results).ApplicationRoles.Single();
-
         Assert.Equal(ApplicationRoleName, role.Name);
         Assert.Equal(ApplicationName, role.Application);
     }
@@ -95,8 +113,6 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, ValidFunctionalRole));
         var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
         var results = Assert.Single(response.Results);
-
-        Assert.Single(response.Results);
         Assert.Single(results.ApplicationRoles);
     }
 
@@ -104,10 +120,8 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
     public async Task Post_HandlesDuplicateMappings_WithoutDuplicateApplicationRoles()
     {
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
-        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value); 
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
         var results = Assert.Single(response.Results);
- 
-        Assert.Single(response.Results);
         Assert.Single(results.ApplicationRoles);
     }
 
@@ -127,7 +141,3 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         Assert.Empty(response.Results);
     }
 }
-
- 
-}
-
