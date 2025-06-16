@@ -5,6 +5,7 @@ using System.Reflection;
 namespace PABC.Server.Features.GetAppVersion
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AppVersionController
     {
         private static readonly AppVersion s_appVersion = GetAppVersionInternal();
