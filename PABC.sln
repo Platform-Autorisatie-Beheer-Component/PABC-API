@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36127.28
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Server", "PABC.Server\PABC.Server.csproj", "{4E5FFD47-701B-4D17-ACA6-0045A139B027}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.MigrationService", "PABC.MigrationService\PABC.MigrationService.csproj", "{FEB7BCF2-BBB4-FD6C-6FA4-4CAAA4DF555C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Data", "PABC.Data\PABC.Data.csproj", "{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Server.Test", "PABC.Server.Test\PABC.Server.Test.csproj", "{08A91984-FE2C-4493-9BEF-C45B4E91F8EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08A91984-FE2C-4493-9BEF-C45B4E91F8EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A91984-FE2C-4493-9BEF-C45B4E91F8EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A91984-FE2C-4493-9BEF-C45B4E91F8EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A91984-FE2C-4493-9BEF-C45B4E91F8EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
