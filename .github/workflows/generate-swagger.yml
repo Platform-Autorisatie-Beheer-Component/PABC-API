@@ -84,6 +84,7 @@ jobs:
           ls -la "$REPO_ROOT/docs/swagger.yaml"
 
       - name: Commit and push Swagger YAML
+        if: github.event_name == 'push'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
