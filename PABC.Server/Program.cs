@@ -1,3 +1,5 @@
+using Microsoft.OpenApi;
+using Microsoft.OpenApi.Extensions;
 using PABC.Data;
 using PABC.Server.Auth;
 using System.Reflection;
@@ -50,7 +52,22 @@ if (app.Environment.IsDevelopment())
 
     });
 }
+// Export Swagger YAML at startup
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    var provider = app.Services.GetRequiredService<Microsoft.AspNetCore.Mvc.ApiExplorer.IApiDescriptionGroupCollectionProvider>();
+    var generator = app.Services.GetRequiredService<Swashbuckle.AspNetCore.Swagger.ISwaggerProvider>();
 
+    var swaggerDoc = generator.GetSwagger("v1");
+
+    var yaml = swaggerDoc.SerializeAsYaml(OpenApiSpecVersion.OpenApi3_0);
+
+    var outputPath = Path.Combine(app.Environment.ContentRootPath, "Docs/swagger.yaml");
+
+    Directory.CreateDirectory(Path.GetDirectoryName(outputPath )?? string.Empty);
+
+    File.WriteAllText(outputPath, yaml);
+});
 app.UseAuthorization();
 
 app.MapControllers();
