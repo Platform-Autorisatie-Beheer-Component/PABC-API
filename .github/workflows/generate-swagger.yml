@@ -50,13 +50,6 @@ jobs:
           echo "Changes detected in PABC.Server.json"
         fi
 
-    - name: Debug - Show git status
-      if: steps.check-changes.outputs.has_changes == 'true'
-      run: |
-        echo "Git status:"
-        git status
-        echo "Git diff:"
-        git diff PABC.Server/PABC.Server.json || echo "No diff output"
 
     - name: Commit and push changes
       if: steps.check-changes.outputs.has_changes == 'true'
