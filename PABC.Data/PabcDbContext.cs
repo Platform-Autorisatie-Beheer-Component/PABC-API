@@ -38,7 +38,7 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
             r.HasIndex(x => new { x.Name }).IsUnique();
         });
 
-        modelBuilder.Entity<Mapping>(m => m.HasIndex(x => new { x.ApplicationRoleId, x.DomainId, x.FunctionalRoleId }));
+        modelBuilder.Entity<Mapping>(m => m.HasIndex(x => new { x.ApplicationRoleId, x.DomainId, x.FunctionalRoleId }).IsUnique());
     }
 
     public required DbSet<ApplicationRole> ApplicationRoles { get; set; }
