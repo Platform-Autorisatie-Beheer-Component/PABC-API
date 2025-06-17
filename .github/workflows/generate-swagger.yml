@@ -66,4 +66,17 @@ jobs:
         git add PABC.Server/PABC.Server.json
         git status
         git commit -m "Update OpenAPI documentation [skip ci]"
-        git push origin HEAD:${{ github.ref }} 
+        
+        echo "Event type: ${{ github.event_name }}"
+        echo "Head ref: ${{ github.head_ref }}"
+        echo "Ref: ${{ github.ref }}"
+        
+        # For pull requests, push to the source branch
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          echo "Pushing to pull request source branch: ${{ github.head_ref }}"
+          git push origin HEAD:${{ github.head_ref }}
+        else
+          # For direct pushes to main
+          echo "Pushing to main branch: ${{ github.ref }}"
+          git push origin HEAD:${{ github.ref }}
+        fi 
