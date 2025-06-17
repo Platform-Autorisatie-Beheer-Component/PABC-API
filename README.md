@@ -8,7 +8,7 @@ Deze sectie toont de API specificatie van de **actieve ontwikkelbranch** waarop 
 
 | API Specificatie |
 |------------------|
-| [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/PC-1466/docs/swagger.yaml) |
+| [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/PC-1466/PABC.Server/PABC.Server.json) |
 
 *Opmerking: Deze links verwijzen direct naar de `PC-1466` branch. Ze zullen alleen werken als de `docs/swagger.yaml` is gegenereerd en gepushed naar deze specifieke branch.*
 
@@ -18,5 +18,5 @@ Deze sectie toont de API specificatie van de **stabiele `main` branch**. Dit rep
 
 | API Specificatie |
 |------------------|
-| [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/main/docs/swagger.yaml) |
+| [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json) |
  
