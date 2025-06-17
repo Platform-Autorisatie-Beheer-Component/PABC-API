@@ -9,6 +9,10 @@ on:
       - 'PABC.Server/PABC.Server.json'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   update-openapi:
     runs-on: ubuntu-latest
@@ -34,17 +38,32 @@ jobs:
     - name: Check for changes in PABC.Server.json
       id: check-changes
       run: |
-        if git diff --quiet PABC.Server/PABC.Server.json; then
+        # Store the current content of the file in git
+        git show HEAD:PABC.Server/PABC.Server.json > /tmp/original.json 2>/dev/null || echo "{}" > /tmp/original.json
+        
+        # Compare the current file with the original
+        if cmp -s /tmp/original.json PABC.Server/PABC.Server.json; then
           echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No changes detected in PABC.Server.json"
         else
           echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "Changes detected in PABC.Server.json"
         fi
+
+    - name: Debug - Show git status
+      if: steps.check-changes.outputs.has_changes == 'true'
+      run: |
+        echo "Git status:"
+        git status
+        echo "Git diff:"
+        git diff PABC.Server/PABC.Server.json || echo "No diff output"
 
     - name: Commit and push changes
       if: steps.check-changes.outputs.has_changes == 'true'
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add PABC.Server/PABC.Server.json
+        git status
         git commit -m "Update OpenAPI documentation [skip ci]"
-        git push 
+        git push origin HEAD:${{ github.ref }} 
