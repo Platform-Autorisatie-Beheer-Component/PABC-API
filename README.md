@@ -1,5 +1,7 @@
 # PABC-API
 
+Het PodiumD Autorisatie Beheer Component (PABC) is een component om binnen het PodiumD landschap autorisaties voor de verschillende componenten te beheren. 
+
 ## Documentatie
 [De documentatie staat op readthedocs](https://pabc-api.readthedocs.io/)
 
