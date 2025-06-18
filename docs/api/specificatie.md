@@ -8,7 +8,7 @@ De API is gedocumenteerd met behulp van OpenAPI 3.0 specificatie.
 
 **JSON Specificatie:**
 
-De volledige OpenAPI specificatie is beschikbaar op:
+De volledige OpenAPI specificatie is (zonder autorisatie) beschikbaar op:
 
 ```
 GET /api/v1/specs.json
