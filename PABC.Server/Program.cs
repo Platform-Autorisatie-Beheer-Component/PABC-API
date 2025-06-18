@@ -1,5 +1,3 @@
-using Microsoft.OpenApi;
-using Microsoft.OpenApi.Extensions;
 using PABC.Data;
 using PABC.Server.Auth;
 using System.Reflection;
@@ -52,7 +50,6 @@ if (app.Environment.IsDevelopment())
 
     });
 }
- 
 app.UseAuthorization();
 
 app.MapControllers();
