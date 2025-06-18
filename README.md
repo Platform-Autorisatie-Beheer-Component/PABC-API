@@ -20,6 +20,6 @@ Add-Migration MyMigration -Project PABC.Data -StartupProject PABC.Server
 ## API Specificatie
 
 
-| API Specificatie |
-|------------------|
-| [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json) |
+| Applicatieversie | API-versie | API Specificatie |
+|------------------|------------------|------------------|
+| main | 1 | [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json), [ReDoc](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json) |
