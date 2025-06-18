@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Server", "PABC.Server\PABC.Server.csproj", "{4E5FFD47-701B-4D17-ACA6-0045A139B027}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.AppHost", "PABC.AppHost\PABC.AppHost.csproj", "{FB81C0F4-5263-4FB4-8A6D-EAFCA3B94520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Server", "PABC.Server\PABC.Server.csproj", "{4E5FFD47-701B-4D17-ACA6-0045A139B027}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.ServiceDefaults", "PABC.ServiceDefaults\PABC.ServiceDefaults.csproj", "{22148183-AA1B-A4B1-5868-6C15978D4EBA}"
 EndProject
