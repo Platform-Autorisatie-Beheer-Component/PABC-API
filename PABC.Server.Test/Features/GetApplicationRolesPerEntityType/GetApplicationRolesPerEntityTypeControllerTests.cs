@@ -1,4 +1,5 @@
-﻿using PABC.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using PABC.Data;
 using PABC.Data.Entities;
 using PABC.Server.Features.GetApplicationRolesPerEntityType;
 using PABC.Server.Test.TestConfig;
@@ -93,11 +94,10 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
     }
 
     [Fact]
-    public async Task Post_ReturnsEmpty_WhenFunctionalRoleDoesNotExist()
+    public async Task Post_ReturnsBadRequest_WhenFunctionalRoleDoesNotExist()
     {
         var result = await CreateController().Post(CreateRequest(InvalidFunctionalRole));
-        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
-        Assert.Empty(response.Results);
+        Assert.IsType<BadRequestObjectResult>(result.Result);
     }
 
     [Fact]
@@ -127,18 +127,9 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
     }
 
     [Fact]
-    public async Task Post_ReturnsOnlyValidRoles_WhenMixedValidAndInvalid()
+    public async Task Post_ReturnsBadRequest_WhenMixedValidAndInvalid()
     {
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, InvalidFunctionalRole));
-        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
-        Assert.Single(response.Results);
-    }
-
-    [Fact]
-    public async Task Post_ReturnsEmpty_ForNullFunctionalRoleNames()
-    {
-        var result = await CreateController().Post(new GetApplicationRolesRequest { FunctionalRoleNames = null! });
-        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
-        Assert.Empty(response.Results);
+        Assert.IsType<BadRequestObjectResult>(result.Result);
     }
 }
