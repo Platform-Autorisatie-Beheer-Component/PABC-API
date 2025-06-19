@@ -1,22 +1,27 @@
 # PABC-API
 
+Het PodiumD Autorisatie Beheer Component (PABC) is een component om binnen het PodiumD landschap autorisaties voor de verschillende componenten te beheren. 
+
+## Documentatie
+[De documentatie staat op readthedocs](https://pabc-api.readthedocs.io/)
+
+## Ontwikkelen
+- Zorg dat PABC.AppHost het startup project is
+- De api key tijdens ontwikkelen is `unsafe-test-api-key`
+
+## Database migration aanmaken
+.NET CLI:
+```bash
+dotnet ef migrations add MyMigration --project PABC.Data --startup-project PABC.Server
+```
+Visual Studio Package Manager Console:
+```powershell
+Add-Migration MyMigration -Project PABC.Data -StartupProject PABC.Server
+```
+
 ## API Specificatie
 
-### Voor de huidige branch (voor testdoeleinden)
 
-Deze sectie toont de API specificatie van de **actieve ontwikkelbranch** waarop u momenteel werkt. Dit is handig voor het testen van recente wijzigingen die nog niet zijn samengevoegd met de `main` branch.
-
-| API Specificatie |
-|------------------|
-| [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/PC-1466/PABC.Server/PABC.Server.json) |
-
-*Opmerking: Deze links verwijzen direct naar de `PC-1466` branch. Ze zullen alleen werken als de `docs/swagger.yaml` is gegenereerd en gepushed naar deze specifieke branch.*
-
-### Voor de `main` branch (stabiele versie)
-
-Deze sectie toont de API specificatie van de **stabiele `main` branch**. Dit representeert de meest recente officiële release van de API.
-
-| API Specificatie |
-|------------------|
-| [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json) |
- 
+| Applicatieversie | API-versie | API Specificatie |
+|------------------|------------------|------------------|
+| main | 1 | [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json), [ReDoc](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json) |
