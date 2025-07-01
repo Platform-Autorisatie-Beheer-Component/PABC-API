@@ -11,9 +11,9 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  WEB_IMAGE: ghcr.io/podiumd-autorisatie-beheer-component/pabc-api
-  MIGRATIONS_IMAGE: ghcr.io/podiumd-autorisatie-beheer-component/pabc-migrations
-  CHART_URL: ghcr.io/podiumd-autorisatie-beheer-component
+  WEB_IMAGE: ghcr.io/platform-autorisatie-beheer-component/pabc-api
+  MIGRATIONS_IMAGE: ghcr.io/platform-autorisatie-beheer-component/pabc-migrations
+  CHART_URL: ghcr.io/platform-autorisatie-beheer-component
   SHOULD_PUSH: ${{ github.event_name != 'pull_request' }}
   SHOULD_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
   IS_LATEST: false

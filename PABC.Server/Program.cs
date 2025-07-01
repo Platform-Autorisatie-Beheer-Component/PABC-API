@@ -19,9 +19,9 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Title = "PodiumD Autorisatie Beheer Component API",
+        Title = "Platform Autorisatie Beheer Component API",
         Version = "v1",
-        Description = "API for the PodiumD Autorisatie Beheer Component (PABC)"
+        Description = "API for the Platform Autorisatie Beheer Component (PABC)"
     });
     options.SupportNonNullableReferenceTypes();
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

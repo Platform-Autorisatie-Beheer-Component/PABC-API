@@ -1,6 +1,6 @@
 # PABC-API
 
-Het PodiumD Autorisatie Beheer Component (PABC) is een component om binnen het PodiumD landschap autorisaties voor de verschillende componenten te beheren. 
+Het Platform Autorisatie Beheer Component (PABC) is een component om binnen het Platform landschap autorisaties voor de verschillende componenten te beheren. 
 
 ## Documentatie
 [De documentatie staat op readthedocs](https://pabc-api.readthedocs.io/)
@@ -24,4 +24,4 @@ Add-Migration MyMigration -Project PABC.Data -StartupProject PABC.Server
 
 | Applicatieversie | API-versie | API Specificatie |
 |------------------|------------------|------------------|
-| main | 1 | [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json), [ReDoc](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json) |
+| main | 1 | [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Platform-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json), [ReDoc](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Platform-Autorisatie-Beheer-Component/PABC-API/refs/heads/main/PABC.Server/PABC.Server.json) |

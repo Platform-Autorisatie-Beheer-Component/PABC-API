@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: "ghcr.io/podiumd-autorisatie-beheer-component/pabc-api"
+  repository: "ghcr.io/platform-autorisatie-beheer-component/pabc-api"
   pullPolicy: IfNotPresent
   tag: ""
 
@@ -155,7 +155,7 @@ settings:
 
 migrations:
   image:
-    repository: "ghcr.io/podiumd-autorisatie-beheer-component/pabc-migrations"
+    repository: "ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"
     pullPolicy: IfNotPresent
     tag: ""
   restartPolicy: Never

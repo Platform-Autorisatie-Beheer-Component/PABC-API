@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "PodiumD Autorisatie Beheer Component API",
-    "description": "API for the PodiumD Autorisatie Beheer Component (PABC)",
+    "title": "Platform Autorisatie Beheer Component API",
+    "description": "API for the Platform Autorisatie Beheer Component (PABC)",
     "version": "v1"
   },
   "paths": {
