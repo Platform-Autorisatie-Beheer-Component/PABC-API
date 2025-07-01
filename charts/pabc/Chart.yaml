@@ -1,6 +1,6 @@
 apiVersion: v2
 name: pabc
-description: A helm chart for the PodiumD Autorisatie Beheer Component.
+description: A helm chart for the Platform Autorisatie Beheer Component.
 
 type: application
 

@@ -2,7 +2,7 @@
 
 # Omgevingsvariabelen
 
-Als je PABC installeert met de helm chart, worden deze variabelen geconfigureerd met de chart values. Zie [de helm chart in github](https://github.com/PodiumD-Autorisatie-Beheer-Component/PABC-API/tree/main/charts/pabc) voor meer informatie.
+Als je PABC installeert met de helm chart, worden deze variabelen geconfigureerd met de chart values. Zie [de helm chart in github](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/tree/main/charts/pabc) voor meer informatie.
  
 ---------------------------------
 | **Variabele**                      | **Waarde**                                                     |

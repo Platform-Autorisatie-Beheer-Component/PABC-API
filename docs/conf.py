@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'PodiumD Autorisatie Beheer Component'
+project = 'Platform Autorisatie Beheer Component'
 copyright = '2025, ICATT'
 author = 'ICATT'
 

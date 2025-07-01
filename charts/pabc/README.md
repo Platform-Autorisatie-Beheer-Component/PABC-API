@@ -2,7 +2,7 @@
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.0](https://img.shields.io/badge/AppVersion-0.0.0-informational?style=flat-square)
 
-A helm chart for the PodiumD Autorisatie Beheer Component.
+A helm chart for the Platform Autorisatie Beheer Component.
 
 ## Requirements
 
@@ -28,7 +28,7 @@ A helm chart for the PodiumD Autorisatie Beheer Component.
 | extraIngress | list | `[]` | Specify extra ingresses, for example if you have multiple ingress classes |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"ghcr.io/podiumd-autorisatie-beheer-component/pabc-api"` |  |
+| image.repository | string | `"ghcr.io/platform-autorisatie-beheer-component/pabc-api"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
@@ -42,7 +42,7 @@ A helm chart for the PodiumD Autorisatie Beheer Component.
 | livenessProbe.successThreshold | int | `1` |  |
 | livenessProbe.timeoutSeconds | int | `5` |  |
 | migrations.image.pullPolicy | string | `"IfNotPresent"` |  |
-| migrations.image.repository | string | `"ghcr.io/podiumd-autorisatie-beheer-component/pabc-migrations"` |  |
+| migrations.image.repository | string | `"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"` |  |
 | migrations.image.tag | string | `""` |  |
 | migrations.restartPolicy | string | `"Never"` |  |
 | nameOverride | string | `""` |  |
