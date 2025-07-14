@@ -1,5 +1,7 @@
-using PABC.Data;
+﻿using PABC.Data;
 using PABC.MigrationService;
+
+const int ErrorExitCode = 1;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -11,4 +13,13 @@ builder.Services.AddOpenTelemetry()
     .WithTracing(tracing => tracing.AddSource(Worker.ActivitySourceName));
 
 var host = builder.Build();
-host.Run();
+
+try
+{
+    host.Run();
+}
+catch (Exception)
+{
+    Environment.Exit(ErrorExitCode);
+    throw;
+}
