@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
@@ -21,14 +22,11 @@ public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime h
         {
             await using var scope = serviceProvider.CreateAsyncScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<PabcDbContext>();
-            var strategy = dbContext.Database.CreateExecutionStrategy();
-            await strategy.ExecuteAsync(async () =>
+            await RunWithinTransactionAsync(dbContext, async () =>
             {
-                await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
                 await dbContext.Database.MigrateAsync(cancellationToken);
-                await SeedAsync(dbContext, cancellationToken);
-                await transaction.CommitAsync(cancellationToken);
-            });
+                await LoadDatasetAsync(dbContext, cancellationToken);
+            }, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -39,18 +37,40 @@ public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime h
         hostApplicationLifetime.StopApplication();
     }
 
-    private async Task SeedAsync(PabcDbContext dbContext, CancellationToken cancellationToken)
+    /// <summary>
+    /// If we use a transaction directly, we get this exception:<br/>
+    /// The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    private static async Task RunWithinTransactionAsync(DbContext dbContext, Func<Task> handler, CancellationToken cancellationToken)
+    {
+        var strategy = dbContext.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
+        {
+            await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+            await handler();
+            await transaction.CommitAsync(cancellationToken);
+        });
+    }
+
+    private async Task LoadDatasetAsync(PabcDbContext dbContext, CancellationToken cancellationToken)
     {
         var dataSetPath = configuration["JSON_DATASET_PATH"];
         if (string.IsNullOrWhiteSpace(dataSetPath)) return;
+       
         await using var file = File.OpenRead(dataSetPath);
         var dataSet = await JsonSerializer.DeserializeAsync<DataSet>(file, s_jsonOptions, cancellationToken);
+        var newEntities = MapToEntities(dataSet!);
+
         await dbContext.ApplicationRoles.ExecuteDeleteAsync(cancellationToken);
         await dbContext.FunctionalRoles.ExecuteDeleteAsync(cancellationToken);
         await dbContext.Domains.ExecuteDeleteAsync(cancellationToken);
         await dbContext.EntityTypes.ExecuteDeleteAsync(cancellationToken);
         await dbContext.Mappings.ExecuteDeleteAsync(cancellationToken);
-        await dbContext.AddRangeAsync(MapToEntities(dataSet!), cancellationToken);
+
+        await dbContext.AddRangeAsync(newEntities, cancellationToken);
+       
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
@@ -90,7 +110,7 @@ public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime h
                 Id = domain.Id,
                 Name = domain.Name,
                 Description = domain.Description,
-                EntityTypes = entityTypes.Where(e => domain.EntityTypes.Contains(e.Id)).ToList()
+                EntityTypes = [.. entityTypes.Where(e => domain.EntityTypes.Contains(e.Id))]
             })
             .ToList();
 
