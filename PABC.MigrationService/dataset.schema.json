@@ -1,0 +1,153 @@
+{
+  "type": "object",
+  "properties": {
+    "applicationRoles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/guid"
+          },
+          "application": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "id",
+          "application",
+          "name"
+        ]
+      }
+    },
+    "functionalRoles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/guid"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      }
+    },
+    "entityTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/guid"
+          },
+          "entityTypeId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "uri": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          }
+        },
+        "required": [
+          "id",
+          "entityTypeId",
+          "type",
+          "name"
+        ]
+      }
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/guid"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "entityTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/guid"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "entityTypes"
+        ]
+      }
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/guid"
+          },
+          "functionalRole": {
+            "$ref": "#/$defs/guid"
+          },
+          "domain": {
+            "$ref": "#/$defs/guid"
+          },
+          "applicationRole": {
+            "$ref": "#/$defs/guid"
+          }
+        },
+        "required": [
+          "id",
+          "functionalRole",
+          "domain",
+          "applicationRole"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "guid": {
+      "type": "string",
+      "format": "uuid"
+    }
+  }
+}

@@ -5,7 +5,7 @@ namespace PABC.Data;
 
 public class PabcDbContext(DbContextOptions options) : DbContext(options)
 {
-    const int MaxLengthForIndexProperties = 256;
+    public const int MaxLengthForIndexProperties = 256;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

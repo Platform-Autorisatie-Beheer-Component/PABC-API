@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
-using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
@@ -58,9 +57,10 @@ public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime h
     {
         var dataSetPath = configuration["JSON_DATASET_PATH"];
         if (string.IsNullOrWhiteSpace(dataSetPath)) return;
-       
+
         await using var file = File.OpenRead(dataSetPath);
         var dataSet = await JsonSerializer.DeserializeAsync<DataSet>(file, s_jsonOptions, cancellationToken);
+
         var newEntities = MapToEntities(dataSet!);
 
         await dbContext.ApplicationRoles.ExecuteDeleteAsync(cancellationToken);
@@ -70,7 +70,7 @@ public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime h
         await dbContext.Mappings.ExecuteDeleteAsync(cancellationToken);
 
         await dbContext.AddRangeAsync(newEntities, cancellationToken);
-       
+
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
