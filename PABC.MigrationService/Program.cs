@@ -5,8 +5,7 @@ using Json.Schema.Generation;
 using PABC.Data;
 using PABC.MigrationService;
 
-const int ErrorExitCode = 1;
-
+// use `dotnet run generate` to generate the json schema
 if (args.Contains("generate"))
 {
     var schema = new JsonSchemaBuilder().FromType<DataSet>(new() { PropertyNameResolver = PropertyNameResolvers.CamelCase }).Build();
@@ -26,13 +25,4 @@ builder.Services.AddOpenTelemetry()
     .WithTracing(tracing => tracing.AddSource(Worker.ActivitySourceName));
 
 var host = builder.Build();
-
-try
-{
-    host.Run();
-}
-catch (Exception)
-{
-    Environment.Exit(ErrorExitCode);
-    throw;
-}
+host.Run();
