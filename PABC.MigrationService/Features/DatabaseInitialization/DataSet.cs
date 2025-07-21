@@ -1,4 +1,4 @@
-﻿namespace PABC.MigrationService;
+﻿namespace PABC.MigrationService.Features.DatabaseInitialization;
 
 using Json.Schema;
 using Json.Schema.Generation;
@@ -6,13 +6,8 @@ using Json.Schema.Serialization;
 using PABC.Data;
 using static DataSet;
 
-public static class Schemas
-{ 
-  public static readonly JsonSchema Dataset = JsonSchema.FromFile("dataset.schema.json");
-}
-
-[JsonSchema(typeof(Schemas), nameof(Schemas.Dataset))]
-internal record DataSet(
+[JsonSchema(typeof(DatasetParser), nameof(DatasetParser.Schema))]
+public record DataSet(
     IReadOnlyList<ApplicationRole> ApplicationRoles,
     IReadOnlyList<FunctionRole> FunctionalRoles,
     IReadOnlyList<EntityType> EntityTypes,
@@ -20,7 +15,6 @@ internal record DataSet(
     IReadOnlyList<Mapping> Mappings
 )
 {
-
     public record ApplicationRole
     {
         public required Guid Id { get; init; }

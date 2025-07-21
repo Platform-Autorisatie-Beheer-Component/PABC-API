@@ -1,17 +1,13 @@
-﻿using System.Text.Json;
-using Json.More;
-using Json.Schema;
-using Json.Schema.Generation;
+﻿using Json.Schema;
 using PABC.Data;
 using PABC.MigrationService;
+using PABC.MigrationService.Features.DatabaseInitialization;
 
 // use `dotnet run generate` to generate the json schema
+
 if (args.Contains("generate"))
 {
-    var schema = new JsonSchemaBuilder().FromType<DataSet>(new() { PropertyNameResolver = PropertyNameResolvers.CamelCase }).Build();
-    var json = schema.ToJsonDocument(new JsonSerializerOptions(JsonSerializerDefaults.Web) { WriteIndented = true });
-    await using var file = File.OpenWrite("dataset.schema.json");
-    await JsonSerializer.SerializeAsync(file, json, new JsonSerializerOptions(JsonSerializerDefaults.Web) { WriteIndented = true });
+    await DatasetParser.WriteSchemaToFile(CancellationToken.None);
     return;
 }
 
@@ -19,6 +15,7 @@ var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<PabcDbContext>(connectionName: "Pabc");
+builder.Services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
 builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddOpenTelemetry()
