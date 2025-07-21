@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Immutable;
 using System.Text.Json;
 using Json.Schema;
 using Json.Schema.Generation;
@@ -11,12 +12,30 @@ public interface IDatasetParser
     Task<DataSet> Parse(Stream stream, CancellationToken token);
 }
 
-public class DatasetParser(ILogger<DatasetParser> logger) : IDatasetParser
+public class JsonSchemaValidationException : Exception
+{
+    public required IReadOnlyList<JsonSchemaValidationError> Errors { get; init; }
+}
+
+public class JsonSchemaValidationError
+{
+    public required Json.Pointer.JsonPointer InstanceLocation { get; init; }
+    public required IReadOnlyDictionary<string, string> Errors { get; init; }
+}
+
+public class DatasetParser : IDatasetParser
 {
     private const string SchemaFilename = "dataset.schema.json";
 
     private static readonly JsonSerializerOptions s_jsonSerializerOptions = GetJsonSerializerOptions();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    /// <exception cref="JsonSchemaValidationException"></exception>
     public async Task<DataSet> Parse(Stream stream, CancellationToken token)
     {
         try
@@ -24,16 +43,10 @@ public class DatasetParser(ILogger<DatasetParser> logger) : IDatasetParser
             var result = await JsonSerializer.DeserializeAsync<DataSet>(stream, s_jsonSerializerOptions, token);
             return result!;
         }
-        catch (JsonException ex)
+        catch (JsonException ex) when (ex.Data.Values.OfType<EvaluationResults>().FirstOrDefault() is { } results)
         {
-            var results = ex.Data.OfType<DictionaryEntry>().Select(x => x.Value).OfType<EvaluationResults>().FirstOrDefault();
-            if (results != null)
-            {
-                // because the details of the validation are hidden in the Data dictionary, we log them here before re-throwing
-                var errors = results.Details.Where(d => d.HasErrors).Select(x => new { x.Errors, x.InstanceLocation }).ToList();
-                logger.LogError("Validation failed: {@Errors}", JsonSerializer.Serialize(errors, s_jsonSerializerOptions));
-            }
-            throw;
+            var errors = results.Details.Where(d => d.HasErrors).Select(x => new JsonSchemaValidationError { Errors = x.Errors ?? ImmutableDictionary<string, string>.Empty, InstanceLocation = x.InstanceLocation }).ToList();
+            throw new JsonSchemaValidationException { Errors = errors };
         }
     }
 
