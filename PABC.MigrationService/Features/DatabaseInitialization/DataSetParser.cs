@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Text.Json;
 using Json.Schema;
 using Json.Schema.Generation;
@@ -49,7 +48,14 @@ public class DatasetParser : IDatasetParser
         // the json schema validation errors are a bit hidden in the exception data. we collect them here and throw a custom exception
         catch (JsonException ex) when (ex.Data.Values.OfType<EvaluationResults>().FirstOrDefault() is { } results)
         {
-            var errors = results.Details.Where(d => d.HasErrors).Select(x => new JsonSchemaValidationError { Errors = x.Errors ?? ImmutableDictionary<string, string>.Empty, InstanceLocation = x.InstanceLocation }).ToList();
+            var errors = results.Details
+                .Where(d => d.HasErrors)
+                .Select(x => new JsonSchemaValidationError
+                {
+                    Errors = x.Errors!,
+                    InstanceLocation = x.InstanceLocation
+                })
+                .ToList();
             throw new JsonSchemaValidationException { Errors = errors };
         }
     }
