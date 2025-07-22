@@ -43,6 +43,7 @@ public class DatasetParser : IDatasetParser
             var result = await JsonSerializer.DeserializeAsync<DataSet>(stream, s_jsonSerializerOptions, token);
             return result!;
         }
+        // the json schema validation errors are a bit hidden in the exception data. we collect them here and throw a custom exception
         catch (JsonException ex) when (ex.Data.Values.OfType<EvaluationResults>().FirstOrDefault() is { } results)
         {
             var errors = results.Details.Where(d => d.HasErrors).Select(x => new JsonSchemaValidationError { Errors = x.Errors ?? ImmutableDictionary<string, string>.Empty, InstanceLocation = x.InstanceLocation }).ToList();
