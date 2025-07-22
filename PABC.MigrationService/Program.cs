@@ -3,7 +3,7 @@ using PABC.Data;
 using PABC.MigrationService;
 using PABC.MigrationService.Features.DatabaseInitialization;
 
-// use `dotnet run generate` to generate the json schema
+// use `dotnet run generate` to generate the json schema. we do this in a github action
 
 if (args.Contains("generate"))
 {
@@ -16,6 +16,7 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<PabcDbContext>(connectionName: "Pabc");
 builder.Services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
+builder.Services.AddSingleton<IDatasetParser, DatasetParser>();
 builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddOpenTelemetry()
