@@ -9,6 +9,16 @@ namespace PABC.MigrationService.Features.DatabaseInitialization;
 
 public interface IDatasetParser
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    /// <exception cref="JsonSchemaValidationException"></exception>
+    /// <exception cref="JsonException"></exception>
+    /// <exception cref="NotSupportedException"></exception>
+    /// <exception cref="ArgumentNullException"></exception>
     Task<DataSet> Parse(Stream stream, CancellationToken token);
 }
 
@@ -29,13 +39,6 @@ public class DatasetParser : IDatasetParser
 
     private static readonly JsonSerializerOptions s_jsonSerializerOptions = GetJsonSerializerOptions();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="stream"></param>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    /// <exception cref="JsonSchemaValidationException"></exception>
     public async Task<DataSet> Parse(Stream stream, CancellationToken token)
     {
         try
