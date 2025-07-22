@@ -2,7 +2,7 @@
 using System.Text;
 using PABC.MigrationService.Features.DatabaseInitialization;
 
-namespace PABC.Server.Test.MigrationService.Features
+namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
 {
     public class DataSetParserTests
     {

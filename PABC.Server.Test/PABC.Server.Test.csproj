@@ -31,4 +31,10 @@
     <ProjectReference Include="..\PABC.Server\PABC.Server.csproj" IsAspireProjectResource="false" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="MigrationService\Features\DatabaseInitialization\expected-result-in-the-database.json" TargetPath="%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

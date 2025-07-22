@@ -1,0 +1,232 @@
+[
+  {
+    "Id": "00045a18-9a15-48e4-b4af-27ccfda10638",
+    "FunctionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+    "FunctionalRole": {
+      "Id": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+      "Name": "GemeenteRol1"
+    },
+    "DomainId": "dc503379-0860-4971-bfe4-6335838d8181",
+    "Domain": {
+      "Id": "dc503379-0860-4971-bfe4-6335838d8181",
+      "Name": "Ruimte",
+      "Description": "Domein ruimte gaat over ruimte",
+      "EntityTypes": [
+        {
+          "Id": "f644f9df-aa70-4046-a278-2069e23818f2",
+          "EntityTypeId": "1c59fbc4-e8cd-4ab0-92d1-5aa023a7c1c8",
+          "Type": "zaaktype",
+          "Name": "Aanvraag subsidieregeling Energieneutraal Ten Post behandelen",
+          "Uri": null
+        },
+        {
+          "Id": "48634eaf-741c-4bc0-9ade-03886f08cb36",
+          "EntityTypeId": "a3469fab-dc42-4034-ac92-95d5682e78b9",
+          "Type": "zaaktype",
+          "Name": "Melding flyeren en samplen behandelen",
+          "Uri": null
+        }
+      ]
+    },
+    "ApplicationRoleId": "29fd3e52-193c-48e2-8471-2899130db153",
+    "ApplicationRole": {
+      "Id": "29fd3e52-193c-48e2-8471-2899130db153",
+      "Name": "Beheerder",
+      "Application": "ZAC"
+    }
+  },
+  {
+    "Id": "2e458076-5a94-4d71-b0c6-ad059a719c27",
+    "FunctionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+    "FunctionalRole": {
+      "Id": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+      "Name": "GemeenteRol1"
+    },
+    "DomainId": "b9767da1-fb07-4e99-b790-04bf54482daf",
+    "Domain": {
+      "Id": "b9767da1-fb07-4e99-b790-04bf54482daf",
+      "Name": "Bedrijfsvoering",
+      "Description": "Domein bedrijfsvoering gaat over bedrijfsvoering",
+      "EntityTypes": [
+        {
+          "Id": "49a3a65e-85d5-483f-94ef-cacde9b46392",
+          "EntityTypeId": "9554bf85-25f3-4fd0-af41-bb760bba997e",
+          "Type": "zaaktype",
+          "Name": "Melding klein kansspel",
+          "Uri": null
+        },
+        {
+          "Id": "df414340-ccc8-4538-b627-8f030d3fce5a",
+          "EntityTypeId": "4e082abc-128b-47fa-8d1d-4a215cd602d2",
+          "Type": "zaaktype",
+          "Name": "Aanvraag ontheffing bedrijfsvoertuigen behandelen",
+          "Uri": null
+        },
+        {
+          "Id": "f644f9df-aa70-4046-a278-2069e23818f2",
+          "EntityTypeId": "1c59fbc4-e8cd-4ab0-92d1-5aa023a7c1c8",
+          "Type": "zaaktype",
+          "Name": "Aanvraag subsidieregeling Energieneutraal Ten Post behandelen",
+          "Uri": null
+        }
+      ]
+    },
+    "ApplicationRoleId": "7839298d-9ac9-4b02-bcfc-18b5e6e00227",
+    "ApplicationRole": {
+      "Id": "7839298d-9ac9-4b02-bcfc-18b5e6e00227",
+      "Name": "Raadpleger",
+      "Application": "ZAC"
+    }
+  },
+  {
+    "Id": "4e40db32-a99c-4c3a-9390-409ce8a5b9ff",
+    "FunctionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+    "FunctionalRole": {
+      "Id": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+      "Name": "GemeenteRol1"
+    },
+    "DomainId": "dc503379-0860-4971-bfe4-6335838d8181",
+    "Domain": {
+      "Id": "dc503379-0860-4971-bfe4-6335838d8181",
+      "Name": "Ruimte",
+      "Description": "Domein ruimte gaat over ruimte",
+      "EntityTypes": [
+        {
+          "Id": "f644f9df-aa70-4046-a278-2069e23818f2",
+          "EntityTypeId": "1c59fbc4-e8cd-4ab0-92d1-5aa023a7c1c8",
+          "Type": "zaaktype",
+          "Name": "Aanvraag subsidieregeling Energieneutraal Ten Post behandelen",
+          "Uri": null
+        },
+        {
+          "Id": "48634eaf-741c-4bc0-9ade-03886f08cb36",
+          "EntityTypeId": "a3469fab-dc42-4034-ac92-95d5682e78b9",
+          "Type": "zaaktype",
+          "Name": "Melding flyeren en samplen behandelen",
+          "Uri": null
+        }
+      ]
+    },
+    "ApplicationRoleId": "f5cf1465-c05a-4c95-98da-0ec6402161a0",
+    "ApplicationRole": {
+      "Id": "f5cf1465-c05a-4c95-98da-0ec6402161a0",
+      "Name": "MyAppRole2",
+      "Application": "MyApplication2"
+    }
+  },
+  {
+    "Id": "8998615c-cfa3-4829-8047-2706dc8cff91",
+    "FunctionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+    "FunctionalRole": {
+      "Id": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+      "Name": "GemeenteRol1"
+    },
+    "DomainId": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
+    "Domain": {
+      "Id": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
+      "Name": "Leefomgeving",
+      "Description": "Domein leefomgeving gaat over leefomgeving",
+      "EntityTypes": [
+        {
+          "Id": "f644f9df-aa70-4046-a278-2069e23818f2",
+          "EntityTypeId": "1c59fbc4-e8cd-4ab0-92d1-5aa023a7c1c8",
+          "Type": "zaaktype",
+          "Name": "Aanvraag subsidieregeling Energieneutraal Ten Post behandelen",
+          "Uri": null
+        },
+        {
+          "Id": "48634eaf-741c-4bc0-9ade-03886f08cb36",
+          "EntityTypeId": "a3469fab-dc42-4034-ac92-95d5682e78b9",
+          "Type": "zaaktype",
+          "Name": "Melding flyeren en samplen behandelen",
+          "Uri": null
+        }
+      ]
+    },
+    "ApplicationRoleId": "fb0e0fb8-5a16-469c-82f4-d3ef6a767828",
+    "ApplicationRole": {
+      "Id": "fb0e0fb8-5a16-469c-82f4-d3ef6a767828",
+      "Name": "Recordmanager",
+      "Application": "ZAC"
+    }
+  },
+  {
+    "Id": "cd1a2f57-2a2e-4d28-8ec5-231d6a4e3700",
+    "FunctionalRoleId": "09b78850-75cd-4b5f-b56c-3bee5261a0f9",
+    "FunctionalRole": {
+      "Id": "09b78850-75cd-4b5f-b56c-3bee5261a0f9",
+      "Name": "GemeenteRol2"
+    },
+    "DomainId": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
+    "Domain": {
+      "Id": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
+      "Name": "Leefomgeving",
+      "Description": "Domein leefomgeving gaat over leefomgeving",
+      "EntityTypes": [
+        {
+          "Id": "f644f9df-aa70-4046-a278-2069e23818f2",
+          "EntityTypeId": "1c59fbc4-e8cd-4ab0-92d1-5aa023a7c1c8",
+          "Type": "zaaktype",
+          "Name": "Aanvraag subsidieregeling Energieneutraal Ten Post behandelen",
+          "Uri": null
+        },
+        {
+          "Id": "48634eaf-741c-4bc0-9ade-03886f08cb36",
+          "EntityTypeId": "a3469fab-dc42-4034-ac92-95d5682e78b9",
+          "Type": "zaaktype",
+          "Name": "Melding flyeren en samplen behandelen",
+          "Uri": null
+        }
+      ]
+    },
+    "ApplicationRoleId": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1",
+    "ApplicationRole": {
+      "Id": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1",
+      "Name": "Behandelaar",
+      "Application": "ZAC"
+    }
+  },
+  {
+    "Id": "eccaabe9-8b26-4bc8-879c-55762e955398",
+    "FunctionalRoleId": "09b78850-75cd-4b5f-b56c-3bee5261a0f9",
+    "FunctionalRole": {
+      "Id": "09b78850-75cd-4b5f-b56c-3bee5261a0f9",
+      "Name": "GemeenteRol2"
+    },
+    "DomainId": "b9767da1-fb07-4e99-b790-04bf54482daf",
+    "Domain": {
+      "Id": "b9767da1-fb07-4e99-b790-04bf54482daf",
+      "Name": "Bedrijfsvoering",
+      "Description": "Domein bedrijfsvoering gaat over bedrijfsvoering",
+      "EntityTypes": [
+        {
+          "Id": "49a3a65e-85d5-483f-94ef-cacde9b46392",
+          "EntityTypeId": "9554bf85-25f3-4fd0-af41-bb760bba997e",
+          "Type": "zaaktype",
+          "Name": "Melding klein kansspel",
+          "Uri": null
+        },
+        {
+          "Id": "df414340-ccc8-4538-b627-8f030d3fce5a",
+          "EntityTypeId": "4e082abc-128b-47fa-8d1d-4a215cd602d2",
+          "Type": "zaaktype",
+          "Name": "Aanvraag ontheffing bedrijfsvoertuigen behandelen",
+          "Uri": null
+        },
+        {
+          "Id": "f644f9df-aa70-4046-a278-2069e23818f2",
+          "EntityTypeId": "1c59fbc4-e8cd-4ab0-92d1-5aa023a7c1c8",
+          "Type": "zaaktype",
+          "Name": "Aanvraag subsidieregeling Energieneutraal Ten Post behandelen",
+          "Uri": null
+        }
+      ]
+    },
+    "ApplicationRoleId": "03224fbe-84fc-46ad-8392-e7aa883f21aa",
+    "ApplicationRole": {
+      "Id": "03224fbe-84fc-46ad-8392-e7aa883f21aa",
+      "Name": "Co\u00F6rdinator",
+      "Application": "ZAC"
+    }
+  }
+]
