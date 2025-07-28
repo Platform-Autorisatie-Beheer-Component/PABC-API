@@ -59,30 +59,6 @@
           }
         ]
       }
-    },
-    "/api/v1/seed": {
-      "get": {
-        "tags": [
-          "Seed"
-        ],
-        "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKey": [ ]
-          }
-        ]
-      }
     }
   },
   "components": {

@@ -14,11 +14,11 @@ namespace PABC.Server.Test.Data
         public async Task DuplicateMappingRowsAreImpossible()
         {
             var appRole = new ApplicationRole { Id = Guid.NewGuid(), Application = string.Empty, Name = string.Empty };
-            var domain = new Domain { Id = Guid.NewGuid(), Description = string.Empty, EntityTypes = [], Name = string.Empty };
+            var domain = new Domain { Id = Guid.NewGuid(), Description = string.Empty, Name = string.Empty };
             var funcRole = new FunctionalRole { Id = Guid.NewGuid(), Name = string.Empty };
 
-            var firstMapping = new Mapping { ApplicationRole = appRole, Domain = domain, FunctionalRole = funcRole, Id = Guid.NewGuid() };
-            var secondMapping = new Mapping { ApplicationRole = appRole, Domain = domain, FunctionalRole = funcRole, Id = Guid.NewGuid() };
+            var firstMapping = new Mapping { ApplicationRoleId = appRole.Id, DomainId = domain.Id, FunctionalRoleId = funcRole.Id, Id = Guid.NewGuid() };
+            var secondMapping = new Mapping { ApplicationRoleId = appRole.Id, DomainId = domain.Id, FunctionalRoleId = funcRole.Id, Id = Guid.NewGuid() };
 
             fixture.DbContext.AddRange(appRole, domain, funcRole, firstMapping);
             await fixture.DbContext.SaveChangesAsync();
@@ -59,8 +59,8 @@ namespace PABC.Server.Test.Data
         [Fact]
         public async Task DuplicateDomainsAreImpossible()
         {
-            var domain = new Domain { Id = Guid.NewGuid(), Description = string.Empty, EntityTypes = [], Name = string.Empty };
-            var domain2 = new Domain { Id = Guid.NewGuid(), Description = string.Empty, EntityTypes = [], Name = string.Empty };
+            var domain = new Domain { Id = Guid.NewGuid(), Description = string.Empty, Name = string.Empty };
+            var domain2 = new Domain { Id = Guid.NewGuid(), Description = string.Empty, Name = string.Empty };
 
             fixture.DbContext.Add(domain);
             await fixture.DbContext.SaveChangesAsync();

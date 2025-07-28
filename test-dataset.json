@@ -74,7 +74,7 @@
       "id": "b9767da1-fb07-4e99-b790-04bf54482daf",
       "name": "Bedrijfsvoering",
       "description": "Domein bedrijfsvoering gaat over bedrijfsvoering",
-      "entityTypes": [
+      "entityTypeIds": [
         "49a3a65e-85d5-483f-94ef-cacde9b46392",
         "df414340-ccc8-4538-b627-8f030d3fce5a",
         "f644f9df-aa70-4046-a278-2069e23818f2"
@@ -84,7 +84,7 @@
       "id": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
       "name": "Leefomgeving",
       "description": "Domein leefomgeving gaat over leefomgeving",
-      "entityTypes": [
+      "entityTypeIds": [
         "f644f9df-aa70-4046-a278-2069e23818f2",
         "48634eaf-741c-4bc0-9ade-03886f08cb36"
       ]
@@ -93,7 +93,7 @@
       "id": "dc503379-0860-4971-bfe4-6335838d8181",
       "name": "Ruimte",
       "description": "Domein ruimte gaat over ruimte",
-      "entityTypes": [
+      "entityTypeIds": [
         "f644f9df-aa70-4046-a278-2069e23818f2",
         "48634eaf-741c-4bc0-9ade-03886f08cb36"
       ]
@@ -102,39 +102,39 @@
   "mappings": [
     {
       "id": "2e458076-5a94-4d71-b0c6-ad059a719c27",
-      "functionalRole": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
-      "domain": "b9767da1-fb07-4e99-b790-04bf54482daf",
-      "applicationRole": "7839298d-9ac9-4b02-bcfc-18b5e6e00227"
+      "functionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+      "domainId": "b9767da1-fb07-4e99-b790-04bf54482daf",
+      "applicationRoleId": "7839298d-9ac9-4b02-bcfc-18b5e6e00227"
     },
     {
       "id": "cd1a2f57-2a2e-4d28-8ec5-231d6a4e3700",
-      "functionalRole": "09b78850-75cd-4b5f-b56c-3bee5261a0f9",
-      "domain": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
-      "applicationRole": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1"
+      "functionalRoleId": "09b78850-75cd-4b5f-b56c-3bee5261a0f9",
+      "domainId": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
+      "applicationRoleId": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1"
     },
     {
       "id": "eccaabe9-8b26-4bc8-879c-55762e955398",
-      "functionalRole": "09b78850-75cd-4b5f-b56c-3bee5261a0f9",
-      "domain": "b9767da1-fb07-4e99-b790-04bf54482daf",
-      "applicationRole": "03224fbe-84fc-46ad-8392-e7aa883f21aa"
+      "functionalRoleId": "09b78850-75cd-4b5f-b56c-3bee5261a0f9",
+      "domainId": "b9767da1-fb07-4e99-b790-04bf54482daf",
+      "applicationRoleId": "03224fbe-84fc-46ad-8392-e7aa883f21aa"
     },
     {
       "id": "8998615c-cfa3-4829-8047-2706dc8cff91",
-      "functionalRole": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
-      "domain": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
-      "applicationRole": "fb0e0fb8-5a16-469c-82f4-d3ef6a767828"
+      "functionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+      "domainId": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7",
+      "applicationRoleId": "fb0e0fb8-5a16-469c-82f4-d3ef6a767828"
     },
     {
       "id": "00045a18-9a15-48e4-b4af-27ccfda10638",
-      "functionalRole": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
-      "domain": "dc503379-0860-4971-bfe4-6335838d8181",
-      "applicationRole": "29fd3e52-193c-48e2-8471-2899130db153"
+      "functionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+      "domainId": "dc503379-0860-4971-bfe4-6335838d8181",
+      "applicationRoleId": "29fd3e52-193c-48e2-8471-2899130db153"
     },
     {
       "id": "4e40db32-a99c-4c3a-9390-409ce8a5b9ff",
-      "functionalRole": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
-      "domain": "dc503379-0860-4971-bfe4-6335838d8181",
-      "applicationRole": "f5cf1465-c05a-4c95-98da-0ec6402161a0"
+      "functionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
+      "domainId": "dc503379-0860-4971-bfe4-6335838d8181",
+      "applicationRoleId": "f5cf1465-c05a-4c95-98da-0ec6402161a0"
     }
   ]
 }

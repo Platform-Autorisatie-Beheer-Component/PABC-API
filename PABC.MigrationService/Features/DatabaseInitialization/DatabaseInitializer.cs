@@ -21,17 +21,29 @@ namespace PABC.MigrationService.Features.DatabaseInitialization
 
         private async Task UpserDataSet(DataSet dataSet, CancellationToken cancellationToken)
         {
-            var newEntities = DataSetMapper.MapToEntities(dataSet);
-
             // Clear existing entries from relevant tables
             await dbContext.ApplicationRoles.ExecuteDeleteAsync(cancellationToken);
             await dbContext.FunctionalRoles.ExecuteDeleteAsync(cancellationToken);
             await dbContext.Domains.ExecuteDeleteAsync(cancellationToken);
             await dbContext.EntityTypes.ExecuteDeleteAsync(cancellationToken);
             await dbContext.Mappings.ExecuteDeleteAsync(cancellationToken);
-            await dbContext.AddRangeAsync(newEntities, cancellationToken);
 
             // Insert new records
+            await dbContext.ApplicationRoles.AddRangeAsync(dataSet.ApplicationRoles, cancellationToken);
+            await dbContext.FunctionalRoles.AddRangeAsync(dataSet.FunctionalRoles, cancellationToken);
+            await dbContext.Domains.AddRangeAsync(dataSet.Domains, cancellationToken);
+            await dbContext.EntityTypes.AddRangeAsync(dataSet.EntityTypes, cancellationToken);
+            await dbContext.Mappings.AddRangeAsync(dataSet.Mappings, cancellationToken);
+
+            // correct the DomainEntityType n-to-n-table
+            foreach (var item in dataSet.Domains)
+            {
+                foreach (var entityId in item.EntityTypeIds)
+                {
+                    item.EntityTypes.Add(dataSet.EntityTypes.Single(e => e.Id == entityId));
+                }
+            }
+
             await dbContext.SaveChangesAsync(cancellationToken);
         }
 

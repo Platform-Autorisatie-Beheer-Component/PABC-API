@@ -5,7 +5,7 @@ using PABC.Data.Entities;
 using PABC.MigrationService.Features.DatabaseInitialization;
 using PABC.Server.Test.TestConfig;
 
-namespace PABC.Server.Test.MigrationService.Features
+namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
 {
     public class DatabaseInitializerTests(PostgresFixture fixture) : IClassFixture<PostgresFixture>, IAsyncLifetime
     {

@@ -9,19 +9,19 @@
           "id": {
             "$ref": "#/$defs/guid"
           },
-          "application": {
+          "name": {
             "type": "string",
             "maxLength": 256
           },
-          "name": {
+          "application": {
             "type": "string",
             "maxLength": 256
           }
         },
         "required": [
           "id",
-          "application",
-          "name"
+          "name",
+          "application"
         ]
       }
     },
@@ -64,12 +64,6 @@
             "type": "string",
             "maxLength": 256
           },
-          "description": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
           "uri": {
             "type": [
               "string",
@@ -102,7 +96,7 @@
             "type": "string",
             "maxLength": 256
           },
-          "entityTypes": {
+          "entityTypeIds": {
             "type": "array",
             "items": {
               "$ref": "#/$defs/guid"
@@ -113,7 +107,7 @@
           "id",
           "name",
           "description",
-          "entityTypes"
+          "entityTypeIds"
         ]
       }
     },
@@ -125,21 +119,21 @@
           "id": {
             "$ref": "#/$defs/guid"
           },
-          "functionalRole": {
+          "functionalRoleId": {
             "$ref": "#/$defs/guid"
           },
-          "domain": {
+          "domainId": {
             "$ref": "#/$defs/guid"
           },
-          "applicationRole": {
+          "applicationRoleId": {
             "$ref": "#/$defs/guid"
           }
         },
         "required": [
           "id",
-          "functionalRole",
-          "domain",
-          "applicationRole"
+          "functionalRoleId",
+          "domainId",
+          "applicationRoleId"
         ]
       }
     }
