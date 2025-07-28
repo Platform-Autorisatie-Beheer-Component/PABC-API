@@ -1,13 +1,21 @@
-﻿namespace PABC.Data.Entities
+﻿using Json.Schema.Generation;
+
+namespace PABC.Data.Entities
 {
     public class Mapping
     {
         public required Guid Id { get; init; }
-        public Guid FunctionalRoleId { get; private init; }
-        public required FunctionalRole FunctionalRole { get; init; }
-        public Guid DomainId { get; private init; }
-        public required Domain Domain { get; init; }
-        public Guid ApplicationRoleId { get; private init; }
-        public required ApplicationRole ApplicationRole { get; init; }
+        public required Guid FunctionalRoleId { get; init; }
+        public required Guid DomainId { get; init; }
+        public required Guid ApplicationRoleId { get; init; }
+
+        [JsonExclude]
+        public FunctionalRole FunctionalRole { get; private init; } = null!;
+
+        [Json.Schema.Generation.JsonExclude]
+        public Domain Domain { get; private init; } = null!;
+        
+        [Json.Schema.Generation.JsonExclude]
+        public ApplicationRole ApplicationRole { get; private init; } = null!;
     }
 }

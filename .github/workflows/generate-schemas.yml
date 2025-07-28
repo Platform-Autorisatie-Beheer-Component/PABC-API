@@ -4,9 +4,11 @@ on:
     branches: [ main ]
     paths-ignore:
       - 'PABC.Server/PABC.Server.json'
+      - 'PABC.MigrationService/dataset.schema.json'
   pull_request:
     paths-ignore:
       - 'PABC.Server/PABC.Server.json'
+      - 'PABC.MigrationService/dataset.schema.json'
   workflow_dispatch:
 
 permissions:
@@ -14,7 +16,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  update-openapi:
+  update-schemas:
     runs-on: ubuntu-latest
     
     steps:
@@ -35,8 +37,17 @@ jobs:
     - name: Build PABC.Server
       run: dotnet build PABC.Server/PABC.Server.csproj --no-restore --configuration Release
 
+    - name: run PABC.MigrationService to generate the schema
+      working-directory: ./PABC.MigrationService
+      run: dotnet run generate --configuration Release
+
+    - name: set git user
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+
     - name: Check for changes in PABC.Server.json
-      id: check-changes
+      id: check-changes-openapi
       run: |
         # Store the current content of the file in git
         git show HEAD:PABC.Server/PABC.Server.json > /tmp/original.json 2>/dev/null || echo "{}" > /tmp/original.json
@@ -48,17 +59,31 @@ jobs:
         else
           echo "has_changes=true" >> $GITHUB_OUTPUT
           echo "Changes detected in PABC.Server.json"
+          git add PABC.Server/PABC.Server.json
+        fi
+
+    - name: Check for changes in dataset.schema.json
+      id: check-changes-dataset
+      run: |
+        # Store the current content of the file in git
+        git show HEAD:PABC.MigrationService/dataset.schema.json > /tmp/original.json 2>/dev/null || echo "{}" > /tmp/original.json
+        
+        # Compare the current file with the original
+        if cmp -s /tmp/original.json PABC.MigrationService/dataset.schema.json; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No changes detected in dataset.schema.json"
+        else
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "Changes detected in dataset.schema.json"
+          git add PABC.MigrationService/dataset.schema.json
         fi
 
 
     - name: Commit and push changes
-      if: steps.check-changes.outputs.has_changes == 'true'
+      if: steps.check-changes-openapi.has_changes == 'true' || steps.check-changes-dataset.has_changes
       run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add PABC.Server/PABC.Server.json
         git status
-        git commit -m "Update OpenAPI documentation [skip ci]"
+        git commit -m "Update OpenAPI / JSON Schema documentation [skip ci]"
         
         echo "Event type: ${{ github.event_name }}"
         echo "Head ref: ${{ github.head_ref }}"

@@ -69,3 +69,16 @@ Create the name of the service account to use
   {{- printf "Host=%s;Port=%d;Database=%s;Username=%s;Password=%s;" .Values.settings.database.host (.Values.settings.database.port | int) .Values.settings.database.name .Values.settings.database.username .Values.settings.database.password -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "pabc.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "pabc.tplvalues.render" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}

@@ -1,4 +1,4 @@
-var builder = DistributedApplication.CreateBuilder(args);
+﻿var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder.AddPostgres("postgres")
     .WithDataVolume()
@@ -7,6 +7,7 @@ var postgres = builder.AddPostgres("postgres")
 var postgresdb = postgres.AddDatabase("Pabc");
 
 var migrations = builder.AddProject<Projects.PABC_MigrationService>("migrations")
+    .WithEnvironment("JSON_DATASET_PATH", "../test-dataset.json")
     .WithReference(postgresdb)
     .WaitFor(postgresdb);
 

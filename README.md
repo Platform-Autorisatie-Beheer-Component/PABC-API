@@ -8,6 +8,7 @@ Het Platform Autorisatie Beheer Component (PABC) is een component om binnen het 
 ## Ontwikkelen
 - Zorg dat PABC.AppHost het startup project is
 - De api key tijdens ontwikkelen is `unsafe-test-api-key`
+- De database wordt bij opstarten  automatisch geleegd en opnieuw gevuld met de data in [`test-dataset.json`](./test-dataset.json)
 
 ## Database migration aanmaken
 .NET CLI:

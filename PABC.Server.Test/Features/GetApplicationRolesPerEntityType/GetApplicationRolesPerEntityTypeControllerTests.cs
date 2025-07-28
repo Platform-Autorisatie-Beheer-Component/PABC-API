@@ -59,21 +59,25 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
             Id = Guid.NewGuid(), EntityTypeId = Guid.NewGuid().ToString(), Name = EntityTypeName, Type = EntityTypeType
         };
         var domain1 = new Domain
-            { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = "Domain 1" };
+            { Id = Guid.NewGuid(), Description = string.Empty, Name = "Domain 1" };
+
+        domain1.EntityTypes.Add(entityType);
+
         var domain2 = new Domain
-            { Id = Guid.NewGuid(), EntityTypes = [entityType], Description = string.Empty, Name = "Domain 2" };
+            { Id = Guid.NewGuid(), Description = string.Empty, Name = "Domain 2" };
+        domain2.EntityTypes.Add(entityType);
 
         var mappings = new List<Mapping>
         {
             new()
             {
-                Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole,
-                Domain = domain1
+                Id = Guid.NewGuid(), FunctionalRoleId = functionalRole.Id, ApplicationRoleId = applicationRole.Id,
+                DomainId = domain1.Id
             },
             new()
             {
-                Id = Guid.NewGuid(), FunctionalRole = functionalRole, ApplicationRole = applicationRole,
-                Domain = domain2
+                Id = Guid.NewGuid(), FunctionalRoleId = functionalRole.Id, ApplicationRoleId = applicationRole.Id,
+                DomainId = domain2.Id
             } // will result in duplicate result in the query if we don't handle it explicitly
         };
 
