@@ -38,7 +38,8 @@ jobs:
       run: dotnet build PABC.Server/PABC.Server.csproj --no-restore --configuration Release
 
     - name: run PABC.MigrationService to generate the schema
-      run: dotnet run PABC.MigrationService/PABC.MigrationService.csproj generate --configuration Release
+      working-directory: ./PABC.MigrationService
+      run: dotnet run generate --configuration Release
 
     - name: set git user
       run: |
