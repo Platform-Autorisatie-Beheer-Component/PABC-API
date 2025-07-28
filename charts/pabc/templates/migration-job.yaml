@@ -21,6 +21,14 @@ spec:
               name: {{ .Values.existingSecret | default (include "pabc.fullname" .) }}
           - configMapRef:
               name: {{ include "pabc.fullname" . }}
+      {{- if .Values.extraVolumeMounts }}
+        volumeMounts:
+          {{- include "pabc.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+      {{- end }}
+    {{- if .Values.extraVolumes }}
+      volumes:
+        {{- include "pabc.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+    {{- end }}
     {{- if .Values.postgresql.enabled }}
       initContainers:
       - name: "{{ .Chart.Name }}-wait-for-postgresql"

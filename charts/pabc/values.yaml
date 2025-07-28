@@ -159,6 +159,24 @@ migrations:
     pullPolicy: IfNotPresent
     tag: ""
   restartPolicy: Never
+  # -- Optionally specify a path to a data set json file to insert into the database. <details> <summary>More information</summary>You can use the extraVolumes and extraVolumeMounts values to mount a data set file into the running container. The file needs to be valid according to <a href="../../PABC.MigrationService/dataset.schema.json">the json schema</a></details>
+  dataSetPath: null
+  # -- Optionally specify extra list of additional volumes, for example to trust extra ca certificates.
+  extraVolumes: []
+  # e.g:
+  # extraVolumes:
+  #   - name: my-dataset-mount
+  #     configMap:
+  #       name: my-configmap-containing-my-dataset
+
+  # -- Optionally specify extra list of additional volumeMounts, for example to trust extra ca certificates.
+  extraVolumeMounts: []
+  # e.g:
+  # extraVolumeMounts:
+  #  - name: my-dataset-mount
+  #    readOnly: true
+  #    subPath: my-dataset
+  #    mountPath: /app/dataset.json
 
 #####################
 # Postgres subchart #

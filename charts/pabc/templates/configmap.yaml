@@ -12,3 +12,6 @@ data:
   {{- if .Values.settings.aspnetcore.httpPorts }}
   ASPNETCORE_HTTP_PORTS: {{ .Values.settings.aspnetcore.httpPorts | toString | quote }}
   {{- end }}
+  {{- if .Values.migrations.dataSetPath }}
+  JSON_DATASET_PATH: {{ .Values.migrations.dataSetPath | toString | quote }}
+  {{- end }}
