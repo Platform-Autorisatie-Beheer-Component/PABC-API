@@ -16,7 +16,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  update-openapi:
+  update-schemas:
     runs-on: ubuntu-latest
     
     steps:
