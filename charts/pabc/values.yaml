@@ -183,6 +183,8 @@ migrations:
 #####################
 postgresql:
   enabled: true
+  image:
+    repository: bitnamilegacy/postgresql
   auth:
     username: ""
     password: ""
@@ -194,3 +196,8 @@ postgresql:
       size: 8Gi
   metrics:
     enabled: false
+    image:
+      repository: bitnamilegacy/postgres-exporter
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
