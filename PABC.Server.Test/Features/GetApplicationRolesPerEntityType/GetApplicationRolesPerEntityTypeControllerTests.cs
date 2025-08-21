@@ -98,11 +98,24 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
     }
 
     [Fact]
-    public async Task Post_ReturnsBadRequest_WhenFunctionalRoleDoesNotExist()
+    public async Task Post_IgnoresUnknownFunctionRoles_WhenFunctionalRoleDoesNotExist()
+    {
+        var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, InvalidFunctionalRole));
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+        var singleResult = Assert.Single(response.Results);
+        var role = Assert.Single(singleResult.ApplicationRoles);
+        Assert.Equal(ApplicationRoleName, role.Name);
+        Assert.Equal(ApplicationName, role.Application);
+    }
+
+    [Fact]
+    public async Task Post_ReturnsEmpty_WhenFunctionalRoleDoesNotExist()
     {
         var result = await CreateController().Post(CreateRequest(InvalidFunctionalRole));
-        Assert.IsType<BadRequestObjectResult>(result.Result);
+        var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+        Assert.Empty(response.Results);
     }
+
 
     [Fact]
     public async Task Post_ReturnsEmpty_WhenFunctionalRoleNamesIsEmpty()
