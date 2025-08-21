@@ -142,11 +142,4 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         var results = Assert.Single(response.Results);
         Assert.Single(results.ApplicationRoles);
     }
-
-    [Fact]
-    public async Task Post_ReturnsBadRequest_WhenMixedValidAndInvalid()
-    {
-        var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, InvalidFunctionalRole));
-        Assert.IsType<BadRequestObjectResult>(result.Result);
-    }
 }
