@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PABC.Data.Entities;
 
 namespace PABC.Data;
@@ -38,14 +38,14 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
             r.HasIndex(x => new { x.Name }).IsUnique();
         });
 
-        modelBuilder.Entity<Mapping>(m => 
+        modelBuilder.Entity<Mapping>(m =>
         {
             m.HasIndex(x => new { x.ApplicationRoleId, x.DomainId, x.FunctionalRoleId }).IsUnique();
-             
+
             m.ToTable(t => t.HasCheckConstraint(
-                "CK_Mapping_DomainId_IsDomainOptional", 
+                "CK_Mapping_DomainId_IsDomainOptional",
                 "(\"IsDomainOptional\" = true AND \"DomainId\" IS NULL) OR (\"IsDomainOptional\" = false AND \"DomainId\" IS NOT NULL)"));
-             
+
             m.HasOne(x => x.Domain)
              .WithMany()
              .HasForeignKey(x => x.DomainId)

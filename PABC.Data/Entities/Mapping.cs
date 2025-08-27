@@ -1,4 +1,4 @@
-using Json.Schema.Generation;
+﻿using Json.Schema.Generation;
 
 namespace PABC.Data.Entities
 {
@@ -15,7 +15,7 @@ namespace PABC.Data.Entities
 
         [Json.Schema.Generation.JsonExclude]
         public Domain? Domain { get; private init; }
-        
+
         [Json.Schema.Generation.JsonExclude]
         public ApplicationRole ApplicationRole { get; private init; } = null!;
     }
