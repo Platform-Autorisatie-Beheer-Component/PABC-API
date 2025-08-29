@@ -12,8 +12,8 @@ using PABC.Data;
 namespace PABC.Data.Migrations
 {
     [DbContext(typeof(PabcDbContext))]
-    [Migration("20250827153734_AddIsDomainOptionalFieldAndNullableDomainId")]
-    partial class AddIsDomainOptionalFieldAndNullableDomainId
+    [Migration("20250829142350_AddIsAllEntityTypesAndNullableDomainId")]
+    partial class AddIsAllEntityTypesAndNullableDomainId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -152,7 +152,7 @@ namespace PABC.Data.Migrations
                     b.Property<Guid>("FunctionalRoleId")
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("IsDomainOptional")
+                    b.Property<bool>("IsAllEntityTypes")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");
@@ -166,7 +166,7 @@ namespace PABC.Data.Migrations
 
                     b.ToTable("Mappings", t =>
                         {
-                            t.HasCheckConstraint("CK_Mapping_DomainId_IsDomainOptional", "(\"IsDomainOptional\" = true AND \"DomainId\" IS NULL) OR (\"IsDomainOptional\" = false AND \"DomainId\" IS NOT NULL)");
+                            t.HasCheckConstraint("CK_Mapping_DomainId_IsAllEntityTypes", "(\"IsAllEntityTypes\" = true AND \"DomainId\" IS NULL) OR (\"IsAllEntityTypes\" = false AND \"DomainId\" IS NOT NULL)");
                         });
                 });
 

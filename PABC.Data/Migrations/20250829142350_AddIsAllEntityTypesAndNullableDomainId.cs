@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PABC.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIsDomainOptionalFieldAndNullableDomainId : Migration
+    public partial class AddIsAllEntityTypesAndNullableDomainId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,16 +24,16 @@ namespace PABC.Data.Migrations
                 oldType: "uuid");
 
             migrationBuilder.AddColumn<bool>(
-                name: "IsDomainOptional",
+                name: "IsAllEntityTypes",
                 table: "Mappings",
                 type: "boolean",
                 nullable: false,
                 defaultValue: false);
 
             migrationBuilder.AddCheckConstraint(
-                name: "CK_Mapping_DomainId_IsDomainOptional",
+                name: "CK_Mapping_DomainId_IsAllEntityTypes",
                 table: "Mappings",
-                sql: "(\"IsDomainOptional\" = true AND \"DomainId\" IS NULL) OR (\"IsDomainOptional\" = false AND \"DomainId\" IS NOT NULL)");
+                sql: "(\"IsAllEntityTypes\" = true AND \"DomainId\" IS NULL) OR (\"IsAllEntityTypes\" = false AND \"DomainId\" IS NOT NULL)");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Mappings_Domains_DomainId",
@@ -52,11 +52,11 @@ namespace PABC.Data.Migrations
                 table: "Mappings");
 
             migrationBuilder.DropCheckConstraint(
-                name: "CK_Mapping_DomainId_IsDomainOptional",
+                name: "CK_Mapping_DomainId_IsAllEntityTypes",
                 table: "Mappings");
 
             migrationBuilder.DropColumn(
-                name: "IsDomainOptional",
+                name: "IsAllEntityTypes",
                 table: "Mappings");
 
             migrationBuilder.AlterColumn<Guid>(

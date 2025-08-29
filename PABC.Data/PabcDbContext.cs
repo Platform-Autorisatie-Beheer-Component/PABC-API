@@ -41,10 +41,11 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.Entity<Mapping>(m =>
         {
             m.HasIndex(x => new { x.ApplicationRoleId, x.DomainId, x.FunctionalRoleId }).IsUnique();
-
+            var domainIdColumn = m.Metadata.GetProperty(nameof(Mapping.DomainId)).GetColumnName();
+            var isAllEntityTypesColumn = m.Metadata.GetProperty(nameof(Mapping.IsAllEntityTypes)).GetColumnName();
             m.ToTable(t => t.HasCheckConstraint(
-                "CK_Mapping_DomainId_IsDomainOptional",
-                "(\"IsDomainOptional\" = true AND \"DomainId\" IS NULL) OR (\"IsDomainOptional\" = false AND \"DomainId\" IS NOT NULL)"));
+                $"CK_Mapping_{domainIdColumn}_{isAllEntityTypesColumn}",
+                $"(\"{isAllEntityTypesColumn}\" = true AND \"{domainIdColumn}\" IS NULL) OR (\"{isAllEntityTypesColumn}\" = false AND \"{domainIdColumn}\" IS NOT NULL)"));
 
             m.HasOne(x => x.Domain)
              .WithMany()

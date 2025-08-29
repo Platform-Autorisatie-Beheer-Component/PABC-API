@@ -8,7 +8,7 @@ namespace PABC.Data.Entities
         public required Guid FunctionalRoleId { get; init; }
         public Guid? DomainId { get; init; }
         public required Guid ApplicationRoleId { get; init; }
-        public bool IsDomainOptional { get; init; } = false;
+        public bool IsAllEntityTypes { get; init; } = false;
 
         [JsonExclude]
         public FunctionalRole FunctionalRole { get; private init; } = null!;
