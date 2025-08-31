@@ -127,12 +127,15 @@
           },
           "applicationRoleId": {
             "$ref": "#/$defs/guid"
+          },
+          "isAllEntityTypes": {
+            "type": "boolean",
+            "default": false
           }
         },
         "required": [
           "id",
           "functionalRoleId",
-          "domainId",
           "applicationRoleId"
         ]
       }
