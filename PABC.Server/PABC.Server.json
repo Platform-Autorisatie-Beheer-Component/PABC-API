@@ -146,19 +146,19 @@
       },
       "GetApplicationRolesResponseModel": {
         "required": [
-          "applicationRoles",
-          "entityType"
+          "applicationRole",
+          "entityTypes"
         ],
         "type": "object",
         "properties": {
-          "entityType": {
-            "$ref": "#/components/schemas/EntityTypeModel"
-          },
-          "applicationRoles": {
+          "entityTypes": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ApplicationRoleModel"
+              "$ref": "#/components/schemas/EntityTypeModel"
             }
+          },
+          "applicationRole": {
+            "$ref": "#/components/schemas/ApplicationRoleModel"
           }
         },
         "additionalProperties": false
