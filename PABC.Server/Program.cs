@@ -5,7 +5,7 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddNpgsqlDbContext<PabcDbContext>(connectionName: "Pabc");
+builder.AddPabcDbContext();
 
 builder.Services.AddRequestTimeouts();
 builder.Services.AddOutputCache();
