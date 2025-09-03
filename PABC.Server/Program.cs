@@ -1,21 +1,11 @@
 using PABC.Data;
 using PABC.Server.Auth;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore; 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddNpgsqlDbContext<PabcDbContext>(
-    connectionName: "Pabc",
-    configureDbContextOptions: options =>
-    {
-        options.UseNpgsql(npgsqlOptions =>
-        { 
-            npgsqlOptions.MigrationsHistoryTable("__ef_migrations_history", "public");
-        })
-        .UseSnakeCaseNamingConvention();
-    });
+builder.AddPabcDbContext();
 
 builder.Services.AddRequestTimeouts();
 builder.Services.AddOutputCache();
