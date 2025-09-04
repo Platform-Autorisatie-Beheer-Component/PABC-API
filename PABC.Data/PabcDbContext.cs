@@ -38,7 +38,20 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
             r.HasIndex(x => new { x.Name }).IsUnique();
         });
 
-        modelBuilder.Entity<Mapping>(m => m.HasIndex(x => new { x.ApplicationRoleId, x.DomainId, x.FunctionalRoleId }).IsUnique());
+        modelBuilder.Entity<Mapping>(m =>
+        {
+            m.HasIndex(x => new { x.ApplicationRoleId, x.DomainId, x.FunctionalRoleId }).IsUnique();
+            var domainIdColumn = m.Metadata.GetProperty(nameof(Mapping.DomainId)).GetColumnName();
+            var isAllEntityTypesColumn = m.Metadata.GetProperty(nameof(Mapping.IsAllEntityTypes)).GetColumnName();
+            m.ToTable(t => t.HasCheckConstraint(
+                $"CK_Mapping_{domainIdColumn}_{isAllEntityTypesColumn}",
+                $"(\"{isAllEntityTypesColumn}\" = true AND \"{domainIdColumn}\" IS NULL) OR (\"{isAllEntityTypesColumn}\" = false AND \"{domainIdColumn}\" IS NOT NULL)"));
+
+            m.HasOne(x => x.Domain)
+             .WithMany()
+             .HasForeignKey(x => x.DomainId)
+             .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 
     public required DbSet<ApplicationRole> ApplicationRoles { get; set; }
