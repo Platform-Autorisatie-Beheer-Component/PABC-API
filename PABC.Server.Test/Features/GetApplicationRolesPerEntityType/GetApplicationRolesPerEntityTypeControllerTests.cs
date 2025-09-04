@@ -92,9 +92,9 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
         var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
         var singleResult = Assert.Single(response.Results);
-        Assert.NotNull(singleResult.ApplicationRole);
-        Assert.Equal(ApplicationRoleName, singleResult.ApplicationRole.Name);
-        Assert.Equal(ApplicationName, singleResult.ApplicationRole.Application);
+        var role = Assert.Single(singleResult.ApplicationRoles);
+        Assert.Equal(ApplicationRoleName, role.Name);
+        Assert.Equal(ApplicationName, role.Application);
     }
 
     [Fact]
@@ -103,9 +103,9 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, InvalidFunctionalRole));
         var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
         var singleResult = Assert.Single(response.Results);
-        Assert.NotNull(singleResult.ApplicationRole);
-        Assert.Equal(ApplicationRoleName, singleResult.ApplicationRole.Name);
-        Assert.Equal(ApplicationName, singleResult.ApplicationRole.Application);
+        var role = Assert.Single(singleResult.ApplicationRoles);
+        Assert.Equal(ApplicationRoleName, role.Name);
+        Assert.Equal(ApplicationName, role.Application);
     }
 
     [Fact]
@@ -131,7 +131,7 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, ValidFunctionalRole));
         var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
         var results = Assert.Single(response.Results);
-        Assert.NotNull(results.ApplicationRole);
+        Assert.Single(results.ApplicationRoles);
     }
 
     [Fact]
@@ -140,6 +140,6 @@ public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fix
         var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
         var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
         var results = Assert.Single(response.Results);
-        Assert.NotNull(results.ApplicationRole);
+        Assert.Single(results.ApplicationRoles);
     }
 }

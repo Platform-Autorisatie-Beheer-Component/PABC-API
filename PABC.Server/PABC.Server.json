@@ -146,19 +146,20 @@
       },
       "GetApplicationRolesResponseModel": {
         "required": [
-          "applicationRole",
-          "entityTypes"
+          "applicationRoles",
+          "entityType"
         ],
         "type": "object",
         "properties": {
-          "entityTypes": {
+          "entityType": {
+            "$ref": "#/components/schemas/EntityTypeModel"
+          },
+          "applicationRoles": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/EntityTypeModel"
-            }
-          },
-          "applicationRole": {
-            "$ref": "#/components/schemas/ApplicationRoleModel"
+              "$ref": "#/components/schemas/ApplicationRoleModel"
+            },
+            "description": "List of application roles associated with this entity type"
           }
         },
         "additionalProperties": false

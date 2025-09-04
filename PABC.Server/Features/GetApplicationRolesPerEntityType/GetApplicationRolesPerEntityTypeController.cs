@@ -22,37 +22,43 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
         public async Task<ActionResult<GetApplicationRolesResponse>> Post([FromBody] GetApplicationRolesRequest request,
             CancellationToken token = default)
         {
-            var allEntityTypesQuery = from m in db.Mappings
+            var allEntityTypesList = await (from m in db.Mappings
                     .Include(m => m.ApplicationRole)
                     .Include(m => m.FunctionalRole)
                     .Include(m => m.Domain)
                     .Where(x => request.FunctionalRoleNames.Contains(x.FunctionalRole.Name) && x.IsAllEntityTypes)
                 from e in db.EntityTypes
-                select new { m, e };
+                select new { m, e }).ToListAsync(token);
 
-            var domainSpecificQuery = from m in db.Mappings
+            var domainSpecificList = await (from m in db.Mappings
                     .Include(m => m.ApplicationRole)
                     .Include(m => m.FunctionalRole)
                     .Include(m => m.Domain)
                     .Where(x => request.FunctionalRoleNames.Contains(x.FunctionalRole.Name) && !x.IsAllEntityTypes)
                 from e in m.Domain!.EntityTypes
-                select new { m, e };
+                select new { m, e }).ToListAsync(token);
 
-            var combinedQuery = allEntityTypesQuery.Union(domainSpecificQuery);
-
-            var rawResults = await combinedQuery.ToListAsync(token);
-
+            // Combine the lists
+            var rawResults = allEntityTypesList.ToList();
+            rawResults.AddRange(domainSpecificList);
+    
             var results = rawResults
-                .GroupBy(x => new { x.m.Id, x.m.ApplicationRole.Name, x.m.ApplicationRole.Application })
+                .GroupBy(x => new { x.e.Id, x.e.Type, x.e.Name })
                 .Select(g => new GetApplicationRolesResponseModel
                 {
-                    EntityTypes = g.Select(x => new EntityTypeModel
+                    EntityType = new EntityTypeModel
+                    {
+                        Id = g.Key.Id.ToString(),
+                        Type = g.Key.Type,
+                        Name = g.Key.Name
+                    },
+                    ApplicationRoles = g.Select(x => new ApplicationRoleModel
                         {
-                            Id = x.e.Id.ToString(), Type = x.e.Type, Name = x.e.Name
+                            Name = x.m.ApplicationRole.Name,
+                            Application = x.m.ApplicationRole.Application
                         })
-                        .DistinctBy(et => et.Id)
-                        .ToList(),
-                    ApplicationRole = new ApplicationRoleModel { Name = g.Key.Name, Application = g.Key.Application }
+                        .DistinctBy(ar => new { ar.Name, ar.Application })
+                        .ToList()
                 })
                 .ToList();
 

@@ -2,13 +2,20 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType;
 
 public class GetApplicationRolesResponse
 {
-    public required IReadOnlyCollection<GetApplicationRolesResponseModel> Results { get;set; }
+    public required IReadOnlyCollection<GetApplicationRolesResponseModel> Results { get; set; }
 }
 
 public class GetApplicationRolesResponseModel
 {
-    public required List<EntityTypeModel> EntityTypes { get; set; } = new();
-    public required  ApplicationRoleModel ApplicationRole { get; set; }
+    /// <summary>
+    /// The entity type details
+    /// </summary>
+    public required EntityTypeModel EntityType { get; set; }
+    
+    /// <summary>
+    /// List of application roles associated with this entity type
+    /// </summary>
+    public required List<ApplicationRoleModel> ApplicationRoles { get; set; } = new();
 }
 
 public class EntityTypeModel
@@ -18,11 +25,13 @@ public class EntityTypeModel
     /// </summary>
     /// <example>melding-klein-kansspel</example>
     public required string Id { get; init; }
+    
     /// <summary>
     /// The name of the entity type
     /// </summary>
     /// <example>Melding klein kansspel</example>
     public required string Name { get; init; }
+    
     /// <summary>
     /// The kind of entity
     /// </summary>
@@ -37,6 +46,7 @@ public class ApplicationRoleModel
     /// </summary>
     /// <example>Behandelaar</example>
     public required string Name { get; set; }
+    
     /// <summary>
     /// The application that this role applies to
     /// </summary>
