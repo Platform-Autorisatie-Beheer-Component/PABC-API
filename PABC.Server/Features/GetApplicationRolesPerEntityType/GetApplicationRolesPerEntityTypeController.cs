@@ -1,4 +1,4 @@
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,47 +22,47 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
         public async Task<ActionResult<GetApplicationRolesResponse>> Post([FromBody] GetApplicationRolesRequest request,
             CancellationToken token = default)
         {
-            var allEntityTypesList = await (from m in db.Mappings
+            var allEntityTypesList = await (
+                from m in db.Mappings
                     .Include(m => m.ApplicationRole)
                     .Include(m => m.FunctionalRole)
                     .Include(m => m.Domain)
-                    .Where(x => request.FunctionalRoleNames.Contains(x.FunctionalRole.Name) && x.IsAllEntityTypes)
+                where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && m.IsAllEntityTypes
                 from e in db.EntityTypes
-                select new { m, e }).ToListAsync(token);
+                select new { EntityType = e, ApplicationRole = m.ApplicationRole }
+            ).ToListAsync(token);
 
-            var domainSpecificList = await (from m in db.Mappings
+            // Fetch domain-specific mappings — apply only to entity types within the domain
+            var domainSpecificList = await (
+                from m in db.Mappings
                     .Include(m => m.ApplicationRole)
                     .Include(m => m.FunctionalRole)
                     .Include(m => m.Domain)
-                    .Where(x => request.FunctionalRoleNames.Contains(x.FunctionalRole.Name) && !x.IsAllEntityTypes)
+                where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && !m.IsAllEntityTypes
                 from e in m.Domain!.EntityTypes
-                select new { m, e }).ToListAsync(token);
+                select new { EntityType = e, ApplicationRole = m.ApplicationRole }
+            ).ToListAsync(token);
 
-            // Combine the lists
-            var rawResults = allEntityTypesList.ToList();
-            rawResults.AddRange(domainSpecificList);
-    
-            var results = rawResults
-                .GroupBy(x => new { x.e.Id, x.e.Type, x.e.Name })
+            // Combine results
+            var rawResults = allEntityTypesList.Concat(domainSpecificList).ToList();
+
+            // Group by EntityType and project
+            var groupedResults = rawResults
+                .GroupBy(x => new { x.EntityType.Id, x.EntityType.Type, x.EntityType.Name })
                 .Select(g => new GetApplicationRolesResponseModel
                 {
-                    EntityType = new EntityTypeModel
-                    {
-                        Id = g.Key.Id.ToString(),
-                        Type = g.Key.Type,
-                        Name = g.Key.Name
-                    },
-                    ApplicationRoles = g.Select(x => new ApplicationRoleModel
+                    EntityType = new EntityTypeModel { Id = g.Key.Id.ToString(), Type = g.Key.Type, Name = g.Key.Name },
+                    ApplicationRoles = g
+                        .Select(x => new ApplicationRoleModel
                         {
-                            Name = x.m.ApplicationRole.Name,
-                            Application = x.m.ApplicationRole.Application
+                            Name = x.ApplicationRole.Name, Application = x.ApplicationRole.Application
                         })
                         .DistinctBy(ar => new { ar.Name, ar.Application })
                         .ToList()
                 })
                 .ToList();
 
-            return new GetApplicationRolesResponse { Results = results };
+            return new GetApplicationRolesResponse { Results = groupedResults };
         }
     }
 }
