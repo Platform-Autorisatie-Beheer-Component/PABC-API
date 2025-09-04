@@ -136,6 +136,7 @@
         "required": [
           "id",
           "functionalRoleId",
+          "domainId",
           "applicationRoleId"
         ]
       }
