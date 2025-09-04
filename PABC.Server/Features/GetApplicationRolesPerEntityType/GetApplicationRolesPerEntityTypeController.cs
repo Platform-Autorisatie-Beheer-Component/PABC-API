@@ -29,7 +29,7 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
                     .Include(m => m.Domain)
                 where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && m.IsAllEntityTypes
                 from e in db.EntityTypes
-                select new { EntityType = e, ApplicationRole = m.ApplicationRole }
+                select new { EntityType = e, m.ApplicationRole }
             ).ToListAsync(token);
 
             // Fetch domain-specific mappings — apply only to entity types within the domain
@@ -40,7 +40,7 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
                     .Include(m => m.Domain)
                 where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && !m.IsAllEntityTypes
                 from e in m.Domain!.EntityTypes
-                select new { EntityType = e, ApplicationRole = m.ApplicationRole }
+                select new { EntityType = e, m.ApplicationRole }
             ).ToListAsync(token);
 
             // Combine results
