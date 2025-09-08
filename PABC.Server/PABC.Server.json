@@ -158,7 +158,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ApplicationRoleModel"
-            }
+            },
+            "description": "List of application roles associated with this entity type"
           }
         },
         "additionalProperties": false

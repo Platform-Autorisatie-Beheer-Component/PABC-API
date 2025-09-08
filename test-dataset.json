@@ -33,7 +33,8 @@
   ],
   "functionalRoles": [
     { "id": "72d77855-318a-47e5-bdc8-aa1c3360d3eb", "name": "GemeenteRol1" },
-    { "id": "09b78850-75cd-4b5f-b56c-3bee5261a0f9", "name": "GemeenteRol2" }
+    { "id": "09b78850-75cd-4b5f-b56c-3bee5261a0f9", "name": "GemeenteRol2" },
+    { "id": "e5a7c8f9-3b12-4d67-9e8f-1a2b3c4d5e6f", "name": "AllEntityFunctionalRole" }
   ],
   "entityTypes": [
     {
@@ -100,6 +101,12 @@
     }
   ],
   "mappings": [
+    {
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "functionalRoleId": "e5a7c8f9-3b12-4d67-9e8f-1a2b3c4d5e6f",
+      "applicationRoleId": "7839298d-9ac9-4b02-bcfc-18b5e6e00227",
+      "isAllEntityTypes": true
+    },
     {
       "id": "2e458076-5a94-4d71-b0c6-ad059a719c27",
       "functionalRoleId": "72d77855-318a-47e5-bdc8-aa1c3360d3eb",
