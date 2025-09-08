@@ -27,7 +27,9 @@ namespace PABC.Server.Test.TestConfig
             await _app.ResourceNotifications.WaitForResourceHealthyAsync("Pabc");
             var _postgresConnectionString = await _postgres.Resource.GetConnectionStringAsync();
             var services = new ServiceCollection();
-            services.AddDbContext<PabcDbContext>(opt => opt.UseNpgsql(_postgresConnectionString));
+            services.AddDbContext<PabcDbContext>(opt =>
+         opt.UseNpgsql(_postgresConnectionString)
+            .UseSnakeCaseNamingConvention());
             _serviceScope = services.BuildServiceProvider().CreateScope();
             DbContext = _serviceScope.ServiceProvider.GetRequiredService<PabcDbContext>();
             await DbContext.Database.MigrateAsync();

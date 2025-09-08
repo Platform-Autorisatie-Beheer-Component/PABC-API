@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text.Json;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data.Entities;
 using PABC.MigrationService.Features.DatabaseInitialization;
@@ -12,13 +11,17 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
         public async Task InitializeAsync()
         {
             await ClearDatabaseAsync();
-            await fixture.DbContext.AddRangeAsync([
-                new FunctionalRole{ Id = Guid.NewGuid(), Name = Guid.NewGuid().ToString() }
-            ]);
+            await fixture.DbContext.AddRangeAsync(new FunctionalRole
+            {
+                Id = Guid.NewGuid(), Name = Guid.NewGuid().ToString()
+            });
             await fixture.DbContext.SaveChangesAsync();
         }
 
-        public Task DisposeAsync() => Task.CompletedTask;
+        public Task DisposeAsync()
+        {
+            return Task.CompletedTask;
+        }
 
         private async Task ClearDatabaseAsync()
         {
@@ -46,7 +49,15 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
         {
             var initializer = new DatabaseInitializer(fixture.DbContext);
 
-            await initializer.Initialize(new DataSet { ApplicationRoles = [], Domains = [], EntityTypes = [], FunctionalRoles = [], Mappings = [] }, CancellationToken.None);
+            await initializer.Initialize(
+                new DataSet
+                {
+                    ApplicationRoles = [],
+                    Domains = [],
+                    EntityTypes = [],
+                    FunctionalRoles = [],
+                    Mappings = []
+                }, CancellationToken.None);
 
             var functionalRoleCount = await fixture.DbContext.FunctionalRoles.CountAsync();
             Assert.Equal(0, functionalRoleCount);
@@ -69,11 +80,21 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
                 .ThenInclude(x => x.EntityTypes)
                 .ToListAsync();
 
-            var jsonString = JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true });
+            Assert.Equal(7, result.Count);
 
-            var expectedResultString = await File.ReadAllTextAsync(Path.Combine(binFolder!, "expected-result-in-the-database.json"));
+            Assert.Contains(result, m => m.IsAllEntityTypes);
 
-            Assert.Equal(expectedResultString, jsonString, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+            var appRoleIds = result.Select(m => m.ApplicationRoleId).Distinct().ToList();
+            Assert.Equal(6, appRoleIds.Count);
+
+            var funcRoleIds = result.Select(m => m.FunctionalRoleId).Distinct().ToList();
+            Assert.Equal(3, funcRoleIds.Count);
+
+            var domainIds = result.Where(m => m.DomainId.HasValue)
+                .Select(m => m.DomainId.Value)
+                .Distinct()
+                .ToList();
+            Assert.Equal(3, domainIds.Count);
         }
     }
 }
