@@ -1,4 +1,4 @@
-namespace PABC.Server.Features.GetApplicationRolesPerEntityType;
+﻿namespace PABC.Server.Features.GetApplicationRolesPerEntityType;
 
 public class GetApplicationRolesResponse
 {
@@ -10,7 +10,7 @@ public class GetApplicationRolesResponseModel
     /// <summary>
     /// The entity type details
     /// </summary>
-    public required EntityTypeModel EntityType { get; set; }
+    public EntityTypeModel? EntityType { get; set; }
     
     /// <summary>
     /// List of application roles associated with this entity type
