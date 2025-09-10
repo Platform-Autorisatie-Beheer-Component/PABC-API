@@ -123,22 +123,43 @@
             "$ref": "#/$defs/guid"
           },
           "domainId": {
-            "$ref": "#/$defs/guid"
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
           },
           "applicationRoleId": {
             "$ref": "#/$defs/guid"
           },
           "isAllEntityTypes": {
-            "type": "boolean",
-            "default": false
+            "type": "boolean"
           }
         },
         "required": [
           "id",
           "functionalRoleId",
-          "domainId",
           "applicationRoleId"
-        ]
+        ],
+        "if": {
+          "properties": {
+            "isAllEntityTypes": {
+              "const": true
+            }
+          },
+          "required": [
+            "isAllEntityTypes"
+          ]
+        },
+        "then": {
+          "properties": {
+            "domainId": {
+              "type": "string",
+              "format": "uuid",
+              "const": null
+            }
+          }
+        }
       }
     }
   },

@@ -1,4 +1,5 @@
 {
+  "$schema": "./PABC.MigrationService/dataset.schema.json",
   "applicationRoles": [
     {
       "id": "7839298d-9ac9-4b02-bcfc-18b5e6e00227",
