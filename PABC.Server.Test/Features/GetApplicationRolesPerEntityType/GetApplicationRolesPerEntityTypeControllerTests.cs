@@ -1,4 +1,4 @@
-using PABC.Data;
+﻿using PABC.Data;
 using PABC.Data.Entities;
 using PABC.Server.Features.GetApplicationRolesPerEntityType;
 using PABC.Server.Test.TestConfig;
@@ -16,6 +16,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         private static readonly string EntityTypeType = "TypeA";
         private static readonly string DomainSpecificAppRoleName = "DomainSpecificRole";
         private static readonly string AllEntityTypesAppRoleName = "AllEntityTypesRole";
+        private static readonly string NoEntityTypesAppRoleName = "NoEntityTypesAppRoleName";
         private static readonly string SecondEntityTypeName = "EntityTypeB";
         private static readonly string SecondEntityTypeType = "TypeB";
         private readonly PabcDbContext _dbContext = fixture.DbContext;
@@ -67,6 +68,12 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             var allEntityTypesAppRole = new ApplicationRole
             {
                 Id = Guid.NewGuid(), Name = AllEntityTypesAppRoleName, Application = ApplicationName
+            };
+            var noEntityTypesAppRole = new ApplicationRole
+            {
+                Id = Guid.NewGuid(),
+                Name = NoEntityTypesAppRoleName,
+                Application = ApplicationName
             };
 
             var entityTypeA = new EntityType
@@ -123,10 +130,17 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
                     FunctionalRoleId = functionalRole.Id,
                     ApplicationRoleId = allEntityTypesAppRole.Id,
                     IsAllEntityTypes = true
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    FunctionalRoleId = functionalRole.Id,
+                    ApplicationRoleId = noEntityTypesAppRole.Id,
+                    IsAllEntityTypes = false
                 }
             };
 
-            _dbContext.AddRange(functionalRole, applicationRole, domainSpecificAppRole, allEntityTypesAppRole);
+            _dbContext.AddRange(functionalRole, applicationRole, domainSpecificAppRole, allEntityTypesAppRole, noEntityTypesAppRole);
             _dbContext.AddRange(entityTypeA, entityTypeB, domain1, domain2);
             _dbContext.AddRange(mappings);
             await _dbContext.SaveChangesAsync();
@@ -211,10 +225,11 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         {
             var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+            var resultsWithEntityType = response.Results.Where(x => x.EntityType is not null).ToList();
 
-            Assert.Equal(2, response.Results.Count);
+            Assert.Equal(2, resultsWithEntityType.Count);
 
-            foreach (var entityTypeResult in response.Results)
+            foreach (var entityTypeResult in resultsWithEntityType)
             {
                 Assert.Contains(entityTypeResult.ApplicationRoles, role => role.Name == AllEntityTypesAppRoleName);
             }
@@ -251,6 +266,19 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             Assert.NotNull(entityTypeBResult);
             Assert.Contains(entityTypeBResult.ApplicationRoles, role => role.Name == AllEntityTypesAppRoleName);
             Assert.DoesNotContain(entityTypeBResult.ApplicationRoles, role => role.Name == DomainSpecificAppRoleName);
+        }
+
+        [Fact]
+        public async Task Post_ReturnsNullEntityType_WhenMappingIsAllEntityTypes()
+        {
+            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
+
+            var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+            var resultWithoutEntityType = response.Results.Where(r => r.EntityType is null);
+            var singleResult = Assert.Single(resultWithoutEntityType);
+            var singleAppRole = Assert.Single(singleResult.ApplicationRoles);
+
+            Assert.Equal(NoEntityTypesAppRoleName, singleAppRole.Name);
         }
     }
 }
