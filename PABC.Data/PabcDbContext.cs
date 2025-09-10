@@ -45,7 +45,7 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
             var isAllEntityTypesColumn = m.Metadata.GetProperty(nameof(Mapping.IsAllEntityTypes)).GetColumnName();
             m.ToTable(t => t.HasCheckConstraint(
                 $"CK_Mapping_{domainIdColumn}_{isAllEntityTypesColumn}",
-                $"(\"{isAllEntityTypesColumn}\" = true AND \"{domainIdColumn}\" IS NULL) OR (\"{isAllEntityTypesColumn}\" = false AND \"{domainIdColumn}\" IS NOT NULL)"));
+                $"\"{isAllEntityTypesColumn}\" = false OR \"{domainIdColumn}\" IS NULL"));
 
             m.HasOne(x => x.Domain)
              .WithMany()
