@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
+using PABC.Data.Entities;
 using PABC.Server.Auth;
 
 namespace PABC.Server.Features.GetApplicationRolesPerEntityType
@@ -39,8 +40,8 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
                     .Include(m => m.FunctionalRole)
                     .Include(m => m.Domain)
                 where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && !m.IsAllEntityTypes
-                from e in m.Domain!.EntityTypes
-                select new { EntityType = e, m.ApplicationRole }
+                from e in m.Domain!.EntityTypes.DefaultIfEmpty()
+                select new { EntityType = (EntityType?)e, m.ApplicationRole }
             ).ToListAsync(token);
 
             // Combine results
@@ -48,10 +49,10 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
 
             // Group by EntityType and project
             var groupedResults = rawResults
-                .GroupBy(x => new { x.EntityType.Id, x.EntityType.Type, x.EntityType.Name })
+                .GroupBy(x => x.EntityType)
                 .Select(g => new GetApplicationRolesResponseModel
                 {
-                    EntityType = new EntityTypeModel { Id = g.Key.Id.ToString(), Type = g.Key.Type, Name = g.Key.Name },
+                    EntityType = g.Key == null ? null : new EntityTypeModel { Id = g.Key.Id.ToString(), Type = g.Key.Type, Name = g.Key.Name },
                     ApplicationRoles = g
                         .Select(x => new ApplicationRoleModel
                         {
