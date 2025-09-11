@@ -1,4 +1,6 @@
-﻿namespace PABC.Server.Features.GetApplicationRolesPerEntityType;
+﻿using System.Text.Json.Serialization;
+
+namespace PABC.Server.Features.GetApplicationRolesPerEntityType;
 
 public class GetApplicationRolesResponse
 {
@@ -10,6 +12,7 @@ public class GetApplicationRolesResponseModel
     /// <summary>
     /// The entity type details
     /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public EntityTypeModel? EntityType { get; set; }
     
     /// <summary>
