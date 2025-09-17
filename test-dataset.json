@@ -34,7 +34,7 @@
     {
       "id": "d8b091f0-fc70-4825-9dac-5fcdec931f8e",
       "application": "MyApplication2",
-      "name": "AllEntityApplicationRole"
+      "name": "NoEntityApplicationRole"
     }
   ],
   "functionalRoles": [
