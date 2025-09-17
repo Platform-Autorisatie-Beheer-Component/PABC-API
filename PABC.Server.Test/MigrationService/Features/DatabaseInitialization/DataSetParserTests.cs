@@ -123,7 +123,7 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
         [Fact]
         public async Task Mapping_with_all_entity_types_and_domainId_fails_with_const_expected_null_error()
         {
-            var error = await TestThrowsJsonSchemaValidationExceptionWithSingleError($$"""
+            var error = await TestThrowsJsonSchemaValidationExceptionWithSingleError("""
             {
                 "applicationRoles": [],
                 "functionalRoles": [],
