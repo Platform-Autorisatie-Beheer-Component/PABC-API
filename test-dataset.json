@@ -41,7 +41,7 @@
     { "id": "72d77855-318a-47e5-bdc8-aa1c3360d3eb", "name": "GemeenteRol1" },
     { "id": "09b78850-75cd-4b5f-b56c-3bee5261a0f9", "name": "GemeenteRol2" },
     { "id": "e5a7c8f9-3b12-4d67-9e8f-1a2b3c4d5e6f", "name": "AllEntityFunctionalRole" },
-    { "id": "d5c09974-3eba-44de-a3c9-85d7bcbd0c66", "name": "AdministratorFunctionalRole" }
+    { "id": "d5c09974-3eba-44de-a3c9-85d7bcbd0c66", "name": "NoEntityFunctionalRole" }
   ],
   "entityTypes": [
     {
