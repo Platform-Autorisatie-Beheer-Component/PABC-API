@@ -146,7 +146,8 @@
       },
       "GetApplicationRolesResponseModel": {
         "required": [
-          "applicationRoles"
+          "applicationRoles",
+          "entityType"
         ],
         "type": "object",
         "properties": {
