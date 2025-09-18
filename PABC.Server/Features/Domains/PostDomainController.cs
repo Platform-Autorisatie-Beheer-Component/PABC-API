@@ -1,0 +1,56 @@
+﻿using System.Net.Mime;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PABC.Data;
+using PABC.Data.Entities;
+
+namespace PABC.Server.Features.Domains
+{
+    [ApiController]
+    [Route("/api/v1/domains")]
+    public class PostDomainController(PabcDbContext db) : Controller
+    {
+        [HttpPost]
+        [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
+        [ProducesResponseType<Domain>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
+        public async Task<IActionResult> PostDomain([FromBody] DomainUpsertModel model, CancellationToken token = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            try
+            {
+                var existingDomain = await db.Domains.FirstOrDefaultAsync(domain => domain.Name.ToLower() == model.Name.ToLower(), token);
+
+                if (existingDomain != null)
+                {
+                    return Conflict(new ProblemDetails
+                    {
+                        Title = "Duplicate Domain Name",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
+                }
+
+                var domain = new Domain { Id = Guid.NewGuid(), Name = model.Name, Description = model.Description };
+                
+                db.Domains.Add(domain);
+                
+                await db.SaveChangesAsync(token);
+
+                return StatusCode(201, domain);
+            }
+            catch
+            {
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Internal Server Error",
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
+        }
+    }
+}
