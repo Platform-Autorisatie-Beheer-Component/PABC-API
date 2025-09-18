@@ -8,17 +8,6 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
     public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fixture)
         : IClassFixture<PostgresFixture>, IAsyncLifetime
     {
-        private static readonly string ValidFunctionalRole = "FunctionalRoleA";
-        private static readonly string InvalidFunctionalRole = "NonExistingRole";
-        private static readonly string ApplicationRoleName = "AppRoleA";
-        private static readonly string ApplicationName = "AppA";
-        private static readonly string EntityTypeName = "EntityTypeA";
-        private static readonly string EntityTypeType = "TypeA";
-        private static readonly string DomainSpecificAppRoleName = "DomainSpecificRole";
-        private static readonly string AllEntityTypesAppRoleName = "AllEntityTypesRole";
-        private static readonly string NoEntityTypesAppRoleName = "NoEntityTypesAppRoleName";
-        private static readonly string SecondEntityTypeName = "EntityTypeB";
-        private static readonly string SecondEntityTypeType = "TypeB";
         private readonly PabcDbContext _dbContext = fixture.DbContext;
 
         public async Task InitializeAsync()
@@ -55,6 +44,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         [Fact]
         public async Task Post_ReturnsExpectedData_ForValidFunctionalRole()
         {
+            // ARRANGE
             var someOtherDomain = RandomDomain(RandomEntityType());
             _dbContext.Add(someOtherDomain);
             _dbContext.SaveChanges();
@@ -64,7 +54,11 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
 
             var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), theExpectedDomain, isAllEntityTypes: false);
 
+            // ACT
             var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name));
+            
+            
+            // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
 
             var singleResult = Assert.Single(response.Results);
@@ -77,22 +71,33 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         [Fact]
         public async Task Post_IgnoresUnknownFunctionRoles_WhenFunctionalRoleDoesNotExist()
         {
-            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, InvalidFunctionalRole));
+            // ARRANGE
+            var theExpectedEntityType = RandomEntityType();
+            var theExpectedDomain = RandomDomain(theExpectedEntityType);
+
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), theExpectedDomain, isAllEntityTypes: false);
+
+            // ACT
+            var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name, RandomString(), RandomString()));
+            
+            
+            // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
 
-            Assert.NotEmpty(response.Results);
-
-            var entityTypeResult = response.Results.FirstOrDefault(r => r.EntityType.Name == EntityTypeName);
-            Assert.NotNull(entityTypeResult);
-
-            Assert.Contains(entityTypeResult.ApplicationRoles, role =>
-                role.Name == ApplicationRoleName && role.Application == ApplicationName);
+            var singleResult = Assert.Single(response.Results);
+            Assert.NotNull(singleResult.EntityType);
+            Assert.Equal(theExpectedEntityType.Name, singleResult.EntityType.Name);
+            var singleAppRole = Assert.Single(singleResult.ApplicationRoles);
+            Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
         }
 
         [Fact]
         public async Task Post_ReturnsEmpty_WhenFunctionalRoleDoesNotExist()
         {
-            var result = await CreateController().Post(CreateRequest(InvalidFunctionalRole));
+            // ACT
+            var result = await CreateController().Post(CreateRequest(RandomString()));
+            
+            // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
             Assert.Empty(response.Results);
         }
@@ -101,7 +106,10 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         [Fact]
         public async Task Post_ReturnsEmpty_WhenFunctionalRoleNamesIsEmpty()
         {
+            // ACT
             var result = await CreateController().Post(CreateRequest());
+            
+            // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
             Assert.Empty(response.Results);
         }
@@ -109,30 +117,45 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         [Fact]
         public async Task Post_HandlesDuplicateFunctionalRoleNames_WithoutDuplication()
         {
-            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole, ValidFunctionalRole));
+            // ARRAMGE
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(RandomEntityType()), isAllEntityTypes: false);
+            
+            // ACT
+            var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name, mapping.FunctionalRole.Name));
+            
+            // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
 
-            var entityTypeResult = response.Results.FirstOrDefault(r => r.EntityType.Name == EntityTypeName);
-            Assert.NotNull(entityTypeResult);
-
-
-            var appRoles = entityTypeResult.ApplicationRoles.Where(role =>
-                role.Name == ApplicationRoleName && role.Application == ApplicationName).ToList();
-            Assert.Single(appRoles);
+            var singleResult = Assert.Single(response.Results);
+            Assert.NotNull(singleResult.EntityType);
+            var singleAppRole = Assert.Single(singleResult.ApplicationRoles);
+            Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
         }
 
         [Fact]
         public async Task Post_HandlesDuplicateMappings_WithoutDuplicateApplicationRoles()
         {
-            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
+            // ARRANGE
+            var entityType = RandomEntityType();
+            var domain1 = RandomDomain(entityType);
+            var domain2 = RandomDomain(entityType);
+            _dbContext.AddRange(domain1, domain2);
+            _dbContext.SaveChanges();
+
+            var applicationRole = RandomApplicationRole();
+            var mapping1 = InsertTestMapping(RandomFunctionalRole(), applicationRole, domain1, isAllEntityTypes: false);
+            var mapping2 = InsertTestMapping(RandomFunctionalRole(), applicationRole, domain2, isAllEntityTypes: false);
+
+            // ACT
+            var result = await CreateController().Post(CreateRequest(mapping1.FunctionalRole.Name, mapping2.FunctionalRole.Name));
+            
+            // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
-
-            var entityTypeResult = response.Results.FirstOrDefault(r => r.EntityType.Name == EntityTypeName);
-            Assert.NotNull(entityTypeResult);
-
-            var appRoles = entityTypeResult.ApplicationRoles.Where(role =>
-                role.Name == ApplicationRoleName && role.Application == ApplicationName).ToList();
-            Assert.Single(appRoles);
+            var singleResult = Assert.Single(response.Results);
+            Assert.NotNull(singleResult.EntityType);
+            Assert.Equal(entityType.Name, singleResult.EntityType.Name);
+            var singleAppRole = Assert.Single(singleResult.ApplicationRoles);
+            Assert.Equal(applicationRole.Name, singleAppRole.Name);
         }
 
         [Fact]
@@ -177,36 +200,35 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         }
 
         [Fact]
-        public async Task Post_ReturnsDomainSpecificEntityTypes_WhenMappingIsDomainSpecific()
+        public async Task Post_CombinesBothMappings_WhenBothExist()
         {
-            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
+            // ARRANGE
+            var mapping1 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(RandomEntityType()), isAllEntityTypes:  false);
+            var mapping2 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(RandomEntityType()), isAllEntityTypes:  false);
+
+            // ACT
+            var result = await CreateController().Post(CreateRequest(mapping1.FunctionalRole.Name, mapping2.FunctionalRole.Name));
+            
+            // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
 
-            var entityTypeAResult = response.Results.FirstOrDefault(r => r.EntityType.Name == EntityTypeName);
-            Assert.NotNull(entityTypeAResult);
-            Assert.Contains(entityTypeAResult.ApplicationRoles, role => role.Name == DomainSpecificAppRoleName);
-
-            var entityTypeBResult = response.Results.FirstOrDefault(r => r.EntityType.Name == SecondEntityTypeName);
-            Assert.NotNull(entityTypeBResult);
-            Assert.DoesNotContain(entityTypeBResult.ApplicationRoles, role => role.Name == DomainSpecificAppRoleName);
-        }
-
-        [Fact]
-        public async Task Post_CombinesBothMappingTypes_WhenBothExist()
-        {
-            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
-            var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
-
-            var entityTypeAResult = response.Results.FirstOrDefault(r => r.EntityType.Name == EntityTypeName);
-            Assert.NotNull(entityTypeAResult);
-
-            Assert.Contains(entityTypeAResult.ApplicationRoles, role => role.Name == DomainSpecificAppRoleName);
-            Assert.Contains(entityTypeAResult.ApplicationRoles, role => role.Name == AllEntityTypesAppRoleName);
-
-            var entityTypeBResult = response.Results.FirstOrDefault(r => r.EntityType.Name == SecondEntityTypeName);
-            Assert.NotNull(entityTypeBResult);
-            Assert.Contains(entityTypeBResult.ApplicationRoles, role => role.Name == AllEntityTypesAppRoleName);
-            Assert.DoesNotContain(entityTypeBResult.ApplicationRoles, role => role.Name == DomainSpecificAppRoleName);
+            Assert.Collection(response.Results,
+                // from mapping 1
+                r =>
+                {
+                    var singleAppRole = Assert.Single(r.ApplicationRoles);
+                    Assert.Equal(mapping1.ApplicationRole.Name, singleAppRole.Name);
+                    Assert.NotNull(r.EntityType);
+                    Assert.Equal(r.EntityType.Name, mapping1.Domain!.EntityTypes[0].Name);
+                },
+                // from mapping 2;
+                r =>
+                {
+                    var singleAppRole = Assert.Single(r.ApplicationRoles);
+                    Assert.Equal(mapping2.ApplicationRole.Name, singleAppRole.Name);
+                    Assert.NotNull(r.EntityType);
+                    Assert.Equal(r.EntityType.Name, mapping2.Domain!.EntityTypes[0].Name);
+                });
         }
 
         [Fact]
@@ -251,11 +273,6 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             _dbContext.SaveChanges();
             
             return mapping;
-        }
-
-        private class DomainTestModel
-        {
-            public required int EntityTypeCount { get; init; }
         }
 
         private static string RandomString() => Guid.NewGuid().ToString();
