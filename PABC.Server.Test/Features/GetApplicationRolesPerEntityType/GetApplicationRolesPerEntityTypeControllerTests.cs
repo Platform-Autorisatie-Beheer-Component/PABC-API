@@ -24,7 +24,6 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         public async Task InitializeAsync()
         {
             await ClearDatabaseAsync();
-            await SeedTestDataAsync();
         }
 
         public Task DisposeAsync()
@@ -53,110 +52,26 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             await _dbContext.SaveChangesAsync();
         }
 
-        private async Task SeedTestDataAsync()
-        {
-            var functionalRole = new FunctionalRole { Id = Guid.NewGuid(), Name = ValidFunctionalRole };
-
-            var applicationRole = new ApplicationRole
-            {
-                Id = Guid.NewGuid(), Name = ApplicationRoleName, Application = ApplicationName
-            };
-            var domainSpecificAppRole = new ApplicationRole
-            {
-                Id = Guid.NewGuid(), Name = DomainSpecificAppRoleName, Application = ApplicationName
-            };
-            var allEntityTypesAppRole = new ApplicationRole
-            {
-                Id = Guid.NewGuid(), Name = AllEntityTypesAppRoleName, Application = ApplicationName
-            };
-            var noEntityTypesAppRole = new ApplicationRole
-            {
-                Id = Guid.NewGuid(),
-                Name = NoEntityTypesAppRoleName,
-                Application = ApplicationName
-            };
-
-            var entityTypeA = new EntityType
-            {
-                Id = Guid.NewGuid(),
-                EntityTypeId = Guid.NewGuid().ToString(),
-                Name = EntityTypeName,
-                Type = EntityTypeType
-            };
-            var entityTypeB = new EntityType
-            {
-                Id = Guid.NewGuid(),
-                EntityTypeId = Guid.NewGuid().ToString(),
-                Name = SecondEntityTypeName,
-                Type = SecondEntityTypeType
-            };
-
-            var domain1 = new Domain { Id = Guid.NewGuid(), Description = string.Empty, Name = "Domain 1" };
-            domain1.EntityTypes.Add(entityTypeA);
-
-            var domain2 = new Domain { Id = Guid.NewGuid(), Description = string.Empty, Name = "Domain 2" };
-            domain2.EntityTypes.Add(entityTypeA);
-            domain2.EntityTypes.Add(entityTypeB);
-
-            var mappings = new List<Mapping>
-            {
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    FunctionalRoleId = functionalRole.Id,
-                    ApplicationRoleId = applicationRole.Id,
-                    DomainId = domain1.Id,
-                    IsAllEntityTypes = false
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    FunctionalRoleId = functionalRole.Id,
-                    ApplicationRoleId = applicationRole.Id,
-                    DomainId = domain2.Id,
-                    IsAllEntityTypes = false
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    FunctionalRoleId = functionalRole.Id,
-                    ApplicationRoleId = domainSpecificAppRole.Id,
-                    DomainId = domain1.Id,
-                    IsAllEntityTypes = false
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    FunctionalRoleId = functionalRole.Id,
-                    ApplicationRoleId = allEntityTypesAppRole.Id,
-                    IsAllEntityTypes = true
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    FunctionalRoleId = functionalRole.Id,
-                    ApplicationRoleId = noEntityTypesAppRole.Id,
-                    IsAllEntityTypes = false
-                }
-            };
-
-            _dbContext.AddRange(functionalRole, applicationRole, domainSpecificAppRole, allEntityTypesAppRole, noEntityTypesAppRole);
-            _dbContext.AddRange(entityTypeA, entityTypeB, domain1, domain2);
-            _dbContext.AddRange(mappings);
-            await _dbContext.SaveChangesAsync();
-        }
-
         [Fact]
         public async Task Post_ReturnsExpectedData_ForValidFunctionalRole()
         {
-            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
+            var someOtherDomain = RandomDomain(RandomEntityType());
+            _dbContext.Add(someOtherDomain);
+            _dbContext.SaveChanges();
+
+            var theExpectedEntityType = RandomEntityType();
+            var theExpectedDomain = RandomDomain(theExpectedEntityType);
+
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), theExpectedDomain, isAllEntityTypes: false);
+
+            var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name));
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
 
-            var entityTypeResult = response.Results.FirstOrDefault(r => r.EntityType.Name == EntityTypeName);
-            Assert.NotNull(entityTypeResult);
-
-            Assert.Contains(entityTypeResult.ApplicationRoles, role =>
-                role.Name == ApplicationRoleName && role.Application == ApplicationName);
+            var singleResult = Assert.Single(response.Results);
+            Assert.NotNull(singleResult.EntityType);
+            Assert.Equal(theExpectedEntityType.Name, singleResult.EntityType.Name);
+            var singleAppRole = Assert.Single(singleResult.ApplicationRoles);
+            Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
         }
 
         [Fact]
@@ -223,16 +138,42 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         [Fact]
         public async Task Post_ReturnsAllEntityTypes_WhenMappingIsAllEntityTypes()
         {
-            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
+            // ARRANGE
+            var entity1 = RandomEntityType();
+            var entity2 = RandomEntityType();
+
+            var domain1 = RandomDomain(entity1);
+            var domain2 = RandomDomain(entity2);
+
+            _dbContext.AddRange(domain1, domain2);
+            _dbContext.SaveChanges();
+
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), domain: null, isAllEntityTypes: true);
+
+
+            // ACT
+            var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name));
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
-            var resultsWithEntityType = response.Results.Where(x => x.EntityType is not null).ToList();
 
-            Assert.Equal(2, resultsWithEntityType.Count);
 
-            foreach (var entityTypeResult in resultsWithEntityType)
-            {
-                Assert.Contains(entityTypeResult.ApplicationRoles, role => role.Name == AllEntityTypesAppRoleName);
-            }
+            // ASSERT
+            Assert.Equal(2, response.Results.Count);
+
+            Assert.Collection(response.Results, 
+                // from domain 1
+                result =>
+                {
+                    Assert.Equal(entity1.Name, result.EntityType!.Name);
+                    var singleAppRole = Assert.Single(result.ApplicationRoles);
+                    Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
+                },
+                // from domain 2
+                result =>
+                {
+                    Assert.Equal(entity2.Name, result.EntityType!.Name);
+                    var singleAppRole = Assert.Single(result.ApplicationRoles);
+                    Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
+                });
         }
 
         [Fact]
@@ -269,16 +210,82 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         }
 
         [Fact]
-        public async Task Post_ReturnsNullEntityType_WhenMappingIsAllEntityTypes()
+        public async Task Post_ReturnsNullEntityType_WhenMappingIsNotAllEntityTypesAndDomainIsNull()
         {
-            var result = await CreateController().Post(CreateRequest(ValidFunctionalRole));
+            // ARRANGE
+            // insert some domain data to make sure it's not included in the result
+            var domain = RandomDomain(RandomEntityType());
+            _dbContext.Add(domain);
+            _dbContext.SaveChanges();
 
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), domain: null, isAllEntityTypes: false);
+
+            // ACT
+            var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name));
+
+            // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
-            var resultWithoutEntityType = response.Results.Where(r => r.EntityType is null);
-            var singleResult = Assert.Single(resultWithoutEntityType);
+            var singleResult = Assert.Single(response.Results);
+            
+            Assert.Null(singleResult.EntityType);
+            
             var singleAppRole = Assert.Single(singleResult.ApplicationRoles);
-
-            Assert.Equal(NoEntityTypesAppRoleName, singleAppRole.Name);
+            Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
         }
+
+        private Mapping InsertTestMapping(FunctionalRole functionalRole, ApplicationRole applicationRole, Domain? domain, bool isAllEntityTypes)
+        {
+            var mapping = new Mapping 
+            { 
+                ApplicationRoleId = applicationRole.Id, 
+                FunctionalRoleId = functionalRole.Id, 
+                IsAllEntityTypes = isAllEntityTypes,
+                DomainId = domain?.Id,
+                Id = Guid.NewGuid(),  
+            };
+            if (domain != null)
+            {
+                _dbContext.Add(domain);
+            }
+            _dbContext.AddRange(functionalRole, applicationRole, mapping);
+            _dbContext.SaveChanges();
+            
+            return mapping;
+        }
+
+        private class DomainTestModel
+        {
+            public required int EntityTypeCount { get; init; }
+        }
+
+        private static string RandomString() => Guid.NewGuid().ToString();
+
+        private static Domain RandomDomain(params EntityType[] entityTypes)
+        {
+            var domain = new Domain() { Description = RandomString(), Id = Guid.NewGuid(), Name = RandomString() };
+            domain.EntityTypes.AddRange(entityTypes);
+            return domain;
+        }
+
+        private static EntityType RandomEntityType() => new()
+        {
+            EntityTypeId = RandomString(),
+            Name = RandomString(),
+            Type = RandomString(),
+            Id = Guid.NewGuid()
+        };
+
+        private static FunctionalRole RandomFunctionalRole() => new()
+        {
+            Id = Guid.NewGuid(),
+            Name = RandomString()
+        };
+
+        private static ApplicationRole RandomApplicationRole() => new()
+        {
+            Id = Guid.NewGuid(),
+            Application = RandomString(),
+            Name = RandomString()
+        };
     }
 }
