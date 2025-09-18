@@ -139,8 +139,6 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             var entityType = RandomEntityType();
             var domain1 = RandomDomain(entityType);
             var domain2 = RandomDomain(entityType);
-            _dbContext.AddRange(domain1, domain2);
-            _dbContext.SaveChanges();
 
             var applicationRole = RandomApplicationRole();
             var mapping1 = InsertTestMapping(RandomFunctionalRole(), applicationRole, domain1, isAllEntityTypes: false);
