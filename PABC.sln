@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Data", "PABC.Data\PABC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Server.Test", "PABC.Server.Test\PABC.Server.Test.csproj", "{08A91984-FE2C-4493-9BEF-C45B4E91F8EF}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "pabc.client", "PABC.Client\pabc.client.esproj", "{F91AA147-0328-15EB-8C51-411832E27B61}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "pabc.client", "pabc.client\pabc.client.esproj", "{F91AA147-0328-15EB-8C51-411832E27B61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
