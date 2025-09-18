@@ -10,7 +10,11 @@
     <OpenApiDocumentsDirectory>$(MSBuildProjectDirectory)</OpenApiDocumentsDirectory>
     <OpenApiGenerateDocuments>true</OpenApiGenerateDocuments>
     <OpenApiGenerateDocumentsOnBuild>true</OpenApiGenerateDocumentsOnBuild>
+    <SpaRoot>..\pabc.client</SpaRoot>
+    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
+    <SpaProxyServerUrl>http://localhost:52450</SpaProxyServerUrl>
   </PropertyGroup>
+  
 	<ItemGroup> 
 		<InternalsVisibleTo Include="PABC.Server.Test" />
 	</ItemGroup>
@@ -29,6 +33,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+      <Version>8.*-*</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\pabc.client\pabc.client.esproj">
+        <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="..\PABC.Data\PABC.Data.csproj" />
     <ProjectReference Include="..\PABC.ServiceDefaults\PABC.ServiceDefaults.csproj" />
   </ItemGroup>
