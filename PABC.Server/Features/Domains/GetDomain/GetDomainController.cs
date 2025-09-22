@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PABC.Data;
 using PABC.Data.Entities;
 
-namespace PABC.Server.Features.Domains
+namespace PABC.Server.Features.Domains.GetDomain
 {
     [ApiController]
     [Route("/api/v1/domains")]
@@ -13,18 +13,9 @@ namespace PABC.Server.Features.Domains
         [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<Domain>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetDomainById(string id, CancellationToken token = default)
+        public async Task<IActionResult> GetDomainById(Guid id, CancellationToken token = default)
         {
-            if (!Guid.TryParse(id, out var guid))
-            {
-                return BadRequest(new ValidationProblemDetails
-                {
-                    Title = "Invalid Domain Id",
-                    Status = StatusCodes.Status400BadRequest
-                });
-            }
-
-            var domain = await db.Domains.FindAsync(guid, token);
+            var domain = await db.Domains.FindAsync(id, token);
 
             if (domain == null)
             {

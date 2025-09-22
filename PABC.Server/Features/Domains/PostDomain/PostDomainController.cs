@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
 
-namespace PABC.Server.Features.Domains
+namespace PABC.Server.Features.Domains.PostDomain
 {
     [ApiController]
     [Route("/api/v1/domains")]
@@ -24,9 +24,9 @@ namespace PABC.Server.Features.Domains
 
             try
             {
-                var existingDomain = await db.Domains.FirstOrDefaultAsync(domain => domain.Name.ToLower() == model.Name.ToLower(), token);
+                var duplicateDomain = await db.Domains.FirstOrDefaultAsync(d => d.Name.ToLower() == model.Name.ToLower(), token);
 
-                if (existingDomain != null)
+                if (duplicateDomain != null)
                 {
                     return Conflict(new ProblemDetails
                     {
