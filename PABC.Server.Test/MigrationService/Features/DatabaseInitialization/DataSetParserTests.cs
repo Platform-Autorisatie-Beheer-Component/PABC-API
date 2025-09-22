@@ -120,6 +120,30 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
             Assert.Equal("maxLength", error.Key);
         }
 
+        [Fact]
+        public async Task Mapping_with_all_entity_types_and_domainId_fails_with_const_expected_null_error()
+        {
+            var error = await TestThrowsJsonSchemaValidationExceptionWithSingleError("""
+            {
+                "applicationRoles": [],
+                "functionalRoles": [],
+                "domains": [],
+                "entityTypes": [],
+                "mappings": [
+                    {
+                      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+                      "functionalRoleId": "e5a7c8f9-3b12-4d67-9e8f-1a2b3c4d5e6f",
+                      "applicationRoleId": "7839298d-9ac9-4b02-bcfc-18b5e6e00227",
+                      "isAllEntityTypes": true,
+                      "domainId": "7839298d-9ac9-4b02-bcfc-18b5e6e00227"
+                    }
+                ]
+            } 
+            """);
+            Assert.Equal("const", error.Key);
+            Assert.Equal("Expected \"null\"", error.Value);
+        }
+
         private static async Task<DataSet> Test([StringSyntax("json")] string input)
         {
             var parser = new DatasetParser();
