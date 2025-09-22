@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data.Entities;
 using PABC.MigrationService.Features.DatabaseInitialization;
@@ -80,15 +80,15 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
                 .ThenInclude(x => x.EntityTypes)
                 .ToListAsync();
 
-            Assert.Equal(7, result.Count);
+            Assert.Equal(8, result.Count);
 
             Assert.Contains(result, m => m.IsAllEntityTypes);
 
             var appRoleIds = result.Select(m => m.ApplicationRoleId).Distinct().ToList();
-            Assert.Equal(6, appRoleIds.Count);
+            Assert.Equal(7, appRoleIds.Count);
 
             var funcRoleIds = result.Select(m => m.FunctionalRoleId).Distinct().ToList();
-            Assert.Equal(3, funcRoleIds.Count);
+            Assert.Equal(4, funcRoleIds.Count);
 
             var domainIds = result.Where(m => m.DomainId.HasValue)
                 .Select(m => m.DomainId.Value)

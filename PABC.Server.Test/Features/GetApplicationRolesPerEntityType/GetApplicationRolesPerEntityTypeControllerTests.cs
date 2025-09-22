@@ -1,4 +1,5 @@
-﻿using PABC.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PABC.Data;
 using PABC.Data.Entities;
 using PABC.Server.Features.GetApplicationRolesPerEntityType;
 using PABC.Server.Test.TestConfig;
@@ -255,6 +256,17 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
 
         private Mapping InsertTestMapping(FunctionalRole functionalRole, ApplicationRole applicationRole, Domain? domain, bool isAllEntityTypes)
         {
+
+            // add functionalRole if it doesn't exist yet
+            if(!_dbContext.FunctionalRoles.Any(x => x.Id == functionalRole.Id)){
+                _dbContext.Add(functionalRole);
+            }
+
+            // add applicationRole if it doesn't exist yet
+            if (!_dbContext.ApplicationRoles.Any(x => x.Id == applicationRole.Id)){
+                _dbContext.Add(applicationRole);
+            }
+
             var mapping = new Mapping 
             { 
                 ApplicationRoleId = applicationRole.Id, 
@@ -267,7 +279,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             {
                 _dbContext.Add(domain);
             }
-            _dbContext.AddRange(functionalRole, applicationRole, mapping);
+            _dbContext.Add(mapping);
             _dbContext.SaveChanges();
             
             return mapping;
