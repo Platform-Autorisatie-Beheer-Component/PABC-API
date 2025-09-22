@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
 
-namespace PABC.Server.Features.Domains
+namespace PABC.Server.Features.Domains.GetDomains
 {
     [ApiController]
     [Route("/api/v1/domains")]
