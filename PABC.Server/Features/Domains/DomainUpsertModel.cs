@@ -1,6 +1,4 @@
-﻿using Json.Schema.Generation;
-using System.ComponentModel.DataAnnotations;
-using PABC.Data;
+﻿using PABC.Data;
 
 namespace PABC.Server.Features.Domains
 {
