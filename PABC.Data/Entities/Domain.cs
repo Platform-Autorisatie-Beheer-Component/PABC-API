@@ -1,7 +1,4 @@
-﻿using Json.Schema.Generation;
-using System.ComponentModel.DataAnnotations;
-
-namespace PABC.Data.Entities
+﻿namespace PABC.Data.Entities
 {
     public class Domain
     {
