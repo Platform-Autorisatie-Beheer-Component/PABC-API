@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
@@ -10,10 +11,9 @@ namespace PABC.Server.Features.Domains.DeleteDomain
     public class DeleteDomainController(PabcDbContext db) : Controller
     {
         [HttpDelete("{id}")]
-        [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteDomain(Guid id, [FromBody] DomainUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> DeleteDomain(Guid id, CancellationToken token = default)
         {
             var domain = await db.Domains.FindAsync(id, token);
 
@@ -26,9 +26,7 @@ namespace PABC.Server.Features.Domains.DeleteDomain
                 });
             }
 
-            db.Domains.Remove(domain);
-
-            await db.SaveChangesAsync(token);
+            await db.Domains.Where(d => d.Id == id).ExecuteDeleteAsync(token);
 
             return NoContent();
         }
