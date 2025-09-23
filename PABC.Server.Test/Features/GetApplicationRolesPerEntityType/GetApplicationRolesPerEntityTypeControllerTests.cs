@@ -181,21 +181,17 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             // ASSERT
             Assert.Equal(2, response.Results.Count);
 
-            Assert.Collection(response.Results, 
-                // from domain 1
-                result =>
-                {
-                    Assert.Equal(entity1.Name, result.EntityType!.Name);
-                    var singleAppRole = Assert.Single(result.ApplicationRoles);
-                    Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
-                },
-                // from domain 2
-                result =>
-                {
-                    Assert.Equal(entity2.Name, result.EntityType!.Name);
-                    var singleAppRole = Assert.Single(result.ApplicationRoles);
-                    Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
-                });
+
+            var entity1Result = response.Results.FirstOrDefault(x=>x.EntityType?.Name == entity1.Name);
+            Assert.NotNull(entity1Result);
+            var entity1ResultSingleAppRole = Assert.Single(entity1Result.ApplicationRoles);
+            Assert.Equal(mapping.ApplicationRole.Name, entity1ResultSingleAppRole.Name);
+
+            var entity2Result = response.Results.FirstOrDefault(x => x.EntityType?.Name == entity2.Name);
+            Assert.NotNull(entity2Result);
+            var entity2ResultSingleAppRole = Assert.Single(entity2Result.ApplicationRoles);
+            Assert.Equal(mapping.ApplicationRole.Name, entity2ResultSingleAppRole.Name);
+
         }
 
         [Fact]
