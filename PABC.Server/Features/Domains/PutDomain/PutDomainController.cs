@@ -47,7 +47,7 @@ namespace PABC.Server.Features.Domains.PostDomain
 
 
                 var duplicateDomain = await db.Domains.FirstOrDefaultAsync(d =>
-                    d.Name.ToLower() == model.Name.ToLower(), token);
+                    d.Id != id && d.Name.ToLower() == model.Name.ToLower(), token);
 
                 if (duplicateDomain != null)
                 {
