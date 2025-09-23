@@ -89,7 +89,7 @@ import toast from "@/components/toast/toast";
 import { pabcService, type Domain } from "@/services/pabcService";
 import { knownErrorMessages } from "@/utils/fetchWrapper";
 
-const MAXLENGTH = 255;
+const MAXLENGTH = 256;
 
 const { id } = defineProps<{ id?: string }>();
 
