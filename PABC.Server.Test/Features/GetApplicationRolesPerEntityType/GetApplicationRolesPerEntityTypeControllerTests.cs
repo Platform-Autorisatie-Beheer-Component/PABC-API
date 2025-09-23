@@ -179,7 +179,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
 
 
             // ASSERT
-            Assert.Equal(2, response.Results.Count);
+            Assert.Equal(2, response.Results.Count); 
 
             Assert.Collection(response.Results, 
                 // from domain 1
