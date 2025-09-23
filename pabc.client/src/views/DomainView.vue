@@ -16,6 +16,7 @@
           id="name"
           type="text"
           v-model.trim="domain.name"
+          :maxlength="MAXLENGTH"
           required
           aria-required="true"
           aria-describedby="nameError"
@@ -32,6 +33,7 @@
           id="description"
           rows="4"
           v-model.trim="domain.description"
+          :maxlength="MAXLENGTH"
           required
           aria-required="true"
           aria-describedby="descriptionError"
@@ -85,6 +87,9 @@ import SimpleSpinner from "@/components/SimpleSpinner.vue";
 import PromptModal from "@/components/PromptModal.vue";
 import toast from "@/components/toast/toast";
 import { pabcService, type Domain } from "@/services/pabcService";
+import { knownErrorMessages } from "@/utils/fetchWrapper";
+
+const MAXLENGTH = 255;
 
 const { id } = defineProps<{ id?: string }>();
 
@@ -126,7 +131,14 @@ const submitDomain = async () => {
 
     router.push({ name: "domains" });
   } catch (err: unknown) {
-    toast.add({ text: `Fout bij het opslaan van het domein - ${err}`, type: "error" });
+    if (err instanceof Error && err.message === knownErrorMessages.conflict) {
+      toast.add({
+        text: `Het domein '${domain.value.name}' bestaat al.`,
+        type: "error"
+      });
+    } else {
+      toast.add({ text: `Fout bij het opslaan van het domein - ${err}`, type: "error" });
+    }
   } finally {
     loading.value = false;
   }
