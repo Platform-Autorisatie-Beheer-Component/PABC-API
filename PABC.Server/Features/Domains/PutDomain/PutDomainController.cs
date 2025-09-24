@@ -1,20 +1,11 @@
 ﻿using System.Net.Mime;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
 
-namespace PABC.Server.Features.Domains.PostDomain
+namespace PABC.Server.Features.Domains.PutDomain
 {
-    //[ApiController]
-    //[Route("/api/v1/domains")]
-    //public class PutDomainController(PabcDbContext db) : Controller
-    //{
-    //    [HttpPut("{id}")]
-    //}
-
-
     [ApiController]
     [Route("/api/v1/domains")]
     public class PutDomainController(PabcDbContext db) : Controller
@@ -25,7 +16,7 @@ namespace PABC.Server.Features.Domains.PostDomain
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<Domain>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PostDomain(Guid id, [FromBody] DomainUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PutDomain(Guid id, [FromBody] DomainUpsertModel model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -44,7 +35,6 @@ namespace PABC.Server.Features.Domains.PostDomain
                         Status = StatusCodes.Status404NotFound
                     });
                 }
-
 
                 var duplicateDomain = await db.Domains.FirstOrDefaultAsync(d =>
                     d.Id != id && d.Name.ToLower() == model.Name.ToLower(), token);
