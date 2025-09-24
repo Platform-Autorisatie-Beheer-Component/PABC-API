@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
 
-namespace PABC.Server.Features.Domains.PostDomain
+namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRole
 {
     [ApiController]
-    [Route("/api/v1/domains")]
-    public class PostDomainController(PabcDbContext db) : Controller
+    [Route("/api/v1/functional-roles")]
+    public class PostFunctionalRoleController(PabcDbContext db) : Controller
     {
         [HttpPost]
         [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
-        [ProducesResponseType<Domain>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
+        [ProducesResponseType<FunctionalRole>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PostDomain([FromBody] DomainUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PostFunctionalRole([FromBody] FunctionalRoleUpsertModel model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -24,25 +24,25 @@ namespace PABC.Server.Features.Domains.PostDomain
 
             try
             {
-                var duplicateDomain = await db.Domains.FirstOrDefaultAsync(d =>
+                var duplicateFunctionalRole = await db.FunctionalRoles.FirstOrDefaultAsync(d =>
                     d.Name.ToLower() == model.Name.ToLower(), token);
 
-                if (duplicateDomain != null)
+                if (duplicateFunctionalRole != null)
                 {
                     return Conflict(new ProblemDetails
                     {
-                        Title = "Duplicate Domain Name",
+                        Title = "Duplicate Functional Role Name",
                         Status = StatusCodes.Status500InternalServerError
                     });
                 }
 
-                var domain = new Domain { Id = Guid.NewGuid(), Name = model.Name, Description = model.Description };
+                var functionalRole = new FunctionalRole { Id = Guid.NewGuid(), Name = model.Name };
                 
-                db.Domains.Add(domain);
+                db.FunctionalRoles.Add(functionalRole);
                 
                 await db.SaveChangesAsync(token);
 
-                return StatusCode(201, domain);
+                return StatusCode(201, functionalRole);
             }
             catch
             {
