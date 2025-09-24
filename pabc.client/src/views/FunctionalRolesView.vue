@@ -1,9 +1,9 @@
 <template>
   <section>
-    <h1>Domeinen</h1>
+    <h1>Functionele rollen</h1>
 
     <p>
-      <router-link :to="{ name: 'domain' }" class="button">Nieuw domein</router-link>
+      <router-link :to="{ name: 'functionalRole' }" class="button">Nieuwe functionele rol</router-link>
     </p>
   </section>
 
@@ -11,19 +11,18 @@
 
   <alert-inline v-else-if="error">{{ error }}</alert-inline>
 
-  <p v-else-if="!domains.length">Geen domeinen gevonden.</p>
+  <p v-else-if="!functionalRoles.length">Geen functionele rollen gevonden.</p>
 
   <ul v-else class="reset">
-    <li v-for="{ id, name, description } in domains" :key="id">
+    <li v-for="{ id, name } in functionalRoles" :key="id">
       <router-link
         :to="{
-          name: 'domain',
+          name: 'functionalRole',
           params: { id }
         }"
         class="card"
       >
         <h2>{{ name }}</h2>
-        <p>{{ description }}</p>
       </router-link>
     </li>
   </ul>
@@ -32,14 +31,14 @@
 <script setup lang="ts">
 import AlertInline from "@/components/AlertInline.vue";
 import SimpleSpinner from "@/components/SimpleSpinner.vue";
-import { domainService } from "@/services/pabcService";
+import { functionalRoleService } from "@/services/pabcService";
 import { useItemList } from "@/composables/use-item-list";
 
 const {
-  items: domains,
+  items: functionalRoles,
   loading,
   error
-} = useItemList(domainService, "Fout bij het ophalen van de domeinen");
+} = useItemList(functionalRoleService, "Fout bij het ophalen van de functionele rollen");
 </script>
 
 <style lang="scss" scoped>
