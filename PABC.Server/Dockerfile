@@ -8,10 +8,19 @@ EXPOSE 8080
 
 
 # This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS with-node
+RUN apt-get update
+RUN apt-get install curl
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash
+RUN apt-get -y install nodejs
+
+
+# This stage is used to build the service project
+FROM with-node AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["PABC.Server/PABC.Server.csproj", "PABC.Server/"]
+COPY ["pabc.client/pabc.client.esproj", "pabc.client/"]
 COPY ["PABC.Data/PABC.Data.csproj", "PABC.Data/"]
 COPY ["PABC.ServiceDefaults/PABC.ServiceDefaults.csproj", "PABC.ServiceDefaults/"]
 RUN dotnet restore "./PABC.Server/PABC.Server.csproj"
