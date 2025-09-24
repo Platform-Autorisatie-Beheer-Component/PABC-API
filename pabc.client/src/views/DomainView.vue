@@ -86,7 +86,7 @@ import AlertInline from "@/components/AlertInline.vue";
 import SimpleSpinner from "@/components/SimpleSpinner.vue";
 import PromptModal from "@/components/PromptModal.vue";
 import toast from "@/components/toast/toast";
-import { pabcService, type Domain } from "@/services/pabcService";
+import { domainService, type Domain } from "@/services/pabcService";
 import { knownErrorMessages } from "@/utils/fetchWrapper";
 
 const MAXLENGTH = 256;
@@ -109,7 +109,7 @@ const fetchDomain = async () => {
   error.value = "";
 
   try {
-    domain.value = await pabcService.getDomainById(id);
+    domain.value = await domainService.getById(id);
   } catch (err: unknown) {
     error.value = `Fout bij het ophalen van de domeingegevens - ${err}`;
   } finally {
@@ -122,9 +122,9 @@ const submitDomain = async () => {
 
   try {
     if (!id) {
-      await pabcService.createDomain(domain.value);
+      await domainService.create(domain.value);
     } else {
-      await pabcService.updateDomain(domain.value);
+      await domainService.update(domain.value);
     }
 
     toast.add({ text: "Het domein is succesvol opgeslagen." });
@@ -150,7 +150,7 @@ const deleteDomain = async () => {
   loading.value = true;
 
   try {
-    await pabcService.deleteDomain(id);
+    await domainService.delete(id);
 
     toast.add({ text: "Het domein is succesvol verwijderd." });
 

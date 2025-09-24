@@ -6,20 +6,29 @@ export type Domain = {
   description: string;
 };
 
-export const pabcService = {
-  getAllDomains: (): Promise<Domain[]> => {
-    return get<Domain[]>(`/api/v1/domains`);
-  },
-  getDomainById: (id: string): Promise<Domain> => {
-    return get<Domain>(`/api/v1/domains/${id}`);
-  },
-  createDomain: (payload: Domain): Promise<Domain> => {
-    return post<Domain>(`/api/v1/domains`, payload);
-  },
-  updateDomain: (payload: Domain): Promise<Domain> => {
-    return put<Domain>(`/api/v1/domains/${payload.id}`, payload);
-  },
-  deleteDomain: (id: string): Promise<void> => {
-    return del(`/api/v1/domains/${id}`);
-  }
+export type FunctionalRole = {
+  id: string;
+  name: string;
 };
+
+const createService = <T extends { id?: string }>(endpoint: string) => ({
+  getAll: (): Promise<T[]> => {
+    return get<T[]>(`/api/v1/${endpoint}`);
+  },
+  getById: (id: string): Promise<T> => {
+    return get<T>(`/api/v1/${endpoint}/${id}`);
+  },
+  create: (payload: T): Promise<T> => {
+    return post<T>(`/api/v1/${endpoint}`, payload);
+  },
+  update: (payload: T): Promise<T> => {
+    return put<T>(`/api/v1/${endpoint}/${payload.id}`, payload);
+  },
+  delete: (id: string): Promise<void> => {
+    return del(`/api/v1/${endpoint}/${id}`);
+  }
+});
+
+export const domainService = createService<Domain>("domains");
+
+export const functionalRoleService = createService<FunctionalRole>("functionalroles");
