@@ -1,7 +1,8 @@
 import { onMounted, ref } from "vue";
+import type { PabcService } from "@/services/pabcService";
 
 export const useItemList = <T extends { name: string }>(
-  service: { getAll(): Promise<T[]> },
+  pabcService: PabcService<T>,
   errorPrefix: string
 ) => {
   const items = ref<T[]>([]);
@@ -13,7 +14,7 @@ export const useItemList = <T extends { name: string }>(
     error.value = "";
 
     try {
-      items.value = (await service.getAll()).sort((a, b) =>
+      items.value = (await pabcService.getAll()).sort((a, b) =>
         a.name.toLowerCase().localeCompare(b.name.toLowerCase())
       );
     } catch (err: unknown) {

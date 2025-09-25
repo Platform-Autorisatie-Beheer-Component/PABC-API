@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="heading-section">
     <h1>Domeinen</h1>
 
     <p>
@@ -13,7 +13,7 @@
 
   <p v-else-if="!domains.length">Geen domeinen gevonden.</p>
 
-  <ul v-else class="reset">
+  <ul v-else class="simple-grid reset">
     <li v-for="{ id, name, description } in domains" :key="id">
       <router-link
         :to="{
@@ -41,57 +41,3 @@ const {
   error
 } = useItemList(domainService, "Fout bij het ophalen van de domeinen");
 </script>
-
-<style lang="scss" scoped>
-@use "@/assets/variables";
-
-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-default);
-  justify-content: space-between;
-  align-items: center;
-  padding-block: var(--spacing-default);
-
-  @media (min-width: variables.$breakpoint-md) {
-    flex-direction: row;
-  }
-
-  * {
-    margin: 0;
-  }
-}
-
-ul {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--section-width-small), 1fr));
-  grid-gap: var(--spacing-default);
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--spacing-small);
-  block-size: 100%;
-  padding: var(--spacing-default);
-  border: 1px solid var(--border);
-  text-decoration: none;
-
-  &:hover,
-  &:focus-visible {
-    h2 {
-      text-decoration: underline;
-    }
-  }
-
-  h2,
-  p {
-    font-weight: 300;
-    margin: 0;
-  }
-
-  p {
-    color: var(--text);
-  }
-}
-</style>

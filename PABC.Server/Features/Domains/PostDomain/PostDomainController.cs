@@ -32,7 +32,7 @@ namespace PABC.Server.Features.Domains.PostDomain
                     return Conflict(new ProblemDetails
                     {
                         Title = "Duplicate Domain Name",
-                        Status = StatusCodes.Status500InternalServerError
+                        Status = StatusCodes.Status409Conflict
                     });
                 }
 
