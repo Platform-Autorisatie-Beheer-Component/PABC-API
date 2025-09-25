@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SimpleSpinner from "@/components/SimpleSpinner.vue";
 import { functionalRoleService } from "@/services/pabcService";
@@ -39,6 +40,9 @@ import { useItemList } from "@/composables/use-item-list";
 const {
   items: functionalRoles,
   loading,
-  error
+  error,
+  fetchItems
 } = useItemList(functionalRoleService, "Fout bij het ophalen van de functionele rollen");
+
+onMounted(() => fetchItems());
 </script>
