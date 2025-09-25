@@ -30,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SimpleSpinner from "@/components/SimpleSpinner.vue";
 import { domainService } from "@/services/pabcService";
@@ -38,6 +39,9 @@ import { useItemList } from "@/composables/use-item-list";
 const {
   items: domains,
   loading,
-  error
+  error,
+  fetchItems
 } = useItemList(domainService, "Fout bij het ophalen van de domeinen");
+
+onMounted(() => fetchItems());
 </script>

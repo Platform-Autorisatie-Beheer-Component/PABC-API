@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import type { PabcService } from "@/services/pabcService";
 
 export const useItemList = <T extends { name: string }>(
@@ -23,8 +23,6 @@ export const useItemList = <T extends { name: string }>(
       loading.value = false;
     }
   };
-
-  onMounted(() => fetchItems());
 
   return {
     items,
