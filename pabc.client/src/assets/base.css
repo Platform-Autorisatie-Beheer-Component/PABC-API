@@ -89,7 +89,7 @@ body {
 }
 
 #app {
-  --page-max-width: 75rem;
+  --page-max-width: 60rem;
 
   display: grid;
   grid-template-rows: auto 1fr auto;

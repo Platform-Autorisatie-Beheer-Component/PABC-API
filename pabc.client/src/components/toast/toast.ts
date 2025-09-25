@@ -27,7 +27,7 @@ export default {
 
     _messages.push(m);
 
-    const defaultTimeout = params.type === "error" ? 30000 : 2000;
+    const defaultTimeout = params.type === "error" ? 5000 : 2000;
 
     setTimeout(() => this.remove(m), params.timeout || defaultTimeout);
   },
