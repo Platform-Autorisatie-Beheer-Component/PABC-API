@@ -3,6 +3,7 @@ import DashboardView from "@/views/DashboardView.vue";
 import DomainsView from "@/views/DomainsView.vue";
 import DomainView from "@/views/DomainView.vue";
 import FunctionalRolesView from "@/views/FunctionalRolesView.vue";
+import FunctionalRoleView from "@/views/FunctionalRoleView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,15 @@ const router = createRouter({
       component: FunctionalRolesView,
       meta: {
         title: "Functionele rollen"
+      }
+    },
+    {
+      path: "/functionele-rol/:id?",
+      name: "functionalRole",
+      component: FunctionalRoleView,
+      props: true,
+      meta: {
+        title: "Functionele rol"
       }
     }
   ]

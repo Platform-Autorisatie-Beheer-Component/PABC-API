@@ -156,10 +156,60 @@ form menu {
   }
 }
 
+.heading-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-default);
+  justify-content: space-between;
+  align-items: center;
+  padding-block: var(--spacing-default);
+
+  @media (min-width: variables.$breakpoint-md) {
+    flex-direction: row;
+  }
+
+  * {
+    margin: 0;
+  }
+}
+
+.simple-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--section-width-small), 1fr));
+  grid-gap: var(--spacing-default);
+}
+
 .reset {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--spacing-small);
+  block-size: 100%;
+  padding: var(--spacing-default);
+  border: 1px solid var(--border);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    h2 {
+      text-decoration: underline;
+    }
+  }
+
+  h2,
+  p {
+    font-weight: 300;
+    margin: 0;
+  }
+
+  p {
+    color: var(--text);
+  }
 }
 
 // Button
