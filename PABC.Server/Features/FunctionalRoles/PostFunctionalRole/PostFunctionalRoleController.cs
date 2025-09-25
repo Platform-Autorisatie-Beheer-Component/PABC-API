@@ -32,7 +32,7 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRole
                     return Conflict(new ProblemDetails
                     {
                         Title = "Duplicate Functional Role Name",
-                        Status = StatusCodes.Status500InternalServerError
+                        Status = StatusCodes.Status409Conflict
                     });
                 }
 
