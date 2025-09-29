@@ -26,7 +26,6 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.Entity<Domain>(d =>
         {
             d.Property(x => x.Name).HasMaxLength(MaxLengthForIndexProperties);
-            d.Property(e => e.Name).UseCollation("nl_case_insensitive");
             d.HasIndex(x => new { x.Name }).IsUnique();
             d.HasMany(x => x.EntityTypes).WithMany();
         });
@@ -41,7 +40,6 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.Entity<FunctionalRole>(r =>
         {
             r.Property(x => x.Name).HasMaxLength(MaxLengthForIndexProperties);
-            r.Property(e => e.Name).UseCollation("nl_case_insensitive");
             r.HasIndex(x => new { x.Name }).IsUnique();
         });
 
@@ -59,6 +57,11 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
              .HasForeignKey(x => x.DomainId)
              .OnDelete(DeleteBehavior.Restrict);
         });
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<string>().UseCollation("nl_case_insensitive");
     }
 
     public required DbSet<ApplicationRole> ApplicationRoles { get; set; }
