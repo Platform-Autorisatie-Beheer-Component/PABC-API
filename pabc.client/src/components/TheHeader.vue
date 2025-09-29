@@ -11,6 +11,10 @@
         <li>
           <router-link :to="{ name: 'domains' }">Domeinen</router-link>
         </li>
+
+        <li>
+          <router-link :to="{ name: 'functionalRoles' }">Functionele rollen</router-link>
+        </li>
       </ul>
     </nav>
   </header>

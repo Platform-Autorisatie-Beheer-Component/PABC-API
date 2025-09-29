@@ -4,19 +4,18 @@ using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
 
-namespace PABC.Server.Features.Domains.PutDomain
+namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRole
 {
     [ApiController]
-    [Route("/api/v1/domains")]
-    public class PutDomainController(PabcDbContext db) : Controller
+    [Route("/api/v1/functional-roles")]
+    public class PostFunctionalRoleController(PabcDbContext db) : Controller
     {
-        [HttpPut("{id}")]
+        [HttpPost]
         [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
-        [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
-        [ProducesResponseType<Domain>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
+        [ProducesResponseType<FunctionalRole>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PutDomain(Guid id, [FromBody] DomainUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PostFunctionalRole([FromBody] FunctionalRoleUpsertModel model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -25,31 +24,19 @@ namespace PABC.Server.Features.Domains.PutDomain
 
             try
             {
-                var domain = await db.Domains.FindAsync([id], token);
-
-                if (domain == null)
-                {
-                    return NotFound(new ProblemDetails
-                    {
-                        Title = "Domain Not Found",
-                        Status = StatusCodes.Status404NotFound
-                    });
-                }
-
-                domain.Name = model.Name;
-                domain.Description = model.Description;
-
-                db.Domains.Update(domain);
+                var functionalRole = new FunctionalRole { Id = Guid.NewGuid(), Name = model.Name };
+                
+                db.FunctionalRoles.Add(functionalRole);
                 
                 await db.SaveChangesAsync(token);
 
-                return Ok(domain);
+                return StatusCode(201, functionalRole);
             }
             catch (DbUpdateException ex) when (ex.IsDuplicateException())
             {
                 return Conflict(new ProblemDetails
                 {
-                    Title = "Duplicate Domain Name",
+                    Title = "Duplicate Functional Role Name",
                     Status = StatusCodes.Status409Conflict
                 });
             }

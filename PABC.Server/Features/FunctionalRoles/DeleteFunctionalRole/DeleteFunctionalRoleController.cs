@@ -3,29 +3,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 
-namespace PABC.Server.Features.Domains.DeleteDomain
+namespace PABC.Server.Features.FunctionalRoles.DeleteFunctionalRole
 {
     [ApiController]
-    [Route("/api/v1/domains")]
-    public class DeleteDomainController(PabcDbContext db) : Controller
+    [Route("/api/v1/functional-roles")]
+    public class DeleteFunctionalRoleController(PabcDbContext db) : Controller
     {
         [HttpDelete("{id}")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteDomain(Guid id, CancellationToken token = default)
+        public async Task<IActionResult> DeleteFunctionalRole(Guid id, CancellationToken token = default)
         {
-            var domain = await db.Domains.FindAsync([id], token);
+            var functionalRole = await db.FunctionalRoles.FindAsync([id], token);
 
-            if (domain == null)
+            if (functionalRole == null)
             {
                 return NotFound(new ProblemDetails
                 {
-                    Title = "Domain Not Found",
+                    Title = "Functional Role Not Found",
                     Status = StatusCodes.Status404NotFound
                 });
             }
 
-            await db.Domains.Where(d => d.Id == id).ExecuteDeleteAsync(token);
+            await db.FunctionalRoles.Where(d => d.Id == id).ExecuteDeleteAsync(token);
 
             return NoContent();
         }

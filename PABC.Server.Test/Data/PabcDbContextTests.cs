@@ -124,8 +124,11 @@ namespace PABC.Server.Test.Data
         private async Task ClearDatabaseAsync()
         {
             fixture.DbContext.ChangeTracker.Clear();
+
+            await fixture.DbContext.Database.ExecuteSqlRawAsync(
+                "DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
+
             var migrator = fixture.DbContext.Database.GetInfrastructure().GetRequiredService<IMigrator>();
-            await migrator.MigrateAsync("0");
             await migrator.MigrateAsync();
         }
     }

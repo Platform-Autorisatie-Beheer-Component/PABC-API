@@ -11,6 +11,11 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.HasCollation("nl_case_insensitive",
+            locale: "nl-NL-u-ks-primary",
+            provider: "icu",
+            deterministic: false);
+
         modelBuilder.Entity<ApplicationRole>(r =>
         {
             r.Property(x => x.Application).HasMaxLength(MaxLengthForIndexProperties);
@@ -52,6 +57,11 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
              .HasForeignKey(x => x.DomainId)
              .OnDelete(DeleteBehavior.Restrict);
         });
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<string>().UseCollation("nl_case_insensitive");
     }
 
     public required DbSet<ApplicationRole> ApplicationRoles { get; set; }
