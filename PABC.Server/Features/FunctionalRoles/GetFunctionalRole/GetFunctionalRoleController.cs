@@ -15,7 +15,7 @@ namespace PABC.Server.Features.FunctionalRoles.GetFunctionalRole
         [ProducesResponseType<FunctionalRole>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetFunctionalRoleById(Guid id, CancellationToken token = default)
         {
-            var functionalRole = await db.FunctionalRoles.FindAsync(id, token);
+            var functionalRole = await db.FunctionalRoles.FindAsync([id], token);
 
             if (functionalRole == null)
             {

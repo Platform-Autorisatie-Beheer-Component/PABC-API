@@ -25,7 +25,7 @@ namespace PABC.Server.Features.Domains.PutDomain
 
             try
             {
-                var domain = await db.Domains.FindAsync(id, token);
+                var domain = await db.Domains.FindAsync([id], token);
 
                 if (domain == null)
                 {
@@ -33,18 +33,6 @@ namespace PABC.Server.Features.Domains.PutDomain
                     {
                         Title = "Domain Not Found",
                         Status = StatusCodes.Status404NotFound
-                    });
-                }
-
-                var duplicateDomain = await db.Domains.FirstOrDefaultAsync(d =>
-                    d.Id != id && d.Name.ToLower() == model.Name.ToLower(), token);
-
-                if (duplicateDomain != null)
-                {
-                    return Conflict(new ProblemDetails
-                    {
-                        Title = "Duplicate Domain Name",
-                        Status = StatusCodes.Status500InternalServerError
                     });
                 }
 
@@ -56,6 +44,14 @@ namespace PABC.Server.Features.Domains.PutDomain
                 await db.SaveChangesAsync(token);
 
                 return Ok(domain);
+            }
+            catch (DbUpdateException ex) when (ex.IsDuplicateException())
+            {
+                return Conflict(new ProblemDetails
+                {
+                    Title = "Duplicate Domain Name",
+                    Status = StatusCodes.Status409Conflict
+                });
             }
             catch
             {

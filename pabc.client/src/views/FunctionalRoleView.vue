@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ id ? "Domein" : "Nieuw domein" }}</h1>
+  <h1>{{ id ? "Functionele rol" : "Nieuwe functionele rol" }}</h1>
 
   <simple-spinner v-if="loading" />
 
@@ -7,7 +7,7 @@
     <alert-inline v-if="error">{{ error }}</alert-inline>
 
     <fieldset v-else>
-      <legend>Domeingegevens</legend>
+      <legend>Rolgegevens</legend>
 
       <div class="form-group">
         <label for="name">Naam *</label>
@@ -25,28 +25,11 @@
 
         <span id="nameError" class="error">Naam is een verplicht veld</span>
       </div>
-
-      <div class="form-group">
-        <label for="description">Omschrijving *</label>
-
-        <textarea
-          id="description"
-          rows="4"
-          v-model.trim="form.description"
-          :maxlength="MAXLENGTH"
-          required
-          aria-required="true"
-          aria-describedby="descriptionError"
-          :aria-invalid="!form.description"
-        ></textarea>
-
-        <span id="descriptionError" class="error">Omschrijving is een verplicht veld</span>
-      </div>
     </fieldset>
 
     <menu class="reset">
       <li>
-        <router-link :to="{ name: 'domains' }" class="button button-secondary"
+        <router-link :to="{ name: 'functionalRoles' }" class="button button-secondary"
           >&lt; Terug</router-link
         >
       </li>
@@ -54,12 +37,12 @@
       <template v-if="!error">
         <li v-if="id">
           <button type="button" class="button danger" @click="deleteItem(id)">
-            Domein verwijderen
+            Rol verwijderen
           </button>
         </li>
 
         <li>
-          <button type="submit">Domein opslaan</button>
+          <button type="submit">Rol opslaan</button>
         </li>
       </template>
     </menu>
@@ -69,10 +52,10 @@
       cancel-text="Nee, niet verwijderen"
       confirm-text="Ja, verwijderen"
     >
-      <h2>Domein verwijderen</h2>
+      <h2>Functionele rol verwijderen</h2>
 
       <p>
-        Weet je zeker dat je het domein <em>{{ form.name }}</em> wilt verwijderen?
+        Weet je zeker dat je de rol <em>{{ form.name }}</em> wilt verwijderen?
       </p>
     </prompt-modal>
   </form>
@@ -83,7 +66,7 @@ import { onMounted } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SimpleSpinner from "@/components/SimpleSpinner.vue";
 import PromptModal from "@/components/PromptModal.vue";
-import { domainService, type Domain } from "@/services/pabcService";
+import { functionalRoleService, type FunctionalRole } from "@/services/pabcService";
 import { useItemForm } from "@/composables/use-item-form";
 
 const MAXLENGTH = 256;
@@ -91,7 +74,7 @@ const MAXLENGTH = 256;
 const { id } = defineProps<{ id?: string }>();
 
 const { form, loading, error, fetchItem, submitItem, deleteItem, confirmDialog } =
-  useItemForm<Domain>(domainService, "Domein", "domains");
+  useItemForm<FunctionalRole>(functionalRoleService, "Functionele rol", "functionalRoles");
 
 onMounted(() => id && fetchItem(id));
 </script>

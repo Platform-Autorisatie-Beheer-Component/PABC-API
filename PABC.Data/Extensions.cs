@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Hosting;
+using Npgsql;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal;
 
 namespace PABC.Data;
@@ -38,5 +39,14 @@ public static class Extensions
             history.Property(h => h.MigrationId).HasColumnName("MigrationId");
             history.Property(h => h.ProductVersion).HasColumnName("ProductVersion");
         }
+    }
+
+    public static bool IsDuplicateException(this DbUpdateException ex)
+    {
+        return ex.InnerException switch
+        {
+            PostgresException pgEx => pgEx.SqlState == "23505",
+            _ => ex.InnerException?.Message.Contains("unique", StringComparison.OrdinalIgnoreCase) == true
+        };
     }
 }

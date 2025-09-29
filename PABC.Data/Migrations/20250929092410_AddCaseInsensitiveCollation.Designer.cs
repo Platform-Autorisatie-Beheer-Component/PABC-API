@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PABC.Data;
@@ -11,9 +12,11 @@ using PABC.Data;
 namespace PABC.Data.Migrations
 {
     [DbContext(typeof(PabcDbContext))]
-    partial class PabcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250929092410_AddCaseInsensitiveCollation")]
+    partial class AddCaseInsensitiveCollation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,15 +56,13 @@ namespace PABC.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("application")
-                        .UseCollation("nl_case_insensitive");
+                        .HasColumnName("application");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("name")
-                        .UseCollation("nl_case_insensitive");
+                        .HasColumnName("name");
 
                     b.HasKey("Id")
                         .HasName("pk_application_role");
@@ -84,8 +85,7 @@ namespace PABC.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("description")
-                        .UseCollation("nl_case_insensitive");
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -115,21 +115,18 @@ namespace PABC.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("entity_type_id")
-                        .UseCollation("nl_case_insensitive");
+                        .HasColumnName("entity_type_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name")
-                        .UseCollation("nl_case_insensitive");
+                        .HasColumnName("name");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("type")
-                        .UseCollation("nl_case_insensitive");
+                        .HasColumnName("type");
 
                     b.Property<string>("Uri")
                         .HasColumnType("text")

@@ -15,7 +15,7 @@ namespace PABC.Server.Features.Domains.GetDomain
         [ProducesResponseType<Domain>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetDomainById(Guid id, CancellationToken token = default)
         {
-            var domain = await db.Domains.FindAsync(id, token);
+            var domain = await db.Domains.FindAsync([id], token);
 
             if (domain == null)
             {

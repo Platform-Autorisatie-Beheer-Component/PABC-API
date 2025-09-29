@@ -14,7 +14,7 @@ namespace PABC.Server.Features.Domains.DeleteDomain
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteDomain(Guid id, CancellationToken token = default)
         {
-            var domain = await db.Domains.FindAsync(id, token);
+            var domain = await db.Domains.FindAsync([id], token);
 
             if (domain == null)
             {
