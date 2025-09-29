@@ -14,7 +14,7 @@ namespace PABC.Server.Features.FunctionalRoles.DeleteFunctionalRole
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteFunctionalRole(Guid id, CancellationToken token = default)
         {
-            var functionalRole = await db.FunctionalRoles.FindAsync(id, token);
+            var functionalRole = await db.FunctionalRoles.FindAsync([id], token);
 
             if (functionalRole == null)
             {

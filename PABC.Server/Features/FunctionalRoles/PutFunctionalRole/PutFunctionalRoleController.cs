@@ -25,7 +25,7 @@ namespace PABC.Server.Features.FunctionalRoles.PutFunctionalRole
 
             try
             {
-                var functionalRole = await db.FunctionalRoles.FindAsync(id, token);
+                var functionalRole = await db.FunctionalRoles.FindAsync([id], token);
 
                 if (functionalRole == null)
                 {
@@ -36,19 +36,6 @@ namespace PABC.Server.Features.FunctionalRoles.PutFunctionalRole
                     });
                 }
 
-
-                var duplicateFunctionalRole = await db.FunctionalRoles.FirstOrDefaultAsync(d =>
-                    d.Id != id && d.Name.ToLower() == model.Name.ToLower(), token);
-
-                if (duplicateFunctionalRole != null)
-                {
-                    return Conflict(new ProblemDetails
-                    {
-                        Title = "Duplicate Functional Role Name",
-                        Status = StatusCodes.Status409Conflict
-                    });
-                }
-
                 functionalRole.Name = model.Name;
 
                 db.FunctionalRoles.Update(functionalRole);
@@ -56,6 +43,14 @@ namespace PABC.Server.Features.FunctionalRoles.PutFunctionalRole
                 await db.SaveChangesAsync(token);
 
                 return Ok(functionalRole);
+            }
+            catch (DbUpdateException ex) when (ex.IsDuplicateException())
+            {
+                return Conflict(new ProblemDetails
+                {
+                    Title = "Duplicate Functional Role Name",
+                    Status = StatusCodes.Status409Conflict
+                });
             }
             catch
             {
