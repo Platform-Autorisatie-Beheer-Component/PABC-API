@@ -608,9 +608,11 @@
             "format": "uuid"
           },
           "name": {
+            "maxLength": 256,
             "type": "string"
           },
           "description": {
+            "maxLength": 256,
             "type": "string"
           },
           "entityTypes": {
