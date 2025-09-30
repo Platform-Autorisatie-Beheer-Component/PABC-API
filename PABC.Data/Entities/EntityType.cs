@@ -16,6 +16,6 @@
         [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
         public required string Name { get; set; }
 
-        public Uri? Uri { get; init; }
+        public Uri? Uri { get; set; }
     }
 }

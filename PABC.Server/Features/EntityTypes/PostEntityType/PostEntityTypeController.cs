@@ -29,7 +29,8 @@ namespace PABC.Server.Features.EntityTypes.PostEntityType
                     Id = Guid.NewGuid(),
                     EntityTypeId = model.EntityTypeId,
                     Type = model.Type,
-                    Name = model.Name
+                    Name = model.Name,
+                    Uri = model.Uri
                 };
                 
                 db.EntityTypes.Add(entityType);

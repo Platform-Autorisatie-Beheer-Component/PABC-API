@@ -39,6 +39,7 @@ namespace PABC.Server.Features.EntityTypes.PutEntityType
                 entityType.EntityTypeId = model.EntityTypeId;
                 entityType.Type = model.Type;
                 entityType.Name = model.Name;
+                entityType.Uri = model.Uri;
 
                 db.EntityTypes.Update(entityType);
                 
