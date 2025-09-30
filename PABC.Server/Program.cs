@@ -1,4 +1,4 @@
-using PABC.Data;
+﻿using PABC.Data;
 using PABC.Server.Auth;
 using System.Reflection;
 
@@ -38,6 +38,9 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 // Configure the HTTP request pipeline.
 app.UseSwagger( x=> x.RouteTemplate = "api/{documentName}/specs.json"); //documetnname = v1
 
@@ -50,11 +53,16 @@ if (app.Environment.IsDevelopment())
 
     });
 }
+
+app.UseHttpsRedirection();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.UseRequestTimeouts();
 app.UseOutputCache();
+
+app.MapFallbackToFile("/index.html");
 
 app.Run();
