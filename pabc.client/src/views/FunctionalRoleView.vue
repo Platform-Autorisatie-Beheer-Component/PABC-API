@@ -74,7 +74,7 @@ const MAXLENGTH = 256;
 const { id } = defineProps<{ id?: string }>();
 
 const { form, loading, error, fetchItem, submitItem, deleteItem, confirmDialog } =
-  useItemForm<FunctionalRole>(functionalRoleService, "Functionele rol", "functionalRoles");
+  useItemForm<FunctionalRole>(functionalRoleService, "Functionele rol");
 
 onMounted(() => id && fetchItem(id));
 </script>

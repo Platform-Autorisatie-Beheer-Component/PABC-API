@@ -1,5 +1,4 @@
 import { ref, watch } from "vue";
-import { useRouter } from "vue-router";
 import { useConfirmDialog } from "@vueuse/core";
 import toast from "@/components/toast/toast";
 import type { PabcService } from "@/services/pabcService";
@@ -7,10 +6,9 @@ import { knownErrorMessages } from "@/utils/fetchWrapper";
 
 export const useItemForm = <T extends { name: string }>(
   pabcService: PabcService<T>,
-  itemName: string,
-  redirectRoute: string
+  itemName: string
 ) => {
-  const router = useRouter();
+  // const router = useRouter();
 
   const form = ref<T>({} as T);
 
@@ -47,7 +45,7 @@ export const useItemForm = <T extends { name: string }>(
 
       toast.add({ text: `${itemName}: succesvol opgeslagen.` });
 
-      router.push({ name: redirectRoute });
+      // router.push({ name: redirectRoute });
     } catch (err: unknown) {
       if (err instanceof Error && err.message === knownErrorMessages.conflict) {
         toast.add({
@@ -72,7 +70,7 @@ export const useItemForm = <T extends { name: string }>(
 
       toast.add({ text: `${itemName}: succesvol verwijderd.` });
 
-      router.push({ name: redirectRoute });
+      // router.push({ name: redirectRoute });
     } catch (err: unknown) {
       toast.add({ text: `${itemName}: fout bij het verwijderen - ${err}`, type: "error" });
     } finally {

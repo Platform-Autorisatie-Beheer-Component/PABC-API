@@ -175,7 +175,7 @@ form menu {
 
 .simple-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--section-width-small), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--section-width), 1fr));
   grid-gap: var(--spacing-default);
 }
 
@@ -185,6 +185,8 @@ form menu {
   margin: 0;
 }
 
+
+// ...
 .card {
   display: flex;
   flex-direction: column;
@@ -213,10 +215,10 @@ form menu {
 }
 
 // Button
-a[class*="icon"],
-button[class*="icon"] {
+button:has(.icon-container) {
   display: flex;
   column-gap: var(--spacing-small);
+  align-items: center;
 }
 
 .visually-hidden {
