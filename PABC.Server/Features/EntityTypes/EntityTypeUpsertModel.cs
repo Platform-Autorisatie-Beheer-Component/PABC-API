@@ -1,9 +1,9 @@
-﻿namespace PABC.Data.Entities
-{
-    public class EntityType
-    {
-        public required Guid Id { get; init; }
+﻿using PABC.Data;
 
+namespace PABC.Server.Features.EntityTypes
+{
+    public class EntityTypeUpsertModel
+    {
         [Json.Schema.Generation.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
         [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
         public required string EntityTypeId { get; set; }
