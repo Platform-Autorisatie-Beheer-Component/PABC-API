@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
+import AdminView from "@/views/AdminView.vue";
 import DomainsView from "@/views/DomainsView.vue";
 import DomainView from "@/views/DomainView.vue";
 import FunctionalRolesView from "@/views/FunctionalRolesView.vue";
 import FunctionalRoleView from "@/views/FunctionalRoleView.vue";
+import EntityTypesView from "@/views/EntityTypesView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +16,14 @@ const router = createRouter({
       component: DashboardView,
       meta: {
         title: "PABC"
+      }
+    },
+    {
+      path: "/beheer",
+      name: "admin",
+      component: AdminView,
+      meta: {
+        title: "PABC - Beheer"
       }
     },
     {
@@ -48,6 +58,14 @@ const router = createRouter({
       props: true,
       meta: {
         title: "Functionele rol"
+      }
+    },
+    {
+      path: "/entiteit-types",
+      name: "entityTypes",
+      component: EntityTypesView,
+      meta: {
+        title: "Entiteit types"
       }
     }
   ]

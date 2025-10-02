@@ -9,11 +9,19 @@
         </li>
 
         <li>
+          <router-link :to="{ name: 'admin' }">Beheer</router-link>
+        </li>
+
+        <li>
           <router-link :to="{ name: 'domains' }">Domeinen</router-link>
         </li>
 
         <li>
           <router-link :to="{ name: 'functionalRoles' }">Functionele rollen</router-link>
+        </li>
+
+        <li>
+          <router-link :to="{ name: 'entityTypes' }">Entiteit types</router-link>
         </li>
       </ul>
     </nav>

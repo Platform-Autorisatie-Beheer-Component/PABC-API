@@ -81,15 +81,17 @@ html {
 
 /* Make the body a nice central block */
 body {
+  --line-height: 1.2;
+
   color: var(--text);
   background-color: var(--bg);
   font-size: 1.15rem;
-  line-height: 1.2;
+  line-height: var(--line-height);
   margin: 0;
 }
 
 #app {
-  --page-max-width: 60rem;
+  --page-max-width: 75rem;
 
   display: grid;
   grid-template-rows: auto 1fr auto;
