@@ -1,6 +1,6 @@
 <template>
-  <dialog ref="dialogRef" @cancel.prevent="$emit(`cancel`)">
-    <form @submit.prevent="$emit(`confirm`)">
+  <dialog ref="dialogRef" @cancel.prevent="handleCancel">
+    <form ref="formRef" @submit.prevent="handleSubmit">
       <small-spinner v-if="loading" />
 
       <alert-inline v-else-if="error">{{ error }}</alert-inline>
@@ -9,13 +9,13 @@
 
       <menu class="reset">
         <li v-if="!loading && !error">
-          <button type="submit" :class="['button', { danger: submitType === 'delete' }]">
+          <button type="submit" :class="['button', { danger: isDelete }]">
             {{ SubmitTypes[submitType] }}
           </button>
         </li>
 
         <li>
-          <button type="button" class="button secondary" @click="$emit(`cancel`)">Annuleren</button>
+          <button type="button" class="button secondary" @click="handleCancel">Annuleren</button>
         </li>
       </menu>
     </form>
@@ -23,29 +23,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
 
-const SubmitTypes = Object.freeze({
+const SubmitTypes = {
   create: "Toevoegen",
   update: "Bijwerken",
   delete: "Verwijderen"
-});
+} as const;
+
+type SubmitType = keyof typeof SubmitTypes;
 
 const { isOpen, submitType, loading, error } = defineProps<{
   isOpen: boolean;
-  submitType: keyof typeof SubmitTypes;
+  submitType: SubmitType;
   loading?: boolean;
   error?: string;
 }>();
 
+const emit = defineEmits<{ (e: "submit"): void; (e: "cancel"): void }>();
+
 const dialogRef = ref<HTMLDialogElement>();
+
+const formRef = ref<HTMLFormElement>();
+
+const isDelete = computed(() => submitType === ("delete" satisfies SubmitType));
 
 watch(
   () => isOpen,
   (value) => (value ? dialogRef.value?.showModal() : dialogRef.value?.close())
 );
+
+const handleSubmit = () => emit("submit");
+
+const handleCancel = () => {
+  formRef.value?.reset();
+
+  emit("cancel");
+};
 </script>
 
 <style lang="scss" scoped>

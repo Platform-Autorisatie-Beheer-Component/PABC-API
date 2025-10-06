@@ -1,5 +1,7 @@
 <template>
-  <span class="spinner" role="presentation" aria-hidden="true"></span>
+  <span aria-live="polite" class="spinner">
+    <span class="visually-hidden">Bezig met laden...</span>
+  </span>
 </template>
 
 <style lang="scss" scoped>

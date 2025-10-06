@@ -2,20 +2,20 @@
   <details>
     <summary>{{ itemNamePlural }}</summary>
 
-    <small-spinner v-if="listLoading" />
-
-    <alert-inline v-else-if="listError">{{ listError }}</alert-inline>
-
-    <p v-else-if="!items.length">Geen {{ itemNamePlural }} gevonden.</p>
+    <alert-inline v-if="listError">{{ listError }}</alert-inline>
 
     <template v-else>
       <p>
-        <button type="button" class="button secondary" @click="handleEdit()">
+        <button type="button" class="button secondary" @click="handleCreate()">
           <icon-container icon="plus" /> Toevoegen
         </button>
       </p>
 
-      <ul class="reset">
+      <small-spinner v-if="listLoading" />
+
+      <p v-else-if="!items.length">Geen {{ itemNamePlural }} gevonden.</p>
+
+      <ul v-else class="reset">
         <li v-for="item in items" :key="item.id">
           <section>
             <slot name="item" :item="item"></slot>
@@ -23,7 +23,7 @@
 
           <menu class="reset">
             <li>
-              <button type="button" class="button secondary" @click="handleEdit(item.id)">
+              <button type="button" class="button secondary" @click="handleUpdate(item.id)">
                 <icon-container icon="pen" />
 
                 <span class="visually-hidden">Item aanpassen</span>
@@ -48,14 +48,10 @@
     :submit-type="!form.id ? `create` : `update`"
     :loading="formLoading"
     :error="formError"
-    @confirm="formDialog.confirm"
+    @submit="formDialog.confirm"
     @cancel="formDialog.cancel"
   >
-    <fieldset>
-      <legend>{{ itemNameSingular }} {{ !form.id ? `toevoegen` : `bijwerken` }}</legend>
-
-      <slot name="form" :form="form"></slot>
-    </fieldset>
+    <slot name="form" :form="form"></slot>
   </form-modal>
 
   <form-modal
@@ -63,15 +59,15 @@
     submit-type="delete"
     :loading="formLoading"
     :error="formError"
-    @confirm="confirmDialog.confirm"
+    @submit="confirmDialog.confirm"
     @cancel="confirmDialog.cancel"
   >
-    <fieldset>
-      <legend>{{ itemNameSingular }} verwijderen</legend>
+    <h2>{{ itemNameSingular }} verwijderen</h2>
 
+    <p>
       Weet je zeker dat je {{ itemNameSingular }} <em>'{{ form.name }}'</em> wilt verwijderen? Deze
       actie kan niet ongedaan gemaakt worden.
-    </fieldset>
+    </p>
   </form-modal>
 </template>
 
@@ -112,15 +108,23 @@ const {
   fetchItem,
   submitItem,
   deleteItem
-} = useItemForm<T>(pabcService, itemNameSingular);
+} = useItemForm(pabcService, itemNameSingular);
 
-const handleEdit = async (id?: string) => {
-  if (id) {
-    fetchItem(id);
-  } else {
-    form.value = {};
-  }
+const handleCreate = async () => {
+  form.value = {};
 
+  await submit();
+};
+
+const handleUpdate = async (id?: string) => {
+  if (!id) return;
+
+  fetchItem(id);
+
+  await submit();
+};
+
+const submit = async () => {
   const submitted = await formDialog.open();
 
   if (submitted) {

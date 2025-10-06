@@ -1,20 +1,26 @@
 <template>
-  <div class="form-group">
-    <label for="name">Rolnaam *</label>
+  <fieldset aria-labelledby="functionalRole">
+    <h2 id="functionalRole">
+      Functionele rol {{ !functionalRole.id ? `toevoegen` : `bijwerken` }}
+    </h2>
 
-    <input
-      id="name"
-      type="text"
-      v-model.trim="functionalRole.name"
-      :maxlength="MAXLENGTH"
-      required
-      aria-required="true"
-      aria-describedby="nameError"
-      :aria-invalid="!functionalRole.name"
-    />
+    <div class="form-group">
+      <label for="name">Rolnaam *</label>
 
-    <span id="nameError" class="error">Naam is een verplicht veld</span>
-  </div>
+      <input
+        id="name"
+        type="text"
+        v-model.trim="functionalRole.name"
+        :maxlength="MAXLENGTH"
+        required
+        aria-required="true"
+        aria-describedby="nameError"
+        :aria-invalid="!functionalRole.name"
+      />
+
+      <span id="nameError" class="error">Naam is een verplicht veld</span>
+    </div>
+  </fieldset>
 </template>
 
 <script setup lang="ts">

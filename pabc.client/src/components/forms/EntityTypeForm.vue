@@ -1,60 +1,64 @@
 <template>
-  <div class="form-group">
-    <label for="type">Soort entiteitstype *</label>
+  <fieldset aria-labelledby="entityType">
+    <h2 id="entityType">Entiteitstype {{ !entityType.id ? `toevoegen` : `bijwerken` }}</h2>
 
-    <input
-      id="type"
-      type="text"
-      v-model.trim="entityType.type"
-      :maxlength="MAXLENGTH"
-      required
-      aria-required="true"
-      aria-describedby="typeError"
-      :aria-invalid="!entityType.type"
-    />
+    <div class="form-group">
+      <label for="type">Soort entiteitstype *</label>
 
-    <span id="typeError" class="error">Soort entiteitstype is een verplicht veld</span>
-  </div>
+      <input
+        id="type"
+        type="text"
+        v-model.trim="entityType.type"
+        :maxlength="MAXLENGTH"
+        required
+        aria-required="true"
+        aria-describedby="typeError"
+        :aria-invalid="!entityType.type"
+      />
 
-  <div class="form-group">
-    <label for="entityTypeId">Type ID *</label>
+      <span id="typeError" class="error">Soort entiteitstype is een verplicht veld</span>
+    </div>
 
-    <input
-      id="entityTypeId"
-      type="text"
-      v-model.trim="entityType.entityTypeId"
-      :maxlength="MAXLENGTH"
-      required
-      aria-required="true"
-      aria-describedby="entityTypeIdError"
-      :aria-invalid="!entityType.entityTypeId"
-    />
+    <div class="form-group">
+      <label for="entityTypeId">Type ID *</label>
 
-    <span id="entityTypeIdError" class="error">Type ID is een verplicht veld</span>
-  </div>
+      <input
+        id="entityTypeId"
+        type="text"
+        v-model.trim="entityType.entityTypeId"
+        :maxlength="MAXLENGTH"
+        required
+        aria-required="true"
+        aria-describedby="entityTypeIdError"
+        :aria-invalid="!entityType.entityTypeId"
+      />
 
-  <div class="form-group">
-    <label for="name">Naam entiteitstype *</label>
+      <span id="entityTypeIdError" class="error">Type ID is een verplicht veld</span>
+    </div>
 
-    <input
-      id="name"
-      type="text"
-      v-model.trim="entityType.name"
-      :maxlength="MAXLENGTH"
-      required
-      aria-required="true"
-      aria-describedby="nameError"
-      :aria-invalid="!entityType.name"
-    />
+    <div class="form-group">
+      <label for="name">Naam entiteitstype *</label>
 
-    <span id="nameError" class="error">Naam is een verplicht veld</span>
-  </div>
+      <input
+        id="name"
+        type="text"
+        v-model.trim="entityType.name"
+        :maxlength="MAXLENGTH"
+        required
+        aria-required="true"
+        aria-describedby="nameError"
+        :aria-invalid="!entityType.name"
+      />
 
-  <div class="form-group">
-    <label for="uri">URL</label>
+      <span id="nameError" class="error">Naam is een verplicht veld</span>
+    </div>
 
-    <input id="uri" type="text" v-model.trim="entityType.uri" />
-  </div>
+    <div class="form-group">
+      <label for="uri">URL</label>
+
+      <input id="uri" type="text" v-model.trim="entityType.uri" />
+    </div>
+  </fieldset>
 </template>
 
 <script setup lang="ts">
