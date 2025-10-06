@@ -1,0 +1,175 @@
+<template>
+  <details>
+    <summary>{{ itemNamePlural }}</summary>
+
+    <small-spinner v-if="listLoading" />
+
+    <alert-inline v-else-if="listError">{{ listError }}</alert-inline>
+
+    <p v-else-if="!items.length">Geen {{ itemNamePlural }} gevonden.</p>
+
+    <template v-else>
+      <p>
+        <button type="button" class="button secondary" @click="handleEdit()">
+          <icon-container icon="plus" /> Toevoegen
+        </button>
+      </p>
+
+      <ul class="reset">
+        <li v-for="item in items" :key="item.id">
+          <section>
+            <slot name="item" :item="item"></slot>
+          </section>
+
+          <menu class="reset">
+            <li>
+              <button type="button" class="button secondary" @click="handleEdit(item.id)">
+                <icon-container icon="pen" />
+
+                <span class="visually-hidden">Item aanpassen</span>
+              </button>
+            </li>
+
+            <li>
+              <button type="button" class="button danger" @click="handleDelete(item.id)">
+                <icon-container icon="trash" />
+
+                <span class="visually-hidden">Item verwijderen</span>
+              </button>
+            </li>
+          </menu>
+        </li>
+      </ul>
+    </template>
+  </details>
+
+  <form-modal
+    :is-open="isFormDialogOpen"
+    :submit-type="!form.id ? `create` : `update`"
+    :loading="formLoading"
+    :error="formError"
+    @confirm="formDialog.confirm"
+    @cancel="formDialog.cancel"
+  >
+    <fieldset>
+      <legend>{{ itemNameSingular }} {{ !form.id ? `toevoegen` : `bijwerken` }}</legend>
+
+      <slot name="form" :form="form"></slot>
+    </fieldset>
+  </form-modal>
+
+  <form-modal
+    :is-open="isConfirmDialogOpen"
+    submit-type="delete"
+    :loading="formLoading"
+    :error="formError"
+    @confirm="confirmDialog.confirm"
+    @cancel="confirmDialog.cancel"
+  >
+    <fieldset>
+      <legend>{{ itemNameSingular }} verwijderen</legend>
+
+      Weet je zeker dat je {{ itemNameSingular }} <em>'{{ form.name }}'</em> wilt verwijderen? Deze
+      actie kan niet ongedaan gemaakt worden.
+    </fieldset>
+  </form-modal>
+</template>
+
+<script setup lang="ts" generic="T extends Item">
+import { onMounted } from "vue";
+import AlertInline from "@/components/AlertInline.vue";
+import SmallSpinner from "@/components/SmallSpinner.vue";
+import FormModal from "@/components/FormModal.vue";
+import IconContainer from "@/components/IconContainer.vue";
+import type { Item, PabcService } from "@/services/pabcService";
+import { useItemList } from "@/composables/use-item-list";
+import { useItemForm } from "@/composables/use-item-form";
+import { useDialog } from "@/composables/use-dialog";
+
+const { pabcService, itemNameSingular, itemNamePlural } = defineProps<{
+  pabcService: PabcService<T>;
+  itemNameSingular: string;
+  itemNamePlural: string;
+}>();
+
+const formDialog = useDialog();
+const { isOpen: isFormDialogOpen } = formDialog;
+
+const confirmDialog = useDialog();
+const { isOpen: isConfirmDialogOpen } = confirmDialog;
+
+const {
+  items,
+  loading: listLoading,
+  error: listError,
+  fetchItems
+} = useItemList(pabcService, itemNamePlural);
+
+const {
+  form,
+  loading: formLoading,
+  error: formError,
+  fetchItem,
+  submitItem,
+  deleteItem
+} = useItemForm<T>(pabcService, itemNameSingular);
+
+const handleEdit = async (id?: string) => {
+  if (id) {
+    fetchItem(id);
+  } else {
+    form.value = {};
+  }
+
+  const submitted = await formDialog.open();
+
+  if (submitted) {
+    await submitItem();
+
+    fetchItems();
+  }
+};
+
+const handleDelete = async (id?: string) => {
+  if (!id) return;
+
+  fetchItem(id);
+
+  const confirmed = await confirmDialog.open();
+
+  if (confirmed) {
+    await deleteItem(id);
+
+    fetchItems();
+  }
+};
+
+onMounted(() => fetchItems());
+</script>
+
+<style lang="scss" scoped>
+ul > li {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-large);
+  padding-block-start: var(--spacing-small);
+  margin-block-end: var(--spacing-small);
+  border-top: 1px solid var(--border);
+
+  section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--spacing-small);
+  }
+
+  menu {
+    display: flex;
+    column-gap: var(--spacing-small);
+
+    button {
+      margin-block-end: 0;
+    }
+  }
+}
+</style>

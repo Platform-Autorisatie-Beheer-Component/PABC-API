@@ -134,10 +134,6 @@ form menu {
   @media (min-width: variables.$breakpoint-md) {
     & {
       flex-direction: row;
-
-      li:first-of-type {
-        margin-inline-end: auto;
-      }
     }
   }
 }

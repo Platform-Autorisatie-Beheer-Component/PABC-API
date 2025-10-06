@@ -9,8 +9,8 @@ export type Domain = Item & {
 export type FunctionalRole = Item;
 
 export type EntityType = Item & {
-  entityTypeId: string;
   type: string;
+  entityTypeId: string;
   uri: string;
 };
 
