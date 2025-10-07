@@ -1,7 +1,5 @@
 <template>
   <header>
-    <span class="heading-1">PABC</span>
-
     <nav>
       <ul>
         <li>

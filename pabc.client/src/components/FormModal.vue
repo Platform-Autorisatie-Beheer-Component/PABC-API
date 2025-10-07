@@ -66,10 +66,10 @@ const handleCancel = () => {
 
 <style lang="scss" scoped>
 dialog {
-  min-inline-size: 50%;
+  inline-size: min(90vw, var(--section-width));
   padding: var(--spacing-large);
+  margin: auto;
   border: 1px solid var(--border);
-  border-radius: var(--radius-default);
 }
 
 ::backdrop {

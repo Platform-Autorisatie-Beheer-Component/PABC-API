@@ -138,13 +138,18 @@ form menu {
   }
 }
 
-dialog fieldset {
-  padding: 0;
-  margin-inline: 0;
-  border: none;
+dialog {
+  fieldset {
+    padding: 0;
+    margin-inline: 0;
+    border: none;
+  }
 
   h2:first-child {
+    font-size: var(--font-large);
     margin-block-start: 0;
+    padding-block-end: var(--spacing-default);
+    border-block-end: 1px solid var(--border);
   }
 }
 

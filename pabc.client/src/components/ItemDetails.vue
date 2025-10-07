@@ -6,7 +6,7 @@
 
     <template v-else>
       <p>
-        <button type="button" class="button secondary" @click="handleCreate()">
+        <button type="button" class="button secondary" @click="handleCreate">
           <icon-container icon="plus" /> Toevoegen
         </button>
       </p>
@@ -152,13 +152,26 @@ onMounted(() => fetchItems());
 </script>
 
 <style lang="scss" scoped>
+@use "@/assets/variables";
+
+details > p {
+  margin-block: var(--spacing-default);
+}
+
 ul > li {
   display: flex;
-  align-items: flex-end;
-  gap: var(--spacing-large);
+  flex-direction: column;
+  gap: var(--spacing-default);
   padding-block-start: var(--spacing-small);
   margin-block-end: var(--spacing-small);
-  border-top: 1px solid var(--border);
+  border-block-start: 1px solid var(--secondary);
+
+  @media (min-width: variables.$breakpoint-md) {
+    & {
+      flex-direction: row;
+      align-items: flex-end;
+    }
+  }
 
   section {
     flex: 1;

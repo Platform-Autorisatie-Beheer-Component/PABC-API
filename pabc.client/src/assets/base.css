@@ -13,18 +13,21 @@
   --accent-bg: #f5f7ff;
   --text: #212121;
   --text-light: #585858;
-  --border: #898ea4;
-  --accent: #0d47a1;
-  --accent-hover: #1266e2;
+  --border: #cecece;
+  --accent: #09423f;
+  --accent-hover: #3a6866;
   --accent-text: var(--bg);
+  --accent-light: #ced9d9;
   --code: #d81b60;
   --preformatted: #444;
   --marked: #ffdd33;
   --disabled: #efefef;
-  --danger: #cc0000;
+  --danger: #d72e2e;
   --danger-text: var(--bg);
   --danger-hover: #ee4444;
   --success: #89cf5e;
+  --secondary: #a86738;
+  --secondary-light: #eee1d7;
 }
 
 /* Dark theme */
@@ -39,9 +42,11 @@
     --accent: #ffb300;
     --accent-hover: #ffe099;
     --accent-text: var(--bg);
+    --accent-light: transparent;
     --code: #f06292;
     --preformatted: #ccc;
     --disabled: #111;
+    --secondary-light: transparent;
   }
   /* Add a bit of transparency so light media isn't so glaring in dark mode */
   img,
@@ -85,6 +90,7 @@ body {
 
   color: var(--text);
   background-color: var(--bg);
+  background-color: var(--accent-light);
   font-size: 1.15rem;
   line-height: var(--line-height);
   margin: 0;
@@ -104,15 +110,11 @@ body {
 
 /* Make the header bg full width, but the content inline with body */
 #app > header {
-  background-color: var(--accent-bg);
+  background-color: var(--accent);
   border-bottom: 1px solid var(--border);
   text-align: center;
-  padding: 0 0.5rem 0.5rem;
+  padding: 0.5rem;
   grid-column: 1 / -1;
-}
-
-#app > header > *:only-child {
-  margin-block-start: 2rem;
 }
 
 #app > header .heading-1 {
@@ -132,7 +134,10 @@ body {
 
 /* Add a little padding to ensure spacing is correct between content and header > nav */
 main {
-  padding-top: 1.5rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  margin-block-start: 1rem;
+  background-color: var(--bg);
 }
 
 #app > footer {
@@ -145,16 +150,17 @@ main {
 }
 
 /* Format headers */
-h1,
-.heading-1 {
+h1 {
   display: block;
   font-size: 3rem;
   font-weight: bold;
+  color: var(--secondary);
   margin-block: 1rem;
 }
 
 h2 {
   font-size: 2.6rem;
+  color: var(--secondary);
   margin-top: 3rem;
 }
 
@@ -314,7 +320,6 @@ input:enabled:focus-visible:where([type="submit"], [type="reset"], [type="button
 header > nav {
   font-size: 1rem;
   line-height: 2;
-  padding: 1rem 0 0 0;
 }
 
 /* Use flexbox to allow items to wrap, as needed */
@@ -325,6 +330,7 @@ header > nav ol {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  gap: 0.5rem;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -338,10 +344,8 @@ header > nav ol li {
 
 header > nav a,
 header > nav a:visited {
-  margin: 0 0.5rem 1rem 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: var(--standard-border-radius);
-  color: var(--text);
+  border: 1px solid transparent;
+  color: var(--accent-bg);
   display: inline-block;
   padding: 0.1rem 1rem;
   text-decoration: none;
@@ -351,19 +355,10 @@ header > nav a:hover,
 header > nav a.current,
 header > nav a[aria-current="page"],
 header > nav a[aria-current="true"] {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--border);
+  color: var(--accent-bg);
   cursor: pointer;
-}
-
-/* Reduce nav side on mobile */
-@media only screen and (max-width: 720px) {
-  header > nav a {
-    border: none;
-    padding: 0;
-    text-decoration: underline;
-    line-height: 1;
-  }
+  background-color: var(--accent-hover);
 }
 
 /* Consolidate box styling */
@@ -371,9 +366,7 @@ aside,
 details,
 pre,
 progress {
-  background-color: var(--accent-bg);
   border: 1px solid var(--border);
-  border-radius: var(--standard-border-radius);
   margin-bottom: 1rem;
 }
 
@@ -406,7 +399,6 @@ fieldset,
 dialog {
   border: 1px solid var(--border);
   padding: 1rem;
-  border-radius: var(--standard-border-radius);
   margin-bottom: 1rem;
 }
 
@@ -418,15 +410,18 @@ section h3:first-child {
 }
 
 details {
-  padding: 0.7rem 1rem;
+  padding: 1rem;
 }
 
 summary {
   cursor: pointer;
   font-weight: bold;
-  padding: 0.7rem 1rem;
-  margin: -0.7rem -1rem;
+  padding: 1rem;
+  margin: -1rem;
   word-break: break-all;
+
+  background-color: var(--secondary-light);
+  border-block-end: 1px solid var(--secondary);
 }
 
 details[open] > summary + * {
@@ -722,23 +717,6 @@ progress::-moz-progress-bar {
 
 progress:indeterminate::-moz-progress-bar {
   background-color: var(--accent-bg);
-}
-
-dialog {
-  max-width: 40rem;
-  margin: auto;
-}
-
-dialog::backdrop {
-  background-color: var(--bg);
-  opacity: 0.8;
-}
-
-@media only screen and (max-width: 720px) {
-  dialog {
-    max-width: 100%;
-    margin: auto 1em;
-  }
 }
 
 /* Superscript & Subscript */

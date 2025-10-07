@@ -32,7 +32,7 @@ export const useItemForm = <T extends { name: string }>(
     loading.value = true;
 
     try {
-      if (!item.value?.id) {
+      if (!form.value?.id) {
         item.value = await pabcService.create(form.value);
       } else {
         item.value = await pabcService.update(form.value);

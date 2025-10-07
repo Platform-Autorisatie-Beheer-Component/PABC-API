@@ -3,6 +3,8 @@
 
   <p>Op deze pagina kan je lijst-items aanvullen, aanpassen of verwijderen.</p>
 
+  <h2>Hoofdlijsten</h2>
+
   <section>
     <item-details
       :pabc-service="domainService"
@@ -10,7 +12,7 @@
       item-name-plural="Domeinen"
     >
       <template #item="{ item: domain }">
-        <h2>{{ domain.name }}</h2>
+        <h3>{{ domain.name }}</h3>
         <p>{{ domain.description }}</p>
       </template>
 
@@ -25,21 +27,25 @@
       item-name-plural="Functionele rollen"
     >
       <template #item="{ item: functionalRole }">
-        <h2>{{ functionalRole.name }}</h2>
+        <h3>{{ functionalRole.name }}</h3>
       </template>
 
       <template #form="{ form }">
         <functional-role-form :functional-role="form" />
       </template>
     </item-details>
+  </section>
 
+  <h2>Overige lijsten</h2>
+
+  <section>
     <item-details
       :pabc-service="entityTypeService"
-      item-name-singular="Entiteit type"
-      item-name-plural="Entiteit types"
+      item-name-singular="Entiteitstype"
+      item-name-plural="Entiteitstypes"
     >
       <template #item="{ item: entityType }">
-        <h2>{{ entityType.type }}</h2>
+        <h3>{{ entityType.type }}</h3>
         <p>{{ entityType.name }}</p>
       </template>
 
@@ -60,7 +66,9 @@ import EntityTypeForm from "@/components/forms/EntityTypeForm.vue";
 
 <style lang="scss" scoped>
 section {
-  h2,
+  inline-size: min(100%, var(--section-width-large));
+
+  h3,
   p {
     margin-block: 0;
     font-size: inherit;
