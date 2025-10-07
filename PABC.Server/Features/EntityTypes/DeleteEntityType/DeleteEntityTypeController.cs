@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.Data.Common;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
@@ -11,10 +12,14 @@ namespace PABC.Server.Features.EntityTypes.DeleteEntityType
     {
         [HttpDelete("{id}")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, MediaTypeNames.Application.ProblemJson)]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status422UnprocessableEntity, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
         public async Task<IActionResult> DeleteEntityType(Guid id, CancellationToken token = default)
         {
-            var entityType = await db.EntityTypes.FindAsync([id], token);
+            try
+            {
+                var entityType = await db.EntityTypes.FindAsync([id], token);
 
             if (entityType == null)
             {
@@ -25,9 +30,26 @@ namespace PABC.Server.Features.EntityTypes.DeleteEntityType
                 });
             }
 
-            await db.EntityTypes.Where(d => d.Id == id).ExecuteDeleteAsync(token);
+                await db.EntityTypes.Where(d => d.Id == id).ExecuteDeleteAsync(token);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (DbException ex) when (ex.IsForeignKeyException())
+            {
+                return UnprocessableEntity(new ProblemDetails
+                {
+                    Title = "Cannot delete referenced Entity Type",
+                    Status = StatusCodes.Status422UnprocessableEntity
+                });
+            }
+            catch
+            {
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Internal Server Error",
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
     }
 }
