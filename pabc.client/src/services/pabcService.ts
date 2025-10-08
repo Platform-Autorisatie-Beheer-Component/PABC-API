@@ -8,16 +8,27 @@ export type Domain = Item & {
 
 export type FunctionalRole = Item;
 
-const createService = <T extends Item>(endpoint: string) => ({
-  getAll: (): Promise<T[]> => get<T[]>(`/api/v1/${endpoint}`),
+export type EntityType = Item & {
+  type: string;
+  entityTypeId: string;
+  uri: string;
+};
+
+const createPabcService = <T extends Item>(endpoint: string) => ({
+  getAll: (): Promise<T[]> =>
+    get<T[]>(`/api/v1/${endpoint}`).then((items) =>
+      items.sort((a, b) => a.name.localeCompare(b.name))
+    ),
   getById: (id: string): Promise<T> => get<T>(`/api/v1/${endpoint}/${id}`),
   create: (payload: T): Promise<T> => post<T>(`/api/v1/${endpoint}`, payload),
   update: (payload: T): Promise<T> => put<T>(`/api/v1/${endpoint}/${payload.id}`, payload),
   delete: (id: string): Promise<void> => del(`/api/v1/${endpoint}/${id}`)
 });
 
-export type PabcService<T extends Item> = ReturnType<typeof createService<T>>;
+export type PabcService<T extends Item> = ReturnType<typeof createPabcService<T>>;
 
-export const domainService = createService<Domain>("domains");
+export const domainService = createPabcService<Domain>("domains");
 
-export const functionalRoleService = createService<FunctionalRole>("functional-roles");
+export const functionalRoleService = createPabcService<FunctionalRole>("functional-roles");
+
+export const entityTypeService = createPabcService<EntityType>("entity-types");

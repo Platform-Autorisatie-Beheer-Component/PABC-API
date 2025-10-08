@@ -38,10 +38,6 @@ export async function fetchWrapper<T = unknown>(
       throw new Error(knownErrorMessages.notFound);
     }
 
-    if (response.status === 409) {
-      throw new Error(knownErrorMessages.conflict);
-    }
-
     let errorMessage = `Request failed with status ${response.status}`;
 
     try {

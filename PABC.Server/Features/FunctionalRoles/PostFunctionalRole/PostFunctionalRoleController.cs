@@ -36,7 +36,7 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRole
             {
                 return Conflict(new ProblemDetails
                 {
-                    Title = "Duplicate Functional Role Name",
+                    Detail = "Functionele rolnaam bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }
@@ -44,7 +44,7 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRole
             {
                 return StatusCode(500, new ProblemDetails
                 {
-                    Title = "Internal Server Error",
+                    Detail = "Internal Server Error",
                     Status = StatusCodes.Status500InternalServerError
                 });
             }

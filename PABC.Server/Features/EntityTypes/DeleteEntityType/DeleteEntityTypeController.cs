@@ -20,7 +20,7 @@ namespace PABC.Server.Features.EntityTypes.DeleteEntityType
             {
                 return NotFound(new ProblemDetails
                 {
-                    Title = "Entity Type Not Found",
+                    Detail = "Entiteitstype niet gevonden",
                     Status = StatusCodes.Status404NotFound
                 });
             }

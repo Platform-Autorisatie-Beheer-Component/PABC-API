@@ -31,7 +31,7 @@ namespace PABC.Server.Features.EntityTypes.PutEntityType
                 {
                     return NotFound(new ProblemDetails
                     {
-                        Title = "Entity Type Not Found",
+                        Detail = "Entiteitstype niet gevonden",
                         Status = StatusCodes.Status404NotFound
                     });
                 }
@@ -51,7 +51,7 @@ namespace PABC.Server.Features.EntityTypes.PutEntityType
             {
                 return Conflict(new ProblemDetails
                 {
-                    Title = "Duplicate EntityTypeId / Type combination",
+                    Detail = "Combinatie Type / EntityTypeId bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }
@@ -59,7 +59,7 @@ namespace PABC.Server.Features.EntityTypes.PutEntityType
             {
                 return StatusCode(500, new ProblemDetails
                 {
-                    Title = "Internal Server Error",
+                    Detail = "Internal Server Error",
                     Status = StatusCodes.Status500InternalServerError
                 });
             }

@@ -134,11 +134,22 @@ form menu {
   @media (min-width: variables.$breakpoint-md) {
     & {
       flex-direction: row;
-
-      li:first-of-type {
-        margin-inline-end: auto;
-      }
     }
+  }
+}
+
+dialog {
+  fieldset {
+    padding: 0;
+    margin-inline: 0;
+    border: none;
+  }
+
+  h2:first-child {
+    font-size: var(--font-large);
+    margin-block-start: 0;
+    padding-block-end: var(--spacing-default);
+    border-block-end: 1px solid var(--border);
   }
 }
 
@@ -156,26 +167,9 @@ form menu {
   }
 }
 
-.heading-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-default);
-  justify-content: space-between;
-  align-items: center;
-  padding-block: var(--spacing-default);
-
-  @media (min-width: variables.$breakpoint-md) {
-    flex-direction: row;
-  }
-
-  * {
-    margin: 0;
-  }
-}
-
 .simple-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--section-width-small), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--section-width), 1fr));
   grid-gap: var(--spacing-default);
 }
 
@@ -213,10 +207,10 @@ form menu {
 }
 
 // Button
-a[class*="icon"],
-button[class*="icon"] {
+button:has(.icon-container) {
   display: flex;
   column-gap: var(--spacing-small);
+  align-items: center;
 }
 
 .visually-hidden {
