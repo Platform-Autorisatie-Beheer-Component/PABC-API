@@ -24,7 +24,7 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRole
 
             try
             {
-                var functionalRole = new FunctionalRole { Id = Guid.NewGuid(), Name = model.Name };
+                var functionalRole = new FunctionalRole { Name = model.Name };
                 
                 db.FunctionalRoles.Add(functionalRole);
                 

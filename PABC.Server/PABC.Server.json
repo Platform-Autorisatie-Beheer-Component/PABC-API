@@ -854,7 +854,6 @@
       "Domain": {
         "required": [
           "description",
-          "id",
           "name"
         ],
         "type": "object",
@@ -902,7 +901,6 @@
       "EntityType": {
         "required": [
           "entityTypeId",
-          "id",
           "name",
           "type"
         ],
@@ -988,7 +986,6 @@
       },
       "FunctionalRole": {
         "required": [
-          "id",
           "name"
         ],
         "type": "object",

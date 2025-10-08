@@ -26,7 +26,6 @@ namespace PABC.Server.Features.EntityTypes.PostEntityType
             {
                 var entityType = new EntityType
                 {
-                    Id = Guid.NewGuid(),
                     EntityTypeId = model.EntityTypeId,
                     Type = model.Type,
                     Name = model.Name,
