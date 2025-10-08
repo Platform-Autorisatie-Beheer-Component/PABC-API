@@ -31,7 +31,7 @@ namespace PABC.Server.Features.FunctionalRoles.PutFunctionalRole
                 {
                     return NotFound(new ProblemDetails
                     {
-                        Title = "Functional Role Not Found",
+                        Detail = "Functionele rol niet gevonden",
                         Status = StatusCodes.Status404NotFound
                     });
                 }
@@ -48,7 +48,7 @@ namespace PABC.Server.Features.FunctionalRoles.PutFunctionalRole
             {
                 return Conflict(new ProblemDetails
                 {
-                    Title = "Duplicate Functional Role Name",
+                    Detail = "Functionele rolnaam bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }
@@ -56,7 +56,7 @@ namespace PABC.Server.Features.FunctionalRoles.PutFunctionalRole
             {
                 return StatusCode(500, new ProblemDetails
                 {
-                    Title = "Internal Server Error",
+                    Detail = "Internal Server Error",
                     Status = StatusCodes.Status500InternalServerError
                 });
             }

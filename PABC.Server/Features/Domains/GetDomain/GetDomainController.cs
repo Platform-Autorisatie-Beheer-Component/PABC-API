@@ -21,7 +21,7 @@ namespace PABC.Server.Features.Domains.GetDomain
             {
                 return NotFound(new ProblemDetails
                 {
-                    Title = "Domain Not Found",
+                    Detail = "Domein niet gevonden",
                     Status = StatusCodes.Status404NotFound
                 });
             }

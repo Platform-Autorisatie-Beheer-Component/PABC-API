@@ -21,7 +21,7 @@ namespace PABC.Server.Features.FunctionalRoles.GetFunctionalRole
             {
                 return NotFound(new ProblemDetails
                 {
-                    Title = "Functional Role Not Found",
+                    Detail = "Functionele rol niet gevonden",
                     Status = StatusCodes.Status404NotFound
                 });
             }

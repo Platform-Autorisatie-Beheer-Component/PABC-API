@@ -3,7 +3,7 @@
     <h2 id="entityType">Entiteitstype {{ !entityType.id ? `toevoegen` : `bijwerken` }}</h2>
 
     <div class="form-group">
-      <label for="type">Soort entiteitstype *</label>
+      <label for="type">Entiteitstype *</label>
 
       <input
         id="type"
@@ -16,11 +16,11 @@
         :aria-invalid="!entityType.type"
       />
 
-      <span id="typeError" class="error">Soort entiteitstype is een verplicht veld</span>
+      <span id="typeError" class="error">Entiteitstype is een verplicht veld</span>
     </div>
 
     <div class="form-group">
-      <label for="entityTypeId">Type ID *</label>
+      <label for="entityTypeId">Entiteitstype ID *</label>
 
       <input
         id="entityTypeId"
@@ -33,11 +33,11 @@
         :aria-invalid="!entityType.entityTypeId"
       />
 
-      <span id="entityTypeIdError" class="error">Type ID is een verplicht veld</span>
+      <span id="entityTypeIdError" class="error">Entiteitstype ID is een verplicht veld</span>
     </div>
 
     <div class="form-group">
-      <label for="name">Naam entiteitstype *</label>
+      <label for="name">Entiteitstype naam *</label>
 
       <input
         id="name"
@@ -50,11 +50,11 @@
         :aria-invalid="!entityType.name"
       />
 
-      <span id="nameError" class="error">Naam is een verplicht veld</span>
+      <span id="nameError" class="error">Entiteitstype naam is een verplicht veld</span>
     </div>
 
     <div class="form-group">
-      <label for="uri">URL</label>
+      <label for="uri">Entiteitstype URL</label>
 
       <input id="uri" type="text" v-model.trim="entityType.uri" />
     </div>

@@ -1,7 +1,6 @@
 import { ref, watch } from "vue";
 import toast from "@/components/toast/toast";
 import type { PabcService } from "@/services/pabcService";
-import { knownErrorMessages } from "@/utils/fetchWrapper";
 
 export const useItemForm = <T extends { name: string }>(
   pabcService: PabcService<T>,
@@ -12,6 +11,7 @@ export const useItemForm = <T extends { name: string }>(
   const item = ref<T | null>(null);
   const loading = ref(false);
   const error = ref("");
+  const invalid = ref("");
 
   watch(item, (value) => value && (form.value = { ...value }));
 
@@ -22,7 +22,7 @@ export const useItemForm = <T extends { name: string }>(
     try {
       item.value = await pabcService.getById(id);
     } catch (err: unknown) {
-      error.value = `${itemName}: fout bij het ophalen - ${err}`;
+      error.value = `${err instanceof Error ? err.message : err}`;
     } finally {
       loading.value = false;
     }
@@ -30,6 +30,7 @@ export const useItemForm = <T extends { name: string }>(
 
   const submitItem = async () => {
     loading.value = true;
+    invalid.value = "";
 
     try {
       if (!form.value?.id) {
@@ -38,16 +39,11 @@ export const useItemForm = <T extends { name: string }>(
         item.value = await pabcService.update(form.value);
       }
 
-      toast.add({ text: `${itemName}: succesvol opgeslagen.` });
+      toast.add({ text: `${itemName} succesvol opgeslagen.` });
     } catch (err: unknown) {
-      if (err instanceof Error && err.message === knownErrorMessages.conflict) {
-        toast.add({
-          text: `${itemName}: '${form.value.name}' bestaat al. Kies een andere naam.`,
-          type: "error"
-        });
-      } else {
-        toast.add({ text: `${itemName}: fout bij het opslaan - ${err}`, type: "error" });
-      }
+      invalid.value = `${err instanceof Error ? err.message : err}`;
+
+      throw err;
     } finally {
       loading.value = false;
     }
@@ -59,9 +55,9 @@ export const useItemForm = <T extends { name: string }>(
     try {
       await pabcService.delete(id);
 
-      toast.add({ text: `${itemName}: succesvol verwijderd.` });
+      toast.add({ text: `${itemName} succesvol verwijderd.` });
     } catch (err: unknown) {
-      toast.add({ text: `${itemName}: fout bij het verwijderen - ${err}`, type: "error" });
+      toast.add({ text: `${err instanceof Error ? err.message : err}`, type: "error" });
     } finally {
       loading.value = false;
     }
@@ -71,6 +67,7 @@ export const useItemForm = <T extends { name: string }>(
     form,
     loading,
     error,
+    invalid,
     fetchItem,
     submitItem,
     deleteItem

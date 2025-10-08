@@ -737,10 +737,11 @@ sub {
 
 /* Classes for notices */
 .notice {
-  background: var(--accent-bg);
-  border: 2px solid var(--border);
+  color: var(--danger);
+  background: var(--bg);
+  border: 2px solid var(--danger);
   border-radius: var(--standard-border-radius);
-  padding: 1.5rem;
+  padding: 1rem;
   margin-block-start: 0;
   margin-block-end: 1rem;
 }

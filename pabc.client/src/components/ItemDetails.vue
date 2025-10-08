@@ -48,8 +48,9 @@
     :submit-type="!form.id ? `create` : `update`"
     :loading="formLoading"
     :error="formError"
-    @submit="formDialog.confirm"
-    @cancel="formDialog.cancel"
+    :invalid="formInvalid"
+    @submit="submit"
+    @cancel="cancel"
   >
     <slot name="form" :form="form"></slot>
   </form-modal>
@@ -105,6 +106,7 @@ const {
   form,
   loading: formLoading,
   error: formError,
+  invalid: formInvalid,
   fetchItem,
   submitItem,
   deleteItem
@@ -113,7 +115,7 @@ const {
 const handleCreate = async () => {
   form.value = {};
 
-  await submit();
+  formDialog.open();
 };
 
 const handleUpdate = async (id?: string) => {
@@ -121,17 +123,22 @@ const handleUpdate = async (id?: string) => {
 
   fetchItem(id);
 
-  await submit();
+  formDialog.open();
 };
 
 const submit = async () => {
-  const submitted = await formDialog.open();
+  await submitItem();
 
-  if (submitted) {
-    await submitItem();
+  formDialog.confirm();
 
-    fetchItems();
-  }
+  fetchItems();
+};
+
+const cancel = async () => {
+  formError.value = "";
+  formInvalid.value = "";
+
+  formDialog.confirm();
 };
 
 const handleDelete = async (id?: string) => {

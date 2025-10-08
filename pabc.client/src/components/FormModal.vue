@@ -7,6 +7,8 @@
 
       <slot v-else></slot>
 
+      <alert-inline v-if="invalid">{{ invalid }}</alert-inline>
+
       <menu class="reset">
         <li v-if="!loading && !error">
           <button type="submit" :class="['button', { danger: isDelete }]">
@@ -35,11 +37,12 @@ const SubmitTypes = {
 
 type SubmitType = keyof typeof SubmitTypes;
 
-const { isOpen, submitType, loading, error } = defineProps<{
+const { isOpen, submitType, loading, error, invalid } = defineProps<{
   isOpen: boolean;
   submitType: SubmitType;
   loading?: boolean;
   error?: string;
+  invalid?: string;
 }>();
 
 const emit = defineEmits<{ (e: "submit"): void; (e: "cancel"): void }>();

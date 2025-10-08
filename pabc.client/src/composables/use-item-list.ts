@@ -13,7 +13,7 @@ export const useItemList = <T extends Item>(pabcService: PabcService<T>, itemNam
     try {
       items.value = await pabcService.getAll();
     } catch (err: unknown) {
-      error.value = `${itemName}: fout bij het ophalen - ${err}`;
+      error.value = `Fout bij het ophalen van ${itemName} - ${err}`;
     } finally {
       loading.value = false;
     }
