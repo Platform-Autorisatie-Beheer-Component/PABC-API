@@ -73,6 +73,10 @@ dialog {
   padding: var(--spacing-large);
   margin: auto;
   border: 1px solid var(--border);
+
+  menu {
+    margin-block-start: var(--spacing-default);
+  }
 }
 
 ::backdrop {
