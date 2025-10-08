@@ -24,7 +24,7 @@ namespace PABC.Server.Features.Domains.PostDomain
 
             try
             {
-                var domain = new Domain { Id = Guid.NewGuid(), Name = model.Name, Description = model.Description };
+                var domain = new Domain { Name = model.Name, Description = model.Description };
                 
                 db.Domains.Add(domain);
                 
