@@ -38,7 +38,7 @@ namespace PABC.Server.Features.FunctionalRoles.DeleteFunctionalRole
             {
                 return UnprocessableEntity(new ProblemDetails
                 {
-                    Title = "Cannot delete referenced Functional Role",
+                    Detail = "Functionele rol kan niet worden verwijderd vanwege bestaande verwijzingen.",
                     Status = StatusCodes.Status422UnprocessableEntity
                 });
             }
@@ -46,7 +46,7 @@ namespace PABC.Server.Features.FunctionalRoles.DeleteFunctionalRole
             {
                 return StatusCode(500, new ProblemDetails
                 {
-                    Title = "Internal Server Error",
+                    Detail = "Internal Server Error",
                     Status = StatusCodes.Status500InternalServerError
                 });
             }
