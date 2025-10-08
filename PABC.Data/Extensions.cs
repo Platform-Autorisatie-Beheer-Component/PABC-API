@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Hosting;
@@ -47,6 +48,15 @@ public static class Extensions
         {
             PostgresException pgEx => pgEx.SqlState == "23505",
             _ => ex.InnerException?.Message.Contains("unique", StringComparison.OrdinalIgnoreCase) == true
+        };
+    }
+
+    public static bool IsForeignKeyException(this DbException ex)
+    {
+        return ex switch
+        {
+            PostgresException pgEx => pgEx.SqlState == "23503",
+            _ => ex.Message.Contains("foreign key", StringComparison.OrdinalIgnoreCase) == true
         };
     }
 }

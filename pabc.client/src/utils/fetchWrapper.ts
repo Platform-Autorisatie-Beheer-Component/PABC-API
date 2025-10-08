@@ -4,7 +4,8 @@ interface FetchOptions extends RequestInit {
 
 export const knownErrorMessages = {
   notFound: "404",
-  conflict: "409"
+  conflict: "409",
+  unprocessableEntity: "422"
 };
 
 export async function fetchWrapper<T = unknown>(
@@ -36,10 +37,6 @@ export async function fetchWrapper<T = unknown>(
 
     if (response.status === 404) {
       throw new Error(knownErrorMessages.notFound);
-    }
-
-    if (response.status === 409) {
-      throw new Error(knownErrorMessages.conflict);
     }
 
     let errorMessage = `Request failed with status ${response.status}`;

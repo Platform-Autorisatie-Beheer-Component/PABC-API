@@ -4,33 +4,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 
-namespace PABC.Server.Features.FunctionalRoles.DeleteFunctionalRole
+namespace PABC.Server.Features.EntityTypes.DeleteEntityType
 {
     [ApiController]
-    [Route("/api/v1/functional-roles")]
-    public class DeleteFunctionalRoleController(PabcDbContext db) : Controller
+    [Route("/api/v1/entity-types")]
+    public class DeleteEntityTypeController(PabcDbContext db) : Controller
     {
         [HttpDelete("{id}")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status422UnprocessableEntity, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> DeleteFunctionalRole(Guid id, CancellationToken token = default)
+        public async Task<IActionResult> DeleteEntityType(Guid id, CancellationToken token = default)
         {
             try
             {
-                var functionalRole = await db.FunctionalRoles.FindAsync([id], token);
+                var entityType = await db.EntityTypes.FindAsync([id], token);
 
-            if (functionalRole == null)
+            if (entityType == null)
             {
                 return NotFound(new ProblemDetails
                 {
-                    Detail = "Functionele rol niet gevonden",
+                    Detail = "Entiteitstype niet gevonden",
                     Status = StatusCodes.Status404NotFound
                 });
             }
 
-                await db.FunctionalRoles.Where(d => d.Id == id).ExecuteDeleteAsync(token);
+                await db.EntityTypes.Where(d => d.Id == id).ExecuteDeleteAsync(token);
 
                 return NoContent();
             }
@@ -38,7 +38,7 @@ namespace PABC.Server.Features.FunctionalRoles.DeleteFunctionalRole
             {
                 return UnprocessableEntity(new ProblemDetails
                 {
-                    Detail = "Functionele rol kan niet worden verwijderd vanwege bestaande verwijzingen.",
+                    Detail = "Entiteitstype kan niet worden verwijderd vanwege bestaande verwijzingen.",
                     Status = StatusCodes.Status422UnprocessableEntity
                 });
             }

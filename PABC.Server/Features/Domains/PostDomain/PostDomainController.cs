@@ -24,7 +24,7 @@ namespace PABC.Server.Features.Domains.PostDomain
 
             try
             {
-                var domain = new Domain { Id = Guid.NewGuid(), Name = model.Name, Description = model.Description };
+                var domain = new Domain { Name = model.Name, Description = model.Description };
                 
                 db.Domains.Add(domain);
                 
@@ -36,7 +36,7 @@ namespace PABC.Server.Features.Domains.PostDomain
             {
                 return Conflict(new ProblemDetails
                 {
-                    Title = "Duplicate Domain Name",
+                    Detail = "Domeinnaam bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }
@@ -44,7 +44,7 @@ namespace PABC.Server.Features.Domains.PostDomain
             {
                 return StatusCode(500, new ProblemDetails
                 {
-                    Title = "Internal Server Error",
+                    Detail = "Internal Server Error",
                     Status = StatusCodes.Status500InternalServerError
                 });
             }

@@ -1,10 +1,7 @@
 import { ref } from "vue";
-import type { PabcService } from "@/services/pabcService";
+import type { Item, PabcService } from "@/services/pabcService";
 
-export const useItemList = <T extends { name: string }>(
-  pabcService: PabcService<T>,
-  errorPrefix: string
-) => {
+export const useItemList = <T extends Item>(pabcService: PabcService<T>, itemName: string) => {
   const items = ref<T[]>([]);
   const loading = ref(false);
   const error = ref("");
@@ -14,11 +11,9 @@ export const useItemList = <T extends { name: string }>(
     error.value = "";
 
     try {
-      items.value = (await pabcService.getAll()).sort((a, b) =>
-        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-      );
+      items.value = await pabcService.getAll();
     } catch (err: unknown) {
-      error.value = `${errorPrefix} - ${err}`;
+      error.value = `Fout bij het ophalen van ${itemName} - ${err}`;
     } finally {
       loading.value = false;
     }
