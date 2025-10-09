@@ -15,10 +15,7 @@ export type EntityType = Item & {
 };
 
 const createPabcService = <T extends Item>(endpoint: string) => ({
-  getAll: (): Promise<T[]> =>
-    get<T[]>(`/api/v1/${endpoint}`).then((items) =>
-      items.sort((a, b) => a.name.localeCompare(b.name))
-    ),
+  getAll: (): Promise<T[]> => get<T[]>(`/api/v1/${endpoint}`),
   getById: (id: string): Promise<T> => get<T>(`/api/v1/${endpoint}/${id}`),
   create: (payload: T): Promise<T> => post<T>(`/api/v1/${endpoint}`, payload),
   update: (payload: T): Promise<T> => put<T>(`/api/v1/${endpoint}/${payload.id}`, payload),

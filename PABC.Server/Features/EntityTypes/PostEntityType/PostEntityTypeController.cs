@@ -42,7 +42,7 @@ namespace PABC.Server.Features.EntityTypes.PostEntityType
             {
                 return Conflict(new ProblemDetails
                 {
-                    Detail = "Combinatie Type / EntityTypeId bestaat al",
+                    Detail = "Combinatie Entiteitstype en Entiteitstype ID bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }

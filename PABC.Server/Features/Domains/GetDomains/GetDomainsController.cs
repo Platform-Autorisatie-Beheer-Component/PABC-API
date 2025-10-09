@@ -14,7 +14,9 @@ namespace PABC.Server.Features.Domains.GetDomains
         [ProducesResponseType<List<Domain>>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetDomains(CancellationToken token = default)
         {
-            var domains = await db.Domains.ToListAsync(token);
+            var domains = await db.Domains
+                .OrderBy(d => d.Name)
+                .ToListAsync(token);
 
             return Ok(domains);
         }
