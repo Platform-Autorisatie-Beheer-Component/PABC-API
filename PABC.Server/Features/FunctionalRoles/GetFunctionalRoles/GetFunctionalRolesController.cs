@@ -14,7 +14,9 @@ namespace PABC.Server.Features.FunctionalRoles.GetFunctionalRoles
         [ProducesResponseType<List<FunctionalRole>>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetFunctionalRoles(CancellationToken token = default)
         {
-            var functionalRoles = await db.FunctionalRoles.ToListAsync(token);
+            var functionalRoles = await db.FunctionalRoles
+                .OrderBy(d => d.Name)
+                .ToListAsync(token);
 
             return Ok(functionalRoles);
         }

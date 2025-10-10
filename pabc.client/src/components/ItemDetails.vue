@@ -60,14 +60,15 @@
     submit-type="delete"
     :loading="formLoading"
     :error="formError"
-    @submit="confirmDialog.confirm"
+    @submit="remove"
     @cancel="confirmDialog.cancel"
   >
     <h2>{{ itemNameSingular }} verwijderen</h2>
 
     <p>
-      Weet je zeker dat je {{ itemNameSingular }} <em>'{{ form.name }}'</em> wilt verwijderen? Deze
-      actie kan niet ongedaan gemaakt worden.
+      Weet je zeker dat je
+      <span class="lowercase">{{ itemNameSingular }}</span> <em>'{{ form.name }}'</em>
+      wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.
     </p>
   </form-modal>
 </template>
@@ -103,6 +104,7 @@ const {
 } = useItemList(pabcService, itemNamePlural);
 
 const {
+  item,
   form,
   loading: formLoading,
   error: formError,
@@ -113,7 +115,7 @@ const {
 } = useItemForm(pabcService, itemNameSingular);
 
 const handleCreate = async () => {
-  form.value = {};
+  item.value = null;
 
   formDialog.open();
 };
@@ -127,11 +129,13 @@ const handleUpdate = async (id?: string) => {
 };
 
 const submit = async () => {
-  await submitItem();
+  try {
+    await submitItem();
 
-  formDialog.confirm();
+    formDialog.confirm();
 
-  fetchItems();
+    fetchItems();
+  } catch {}
 };
 
 const cancel = async () => {
@@ -146,13 +150,15 @@ const handleDelete = async (id?: string) => {
 
   fetchItem(id);
 
-  const confirmed = await confirmDialog.open();
+  confirmDialog.open();
+};
 
-  if (confirmed) {
-    await deleteItem(id);
+const remove = async () => {
+  await deleteItem();
 
-    fetchItems();
-  }
+  confirmDialog.cancel();
+
+  fetchItems();
 };
 
 onMounted(() => fetchItems());
@@ -195,5 +201,9 @@ ul > li {
       margin-block-end: 0;
     }
   }
+}
+
+.lowercase {
+  text-transform: lowercase;
 }
 </style>

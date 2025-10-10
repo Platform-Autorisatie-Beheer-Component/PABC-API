@@ -14,7 +14,10 @@ namespace PABC.Server.Features.EntityTypes.GetEntityTypes
         [ProducesResponseType<List<EntityType>>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetEntityTypes(CancellationToken token = default)
         {
-            var entityTypes = await db.EntityTypes.ToListAsync(token);
+            var entityTypes = await db.EntityTypes
+                .OrderBy(d => d.Type)
+                .ThenBy(d => d.Name)
+                .ToListAsync(token);
 
             return Ok(entityTypes);
         }

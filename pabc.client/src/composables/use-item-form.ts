@@ -1,21 +1,19 @@
 import { ref, watch } from "vue";
 import toast from "@/components/toast/toast";
-import type { PabcService } from "@/services/pabcService";
+import type { Item, PabcService } from "@/services/pabcService";
 
-export const useItemForm = <T extends { name: string }>(
-  pabcService: PabcService<T>,
-  itemName: string
-) => {
+export const useItemForm = <T extends Item>(pabcService: PabcService<T>, itemName: string) => {
+  const item = ref<Item | null>(null);
   const form = ref<T>({} as T);
 
-  const item = ref<T | null>(null);
   const loading = ref(false);
   const error = ref("");
   const invalid = ref("");
 
-  watch(item, (value) => value && (form.value = { ...value }));
+  watch(item, (value) => (form.value = { ...(value ?? {}) }));
 
   const fetchItem = async (id: string) => {
+    item.value = null;
     loading.value = true;
     error.value = "";
 
@@ -33,7 +31,7 @@ export const useItemForm = <T extends { name: string }>(
     invalid.value = "";
 
     try {
-      if (!form.value?.id) {
+      if (!item.value?.id) {
         item.value = await pabcService.create(form.value);
       } else {
         item.value = await pabcService.update(form.value);
@@ -49,11 +47,13 @@ export const useItemForm = <T extends { name: string }>(
     }
   };
 
-  const deleteItem = async (id: string) => {
+  const deleteItem = async () => {
+    if (!item.value?.id) return;
+
     loading.value = true;
 
     try {
-      await pabcService.delete(id);
+      await pabcService.delete(item.value.id);
 
       toast.add({ text: `${itemName} succesvol verwijderd.` });
     } catch (err: unknown) {
@@ -64,6 +64,7 @@ export const useItemForm = <T extends { name: string }>(
   };
 
   return {
+    item,
     form,
     loading,
     error,
