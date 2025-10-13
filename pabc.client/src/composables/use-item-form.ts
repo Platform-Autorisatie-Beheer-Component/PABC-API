@@ -13,9 +13,9 @@ export const useItemForm = <T extends Item>(pabcService: PabcService<T>, itemNam
   watch(item, (value) => (form.value = { ...(value ?? {}) }));
 
   const fetchItem = async (id: string) => {
-    item.value = null;
+    clearItem();
+
     loading.value = true;
-    error.value = "";
 
     try {
       item.value = await pabcService.getById(id);
@@ -55,6 +55,8 @@ export const useItemForm = <T extends Item>(pabcService: PabcService<T>, itemNam
     try {
       await pabcService.delete(item.value.id);
 
+      clearItem();
+
       toast.add({ text: `${itemName} succesvol verwijderd.` });
     } catch (err: unknown) {
       toast.add({ text: `${err instanceof Error ? err.message : err}`, type: "error" });
@@ -63,14 +65,20 @@ export const useItemForm = <T extends Item>(pabcService: PabcService<T>, itemNam
     }
   };
 
+  const clearItem = () => {
+    item.value = null;
+    error.value = "";
+    invalid.value = "";
+  };
+
   return {
-    item,
     form,
     loading,
     error,
     invalid,
     fetchItem,
     submitItem,
-    deleteItem
+    deleteItem,
+    clearItem
   };
 };

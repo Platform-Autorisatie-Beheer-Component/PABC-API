@@ -6,7 +6,7 @@
 
     <template v-else>
       <p>
-        <button type="button" class="button secondary" @click="handleCreate">
+        <button type="button" class="button secondary" @click="openCreateDialog">
           <icon-container icon="plus" /> Toevoegen
         </button>
       </p>
@@ -21,9 +21,9 @@
             <slot name="item" :item="item"></slot>
           </section>
 
-          <menu class="reset">
+          <menu class="reset" v-if="item.id">
             <li>
-              <button type="button" class="button secondary" @click="handleUpdate(item.id)">
+              <button type="button" class="button secondary" @click="openUpdateDialog(item.id)">
                 <icon-container icon="pen" />
 
                 <span class="visually-hidden">Item aanpassen</span>
@@ -31,7 +31,7 @@
             </li>
 
             <li>
-              <button type="button" class="button danger" @click="handleDelete(item.id)">
+              <button type="button" class="button danger" @click="openDeleteDialog(item.id)">
                 <icon-container icon="trash" />
 
                 <span class="visually-hidden">Item verwijderen</span>
@@ -49,8 +49,8 @@
     :loading="formLoading"
     :error="formError"
     :invalid="formInvalid"
-    @submit="submit"
-    @cancel="cancel"
+    @submit="handleSubmit"
+    @cancel="handleCancel"
   >
     <slot name="form" :form="form"></slot>
   </form-modal>
@@ -60,7 +60,7 @@
     submit-type="delete"
     :loading="formLoading"
     :error="formError"
-    @submit="remove"
+    @submit="handleDelete"
     @cancel="confirmDialog.cancel"
   >
     <h2>{{ itemNameSingular }} verwijderen</h2>
@@ -104,31 +104,35 @@ const {
 } = useItemList(pabcService, itemNamePlural);
 
 const {
-  item,
   form,
   loading: formLoading,
   error: formError,
   invalid: formInvalid,
   fetchItem,
   submitItem,
-  deleteItem
+  deleteItem,
+  clearItem
 } = useItemForm(pabcService, itemNameSingular);
 
-const handleCreate = async () => {
-  item.value = null;
+const openCreateDialog = () => {
+  clearItem();
 
   formDialog.open();
 };
 
-const handleUpdate = async (id?: string) => {
-  if (!id) return;
-
+const openUpdateDialog = (id: string) => {
   fetchItem(id);
 
   formDialog.open();
 };
 
-const submit = async () => {
+const openDeleteDialog = (id: string) => {
+  fetchItem(id);
+
+  confirmDialog.open();
+};
+
+const handleSubmit = async () => {
   try {
     await submitItem();
 
@@ -138,25 +142,16 @@ const submit = async () => {
   } catch {}
 };
 
-const cancel = async () => {
-  formError.value = "";
-  formInvalid.value = "";
+const handleCancel = () => {
+  clearItem();
 
-  formDialog.confirm();
+  formDialog.cancel();
 };
 
-const handleDelete = async (id?: string) => {
-  if (!id) return;
-
-  fetchItem(id);
-
-  confirmDialog.open();
-};
-
-const remove = async () => {
+const handleDelete = async () => {
   await deleteItem();
 
-  confirmDialog.cancel();
+  confirmDialog.confirm();
 
   fetchItems();
 };
