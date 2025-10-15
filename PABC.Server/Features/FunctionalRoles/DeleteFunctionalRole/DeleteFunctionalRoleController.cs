@@ -21,14 +21,14 @@ namespace PABC.Server.Features.FunctionalRoles.DeleteFunctionalRole
             {
                 var functionalRole = await db.FunctionalRoles.FindAsync([id], token);
 
-            if (functionalRole == null)
-            {
-                return NotFound(new ProblemDetails
+                if (functionalRole == null)
                 {
-                    Detail = "Functionele rol niet gevonden",
-                    Status = StatusCodes.Status404NotFound
-                });
-            }
+                    return NotFound(new ProblemDetails
+                    {
+                        Detail = "Functionele rol niet gevonden",
+                        Status = StatusCodes.Status404NotFound
+                    });
+                }
 
                 await db.FunctionalRoles.Where(d => d.Id == id).ExecuteDeleteAsync(token);
 
