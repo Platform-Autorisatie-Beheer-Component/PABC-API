@@ -34,29 +34,13 @@ builder.Services.AddApiKeyAuth(builder.Configuration.GetSection("API_KEY")
     .OfType<string>()
     .ToArray());
 
-const string AuthorityKey = "OIDC_AUTHORITY";
-
-var authority = builder.Configuration[AuthorityKey];
-
-if (string.IsNullOrWhiteSpace(authority))
+builder.Services.AddAuth(options =>
 {
-    //Logger.Fatal("Environment variable {variableKey} is missing", AuthorityKey);
-}
-
-builder.Services.AddPabcAuth(options =>
-{
-    options.Authority = authority;
+    options.Authority = builder.Configuration["OIDC_AUTHORITY"];
     options.ClientId = builder.Configuration["OIDC_CLIENT_ID"];
     options.ClientSecret = builder.Configuration["OIDC_CLIENT_SECRET"];
-    options.KlantcontactmedewerkerRole = builder.Configuration["OIDC_KLANTCONTACTMEDEWERKER_ROLE"];
-    options.RedacteurRole = builder.Configuration["OIDC_REDACTEUR_ROLE"];
-    options.MedewerkerIdentificatieClaimType = builder.Configuration["OIDC_MEDEWERKER_IDENTIFICATIE_CLAIM"];
-    if (int.TryParse(builder.Configuration["OIDC_MEDEWERKER_IDENTIFICATIE_TRUNCATE"], out var truncate))
-    {
-        options.TruncateMedewerkerIdentificatie = truncate;
-    }
-    options.JwtTokenAuthenticationSecret = builder.Configuration["MANAGEMENTINFORMATIE_API_KEY"];
 });
+
 
 var app = builder.Build();
 
@@ -78,12 +62,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseAuthentication();
 
-app.UsePabcAuthMiddlewares();
+app.MapITAAuthEndpoints();
+
 
 app.MapControllers();
 

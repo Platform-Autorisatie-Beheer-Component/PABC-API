@@ -1,3 +1,5 @@
+import { useAuthStore } from "../stores/auth";
+
 interface FetchOptions extends RequestInit {
   skipAuthCheck?: boolean;
 }
@@ -32,7 +34,12 @@ export async function fetchWrapper<T = unknown>(
     }
 
     if (response.status === 401 && !skipAuthCheck) {
-      // ...
+      const authStore = useAuthStore();
+      if (authStore) {
+        await authStore.login();
+
+        return Promise.reject(new Error("Authentication required"));
+      }
     }
 
     if (response.status === 404) {
