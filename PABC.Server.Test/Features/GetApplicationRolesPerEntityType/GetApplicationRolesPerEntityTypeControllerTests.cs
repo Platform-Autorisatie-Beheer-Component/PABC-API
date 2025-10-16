@@ -181,31 +181,26 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
 
 
             // ASSERT
-            Assert.Equal(2, response.Results.Count); 
+            Assert.Equal(2, response.Results.Count);
 
-            Assert.Collection(response.Results, 
-                // from domain 1
-                result =>
-                {
-                    Assert.Equal(entity1.Name, result.EntityType!.Name);
-                    var singleAppRole = Assert.Single(result.ApplicationRoles);
-                    Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
-                },
-                // from domain 2
-                result =>
-                {
-                    Assert.Equal(entity2.Name, result.EntityType!.Name);
-                    var singleAppRole = Assert.Single(result.ApplicationRoles);
-                    Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
-                });
+            // from domain 1
+            var fromDomain1 = Assert.Single(response.Results, r => r.EntityType!.Name == entity1.Name);
+            var singleAppRole1 = Assert.Single(fromDomain1.ApplicationRoles);
+            Assert.Equal(mapping.ApplicationRole.Name, singleAppRole1.Name);
+
+            var fromDomain2 = Assert.Single(response.Results, r => r.EntityType!.Name == entity2.Name);
+            var singleAppRole2 = Assert.Single(fromDomain1.ApplicationRoles);
+            Assert.Equal(mapping.ApplicationRole.Name, singleAppRole2.Name);
         }
 
         [Fact]
         public async Task Post_CombinesBothMappings_WhenBothExist()
         {
             // ARRANGE
-            var mapping1 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(RandomEntityType()), isAllEntityTypes:  false);
-            var mapping2 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(RandomEntityType()), isAllEntityTypes:  false);
+            var entityType1 = RandomEntityType();
+            var entityType2 = RandomEntityType();
+            var mapping1 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(entityType1), isAllEntityTypes:  false);
+            var mapping2 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(entityType2), isAllEntityTypes:  false);
 
             // ACT
             var result = await CreateController().Post(CreateRequest(mapping1.FunctionalRole.Name, mapping2.FunctionalRole.Name));
@@ -213,23 +208,17 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             // ASSERT
             var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
 
-            Assert.Collection(response.Results,
-                // from mapping 1
-                r =>
-                {
-                    var singleAppRole = Assert.Single(r.ApplicationRoles);
-                    Assert.Equal(mapping1.ApplicationRole.Name, singleAppRole.Name);
-                    Assert.NotNull(r.EntityType);
-                    Assert.Equal(r.EntityType.Name, mapping1.Domain!.EntityTypes[0].Name);
-                },
-                // from mapping 2;
-                r =>
-                {
-                    var singleAppRole = Assert.Single(r.ApplicationRoles);
-                    Assert.Equal(mapping2.ApplicationRole.Name, singleAppRole.Name);
-                    Assert.NotNull(r.EntityType);
-                    Assert.Equal(r.EntityType.Name, mapping2.Domain!.EntityTypes[0].Name);
-                });
+            var fromMapping1 = Assert.Single(response.Results, x => x.EntityType!.Name == entityType1.Name);
+            var singleAppRole1 = Assert.Single(fromMapping1.ApplicationRoles);
+            Assert.Equal(mapping1.ApplicationRole.Name, singleAppRole1.Name);
+            Assert.NotNull(fromMapping1.EntityType);
+            Assert.Equal(fromMapping1.EntityType.Name, mapping1.Domain!.EntityTypes[0].Name);
+
+            var fromMapping2 = Assert.Single(response.Results, x => x.EntityType!.Name == entityType2.Name);
+            var singleAppRole2 = Assert.Single(fromMapping2.ApplicationRoles);
+            Assert.Equal(mapping2.ApplicationRole.Name, singleAppRole2.Name);
+            Assert.NotNull(fromMapping2.EntityType);
+            Assert.Equal(fromMapping2.EntityType.Name, mapping2.Domain!.EntityTypes[0].Name);
         }
 
         [Fact]
