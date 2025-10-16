@@ -65,6 +65,8 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             var singleResult = Assert.Single(response.Results);
             Assert.NotNull(singleResult.EntityType);
             Assert.Equal(theExpectedEntityType.Name, singleResult.EntityType.Name);
+            Assert.Equal(theExpectedEntityType.EntityTypeId, singleResult.EntityType.Id);
+            Assert.Equal(theExpectedEntityType.Type, singleResult.EntityType.Type);
             var singleAppRole = Assert.Single(singleResult.ApplicationRoles);
             Assert.Equal(mapping.ApplicationRole.Name, singleAppRole.Name);
         }
