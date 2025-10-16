@@ -1,7 +1,7 @@
 <template>
   <h1>Beheer</h1>
 
-  <p>Op deze pagina kan je lijst-items aanvullen, aanpassen of verwijderen.</p>
+  <p>Op deze pagina kan je lijst-admin aanvullen, aanpassen of verwijderen.</p>
 
   <h2>Hoofdlijsten</h2>
 
@@ -78,11 +78,11 @@ import {
   entityTypeService,
   applicationRoleService
 } from "@/services/pabcService";
-import ItemDetails from "@/components/ItemDetails.vue";
-import DomainForm from "@/components/forms/DomainForm.vue";
-import FunctionalRoleForm from "@/components/forms/FunctionalRoleForm.vue";
-import EntityTypeForm from "@/components/forms/EntityTypeForm.vue";
-import ApplicationRoleForm from "@/components/forms/ApplicationRoleForm.vue";
+import ItemDetails from "@/components/admin/ItemDetails.vue";
+import DomainForm from "@/components/admin/forms/DomainForm.vue";
+import FunctionalRoleForm from "@/components/admin/forms/FunctionalRoleForm.vue";
+import EntityTypeForm from "@/components/admin/forms/EntityTypeForm.vue";
+import ApplicationRoleForm from "@/components/admin/forms/ApplicationRoleForm.vue";
 </script>
 
 <style lang="scss" scoped>
