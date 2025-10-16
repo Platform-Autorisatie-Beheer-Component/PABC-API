@@ -7,6 +7,7 @@ using PABC.Data;
 namespace PABC.Server.Features.Domains.DeleteDomain
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/domains")]
     public class DeleteDomainController(PabcDbContext db) : Controller
     {

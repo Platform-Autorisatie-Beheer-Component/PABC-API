@@ -7,6 +7,7 @@ using PABC.Data;
 namespace PABC.Server.Features.FunctionalRoles.DeleteFunctionalRole
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/functional-roles")]
     public class DeleteFunctionalRoleController(PabcDbContext db) : Controller
     {

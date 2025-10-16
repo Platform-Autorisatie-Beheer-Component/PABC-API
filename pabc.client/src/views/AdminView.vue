@@ -12,15 +12,15 @@
       item-name-plural="Applicatierollen"
     >
       <template #item="{ item: applicationRole }">
-        <h3>{{ applicationRole.name }}</h3>
-        <p>{{ applicationRole.application }}</p>
+        <h3>{{ applicationRole.application }}</h3>
+        <p>{{ applicationRole.name }}</p>
       </template>
 
       <template #form="{ form }">
         <application-role-form :application-role="form" />
       </template>
     </item-details>
-    
+
     <item-details
       :pabc-service="domainService"
       item-name-singular="Domein"

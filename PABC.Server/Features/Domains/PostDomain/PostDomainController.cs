@@ -7,6 +7,7 @@ using PABC.Data.Entities;
 namespace PABC.Server.Features.Domains.PostDomain
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/domains")]
     public class PostDomainController(PabcDbContext db) : Controller
     {

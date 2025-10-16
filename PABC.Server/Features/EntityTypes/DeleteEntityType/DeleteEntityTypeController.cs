@@ -7,6 +7,7 @@ using PABC.Data;
 namespace PABC.Server.Features.EntityTypes.DeleteEntityType
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/entity-types")]
     public class DeleteEntityTypeController(PabcDbContext db) : Controller
     {

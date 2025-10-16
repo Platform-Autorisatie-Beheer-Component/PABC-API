@@ -139,7 +139,9 @@ const handleSubmit = async () => {
     formDialog.confirm();
 
     fetchItems();
-  } catch {}
+  } catch {
+    // Error displayed via formInvalid, keep dialog open
+  }
 };
 
 const handleCancel = () => {

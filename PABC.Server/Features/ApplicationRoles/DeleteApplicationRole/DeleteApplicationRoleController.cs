@@ -7,6 +7,7 @@ using PABC.Data;
 namespace PABC.Server.Features.ApplicationRoles.DeleteApplicationRole
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/application-roles")]
     public class DeleteApplicationRoleController(PabcDbContext db) : Controller
     {

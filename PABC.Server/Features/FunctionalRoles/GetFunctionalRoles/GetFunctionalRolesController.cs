@@ -7,6 +7,7 @@ using PABC.Data.Entities;
 namespace PABC.Server.Features.FunctionalRoles.GetFunctionalRoles
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/functional-roles")]
     public class GetFunctionalRolesController(PabcDbContext db) : Controller
     {

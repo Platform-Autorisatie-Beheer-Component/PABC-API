@@ -6,6 +6,7 @@ using PABC.Data.Entities;
 namespace PABC.Server.Features.ApplicationRoles.GetApplicationRole
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/application-roles")]
     public class GetApplicationRoleController(PabcDbContext db) : Controller
     {
