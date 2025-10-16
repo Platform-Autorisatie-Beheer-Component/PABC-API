@@ -7,6 +7,7 @@ using PABC.Data.Entities;
 namespace PABC.Server.Features.EntityTypes.GetEntityTypes
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/entity-types")]
     public class GetEntityTypesController(PabcDbContext db) : Controller
     {

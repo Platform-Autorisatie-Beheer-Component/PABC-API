@@ -14,6 +14,10 @@ export type EntityType = Item & {
   uri: string;
 };
 
+export type ApplicationRole = Item & {
+  application: string;
+};
+
 const createPabcService = <T extends Item>(endpoint: string) => ({
   getAll: (): Promise<T[]> => get<T[]>(`/api/v1/${endpoint}`),
   getById: (id: string): Promise<T> => get<T>(`/api/v1/${endpoint}/${id}`),
@@ -29,3 +33,5 @@ export const domainService = createPabcService<Domain>("domains");
 export const functionalRoleService = createPabcService<FunctionalRole>("functional-roles");
 
 export const entityTypeService = createPabcService<EntityType>("entity-types");
+
+export const applicationRoleService = createPabcService<ApplicationRole>("application-roles");

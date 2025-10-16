@@ -4,19 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
 
-namespace PABC.Server.Features.Domains.PostDomain
+namespace PABC.Server.Features.ApplicationRoles.PostApplicationRole
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("/api/v1/domains")]
-    public class PostDomainController(PabcDbContext db) : Controller
+    [Route("/api/v1/application-roles")]
+    public class PostApplicationRoleController(PabcDbContext db) : Controller
     {
         [HttpPost]
         [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
-        [ProducesResponseType<Domain>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
+        [ProducesResponseType<ApplicationRole>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PostDomain([FromBody] DomainUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PostApplicationRole([FromBody] ApplicationRole model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -25,19 +25,19 @@ namespace PABC.Server.Features.Domains.PostDomain
 
             try
             {
-                var domain = new Domain { Name = model.Name, Description = model.Description };
+                var applicationRole = new ApplicationRole { Name = model.Name, Application = model.Application };
                 
-                db.Domains.Add(domain);
+                db.ApplicationRoles.Add(applicationRole);
                 
                 await db.SaveChangesAsync(token);
 
-                return StatusCode(201, domain);
+                return StatusCode(201, applicationRole);
             }
             catch (DbUpdateException ex) when (ex.IsDuplicateException())
             {
                 return Conflict(new ProblemDetails
                 {
-                    Detail = "Domeinnaam bestaat al",
+                    Detail = "Combinatie Naam en Applicatie bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }

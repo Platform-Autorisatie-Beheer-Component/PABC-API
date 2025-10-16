@@ -3,12 +3,14 @@ namespace PABC.Data.Entities
 {
     public class ApplicationRole
     {
-        public required Guid Id { get; set; }
+        public Guid Id { get; init; }
         
         [Json.Schema.Generation.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
-        public required string Name { get; init; }
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Name { get; set; }
 
         [Json.Schema.Generation.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
-        public required string Application { get; init; }
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Application { get; set; }
     }
 }

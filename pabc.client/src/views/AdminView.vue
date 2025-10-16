@@ -1,11 +1,26 @@
 <template>
   <h1>Beheer</h1>
 
-  <p>Op deze pagina kan je lijst-items aanvullen, aanpassen of verwijderen.</p>
+  <p>Op deze pagina kan je lijst-admin aanvullen, aanpassen of verwijderen.</p>
 
   <h2>Hoofdlijsten</h2>
 
   <section>
+    <item-details
+      :pabc-service="applicationRoleService"
+      item-name-singular="Applicatierol"
+      item-name-plural="Applicatierollen"
+    >
+      <template #item="{ item: applicationRole }">
+        <h3>{{ applicationRole.application }}</h3>
+        <p>{{ applicationRole.name }}</p>
+      </template>
+
+      <template #form="{ form }">
+        <application-role-form :application-role="form" />
+      </template>
+    </item-details>
+
     <item-details
       :pabc-service="domainService"
       item-name-singular="Domein"
@@ -57,11 +72,17 @@
 </template>
 
 <script setup lang="ts">
-import { domainService, functionalRoleService, entityTypeService } from "@/services/pabcService";
-import ItemDetails from "@/components/ItemDetails.vue";
-import DomainForm from "@/components/forms/DomainForm.vue";
-import FunctionalRoleForm from "@/components/forms/FunctionalRoleForm.vue";
-import EntityTypeForm from "@/components/forms/EntityTypeForm.vue";
+import {
+  domainService,
+  functionalRoleService,
+  entityTypeService,
+  applicationRoleService
+} from "@/services/pabcService";
+import ItemDetails from "@/components/admin/ItemDetails.vue";
+import DomainForm from "@/components/admin/forms/DomainForm.vue";
+import FunctionalRoleForm from "@/components/admin/forms/FunctionalRoleForm.vue";
+import EntityTypeForm from "@/components/admin/forms/EntityTypeForm.vue";
+import ApplicationRoleForm from "@/components/admin/forms/ApplicationRoleForm.vue";
 </script>
 
 <style lang="scss" scoped>

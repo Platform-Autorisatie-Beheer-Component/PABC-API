@@ -7,6 +7,7 @@ using PABC.Data;
 namespace PABC.Server.Features.EntityTypes.DeleteEntityType
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/entity-types")]
     public class DeleteEntityTypeController(PabcDbContext db) : Controller
     {
@@ -21,14 +22,14 @@ namespace PABC.Server.Features.EntityTypes.DeleteEntityType
             {
                 var entityType = await db.EntityTypes.FindAsync([id], token);
 
-            if (entityType == null)
-            {
-                return NotFound(new ProblemDetails
+                if (entityType == null)
                 {
-                    Detail = "Entiteitstype niet gevonden",
-                    Status = StatusCodes.Status404NotFound
-                });
-            }
+                    return NotFound(new ProblemDetails
+                    {
+                        Detail = "Entiteitstype niet gevonden",
+                        Status = StatusCodes.Status404NotFound
+                    });
+                }
 
                 await db.EntityTypes.Where(d => d.Id == id).ExecuteDeleteAsync(token);
 
