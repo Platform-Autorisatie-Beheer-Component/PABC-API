@@ -52,7 +52,7 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
                 .GroupBy(x => x.EntityType)
                 .Select(g => new GetApplicationRolesResponseModel
                 {
-                    EntityType = g.Key == null ? null : new EntityTypeModel { Id = g.Key.Id.ToString(), Type = g.Key.Type, Name = g.Key.Name },
+                    EntityType = g.Key == null ? null : new EntityTypeModel { Id = g.Key.EntityTypeId, Type = g.Key.Type, Name = g.Key.Name },
                     ApplicationRoles = g
                         .Select(x => new ApplicationRoleModel
                         {
