@@ -113,7 +113,8 @@ namespace PABC.Server.Auth
             services.AddAuthorizationBuilder()
                 .AddPolicy(ITAPolicy.Name, policy => policy.RequireRole(authOptions.ITASystemAccessRole))
                 .AddPolicy(FunctioneelBeheerderPolicy.Name, policy => policy.RequireRole(authOptions.FunctioneelBeheerderRole))
-                .AddFallbackPolicy("LoggedIn", policy => policy.RequireAuthenticatedUser());
+                //.AddFallbackPolicy("LoggedIn", policy => policy.RequireAuthenticatedUser())
+                ;
             services.AddDistributedMemoryCache();
             services.AddOpenIdConnectAccessTokenManagement();
         }
