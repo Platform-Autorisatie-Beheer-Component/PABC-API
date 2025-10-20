@@ -7,6 +7,7 @@ using PABC.Data;
 namespace PABC.Server.Features.Domains.DeleteDomain
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/domains")]
     public class DeleteDomainController(PabcDbContext db) : Controller
     {
@@ -21,14 +22,14 @@ namespace PABC.Server.Features.Domains.DeleteDomain
             {
                 var domain = await db.Domains.FindAsync([id], token);
 
-            if (domain == null)
-            {
-                return NotFound(new ProblemDetails
+                if (domain == null)
                 {
-                    Detail = "Domein niet gevonden",
-                    Status = StatusCodes.Status404NotFound
-                });
-            }
+                    return NotFound(new ProblemDetails
+                    {
+                        Detail = "Domein niet gevonden",
+                        Status = StatusCodes.Status404NotFound
+                    });
+                }
 
                 await db.Domains.Where(d => d.Id == id).ExecuteDeleteAsync(token);
 

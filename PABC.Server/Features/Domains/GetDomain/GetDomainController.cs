@@ -6,6 +6,7 @@ using PABC.Data.Entities;
 namespace PABC.Server.Features.Domains.GetDomain
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/domains")]
     public class GetDomainController(PabcDbContext db) : Controller
     {
