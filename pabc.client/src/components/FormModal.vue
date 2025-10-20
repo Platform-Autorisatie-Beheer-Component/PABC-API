@@ -9,8 +9,8 @@
 
       <alert-inline v-if="invalid">{{ invalid }}</alert-inline>
 
-      <menu class="reset">
-        <li v-if="!loading && !error">
+      <menu v-if="!loading" class="reset">
+        <li v-if="!error">
           <button type="submit" :class="['button', { danger: isDelete }]">
             {{ SubmitTypes[submitType] }}
           </button>
