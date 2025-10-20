@@ -59,25 +59,6 @@
           }
         ]
       }
-    },
-    "/api/me": {
-      "get": {
-        "tags": [
-          "PABC.Server"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PabcUser"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -178,34 +159,6 @@
               "$ref": "#/components/schemas/ApplicationRoleModel"
             },
             "description": "List of application roles associated with this entity type"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PabcUser": {
-        "required": [
-          "email",
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "isLoggedIn": {
-            "type": "boolean"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "roles": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "hasFunctioneelBeheerderAccess": {
-            "type": "boolean"
           }
         },
         "additionalProperties": false

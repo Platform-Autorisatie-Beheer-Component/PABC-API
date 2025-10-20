@@ -109,9 +109,9 @@ namespace PABC.Server.Auth
 
         public static IEndpointRouteBuilder MapPabcAuthEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("api/logoff", LogoffAsync).AllowAnonymous();
-            endpoints.MapGet("api/me", (PabcUser user) => user).AllowAnonymous();
-            endpoints.MapGet("api/challenge", ChallengeAsync).AllowAnonymous();
+            endpoints.MapGet("api/logoff", LogoffAsync).AllowAnonymous().ExcludeFromDescription();
+            endpoints.MapGet("api/me", (PabcUser user) => user).AllowAnonymous().ExcludeFromDescription();
+            endpoints.MapGet("api/challenge", ChallengeAsync).AllowAnonymous().ExcludeFromDescription();
 
             return endpoints;
         }
