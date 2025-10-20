@@ -68,7 +68,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapITAAuthEndpoints();
+app.MapPabcAuthEndpoints();
 
 
 app.MapControllers();
@@ -76,6 +76,6 @@ app.MapControllers();
 app.UseRequestTimeouts();
 app.UseOutputCache();
 
-app.MapFallbackToFile("/index.html");
+app.MapFallbackToFile("/index.html").AllowAnonymous();
 
 app.Run();

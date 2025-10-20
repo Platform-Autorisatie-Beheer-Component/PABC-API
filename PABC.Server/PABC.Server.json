@@ -1150,14 +1150,10 @@
       "PabcUser": {
         "required": [
           "email",
-          "name",
-          "objectregisterMedewerkerId"
+          "name"
         ],
         "type": "object",
         "properties": {
-          "objectregisterMedewerkerId": {
-            "type": "string"
-          },
           "isLoggedIn": {
             "type": "boolean"
           },
@@ -1172,9 +1168,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "hasITASystemAccess": {
-            "type": "boolean"
           },
           "hasFunctioneelBeheerderAccess": {
             "type": "boolean"

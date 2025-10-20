@@ -16,7 +16,6 @@ namespace PABC.Server.Auth
             var authOptions = new AuthOptions();
             setOptions(authOptions);
 
-            var objectregisterMedewerkerIdClaimType = authOptions.ObjectregisterMedewerkerIdClaimType;
             var emailClaimType = string.IsNullOrWhiteSpace(authOptions.EmailClaimType) ? JwtClaimTypes.Email : authOptions.EmailClaimType;
             var nameClaimType = string.IsNullOrWhiteSpace(authOptions.NameClaimType) ? JwtClaimTypes.Name : authOptions.NameClaimType;
             var roleClaimType = string.IsNullOrWhiteSpace(authOptions.RoleClaimType) ? JwtClaimTypes.Roles : authOptions.RoleClaimType;
@@ -27,20 +26,12 @@ namespace PABC.Server.Auth
             {
                 var user = s.GetRequiredService<IHttpContextAccessor>().HttpContext?.User;
                 var isLoggedIn = user?.Identity?.IsAuthenticated ?? false;
-                var objectregisterMedewerkerId = string.IsNullOrWhiteSpace(objectregisterMedewerkerIdClaimType) ? string.Empty : user?.FindFirst(objectregisterMedewerkerIdClaimType)?.Value ?? string.Empty;
                 var name = user?.FindFirst(nameClaimType)?.Value ?? string.Empty;
                 var email = user?.FindFirst(emailClaimType)?.Value ?? string.Empty;
                 var roles = user?.FindAll(roleClaimType).Select(x=> x.Value).ToArray() ?? [];
-                var hasITASystemAccess = roles.Contains(authOptions.ITASystemAccessRole);
                 var hasFunctioneelBeheerderAccess = roles.Contains(authOptions.FunctioneelBeheerderRole);
 
-                if(isLoggedIn && !string.IsNullOrWhiteSpace(objectregisterMedewerkerIdClaimType) && string.IsNullOrWhiteSpace(objectregisterMedewerkerId))
-                {
-                    throw new Exception($"Verwachtewaarde voor de {authOptions.ObjectregisterMedewerkerIdClaimType} ontbreekt. Neem contact op met de beheerder.");
-                }
-
-
-                return new PabcUser {ObjectregisterMedewerkerId= objectregisterMedewerkerId , IsLoggedIn = isLoggedIn, Name = name, Email = email, Roles = roles, HasITASystemAccess = hasITASystemAccess, HasFunctioneelBeheerderAccess = hasFunctioneelBeheerderAccess };
+                return new PabcUser { IsLoggedIn = isLoggedIn, Name = name, Email = email, Roles = roles, HasFunctioneelBeheerderAccess = hasFunctioneelBeheerderAccess };
             });
 
             var authBuilder = services.AddAuthentication(options =>
@@ -111,15 +102,12 @@ namespace PABC.Server.Auth
                 });
             }
             services.AddAuthorizationBuilder()
-                .AddPolicy(ITAPolicy.Name, policy => policy.RequireRole(authOptions.ITASystemAccessRole))
-                .AddPolicy(FunctioneelBeheerderPolicy.Name, policy => policy.RequireRole(authOptions.FunctioneelBeheerderRole))
-                //.AddFallbackPolicy("LoggedIn", policy => policy.RequireAuthenticatedUser())
-                ;
+                .AddFallbackPolicy(FunctioneelBeheerderPolicy.Name, policy => policy.RequireRole(authOptions.FunctioneelBeheerderRole));
             services.AddDistributedMemoryCache();
             services.AddOpenIdConnectAccessTokenManagement();
         }
 
-        public static IEndpointRouteBuilder MapITAAuthEndpoints(this IEndpointRouteBuilder endpoints)
+        public static IEndpointRouteBuilder MapPabcAuthEndpoints(this IEndpointRouteBuilder endpoints)
         {
             endpoints.MapGet("api/logoff", LogoffAsync).AllowAnonymous();
             endpoints.MapGet("api/me", (PabcUser user) => user).AllowAnonymous();
