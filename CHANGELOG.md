@@ -7,6 +7,7 @@
 - [UI – Functional roles #7](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/7)
 - [UI – Entity types #13](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/13)
 - [Authentication via OIDC for the user interface #10](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/10)
+- [UI - Application roles #14](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/14)
 
 
 ### Maintenance
