@@ -40,10 +40,10 @@ builder.Services.AddApiKeyAuth(builder.Configuration.GetSection("API_KEY")
 
 builder.Services.AddAuth(options =>
 {
-    options.Authority = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:Authority");
-    options.ClientId = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:ClientId");
-    options.ClientSecret = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:ClientSecret");
-    options.FunctioneelBeheerderRole = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:FunctioneelBeheerderRole");
+    options.Authority = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC:AUTHORITY");
+    options.ClientId = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC:CLIENT_ID");
+    options.ClientSecret = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC:CLIENT_SECRET");
+    options.FunctioneelBeheerderRole = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC:FUNCTIONEEL_BEHEERDER_ROLE");
 });
 
 var app = builder.Build();
