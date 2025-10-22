@@ -1,8 +1,12 @@
 ﻿using PABC.Data;
 using PABC.Server.Auth;
+using PABC.Server.Helper;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// when this app is ran from aspire, we need to manually include user secrets from this specific assembly
+builder.Configuration.AddUserSecrets<Program>();
 
 builder.AddServiceDefaults();
 builder.AddPabcDbContext();
@@ -36,11 +40,11 @@ builder.Services.AddApiKeyAuth(builder.Configuration.GetSection("API_KEY")
 
 builder.Services.AddAuth(options =>
 {
-    options.Authority = builder.Configuration["OIDC_AUTHORITY"];
-    options.ClientId = builder.Configuration["OIDC_CLIENT_ID"];
-    options.ClientSecret = builder.Configuration["OIDC_CLIENT_SECRET"];
+    options.Authority = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC_AUTHORITY");
+    options.ClientId = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC_CLIENT_ID");
+    options.ClientSecret = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC_CLIENT_SECRET");
+    options.FunctioneelBeheerderRole = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC_FUNCTIONEEL_BEHEERDER_ROLE");
 });
-
 
 var app = builder.Build();
 
@@ -50,7 +54,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
-app.UseSwagger( x=> x.RouteTemplate = "api/{documentName}/specs.json"); //documetnname = v1
+app.UseSwagger(x => x.RouteTemplate = "api/{documentName}/specs.json"); //documetnname = v1
 
 if (app.Environment.IsDevelopment())
 {
@@ -62,14 +66,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapPabcAuthEndpoints();
-
 
 app.MapControllers();
 

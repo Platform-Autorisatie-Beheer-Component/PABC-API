@@ -1,4 +1,7 @@
+import toast from "../components/toast/toast";
 import { useAuthStore } from "../stores/auth";
+
+import router from '@/router';
 
 interface FetchOptions extends RequestInit {
   skipAuthCheck?: boolean;
@@ -36,10 +39,20 @@ export async function fetchWrapper<T = unknown>(
     if (response.status === 401 && !skipAuthCheck) {
       const authStore = useAuthStore();
       if (authStore) {
-        await authStore.login();
 
-        return Promise.reject(new Error("Authentication required"));
+        if (authStore.user?.isLoggedIn) {
+          toast.add({ text: `De sessie is verlopen. Log in op een nieuwe tab en probeer het opnieuw.` });
+          return Promise.reject(new Error("De sessie is verlopen. Log in op een nieuwe tab en probeer het opnieuw."));
+        } else {
+          await authStore.login();
+          return Promise.reject(new Error("Log eerst in voordat je deze actie kan uitvoeren."));
+        }
+
       }
+    }
+
+    if (response.status === 403) {
+        router.push('/unauthorized');
     }
 
     if (response.status === 404) {

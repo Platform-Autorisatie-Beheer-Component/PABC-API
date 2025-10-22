@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
 import AdminView from "@/views/AdminView.vue";
 import LoginView from "@/views/LoginView.vue";
+import UnauthorizedView from "@/views/UnauthorizedView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,14 @@ const router = createRouter({
       component: LoginView,
       meta: {
         title: "Inloggen"
+      }
+    },
+    {
+      path: '/unauthorized',
+      name: 'Unauthorized',
+      component: UnauthorizedView,
+      meta: {
+        title: '403 - Unauthorized'
       }
     }
   ]
