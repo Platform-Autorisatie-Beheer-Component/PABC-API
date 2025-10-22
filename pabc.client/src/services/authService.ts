@@ -12,7 +12,7 @@ class AuthService {
           email: data.email || "",
           name: data.name || "",
           roles: data.roles || [],
-          hasITASystemAccess: data.hasITASystemAccess || false,
+          hasPabcSystemAccess: data.hasPabcSystemAccess || false,
           hasFunctioneelBeheerderAccess: data.hasFunctioneelBeheerderAccess || false
         };
         return userData;

@@ -10,7 +10,7 @@ export const useAuthStore = defineStore("auth", () => {
   const initialized = computed(() => user.value !== null);
 
   const isAuthenticated = computed(() => user.value?.isLoggedIn || false);
-  const hasITASystemAccess = computed(() => user.value?.hasITASystemAccess || false);
+  const hasPabcSystemAccess = computed(() => user.value?.hasPabcSystemAccess || false);
   const hasFunctioneelBeheerderAccess = computed(
     () => user.value?.hasFunctioneelBeheerderAccess || false
   );
@@ -64,7 +64,7 @@ export const useAuthStore = defineStore("auth", () => {
     isLoading,
     error,
     isAuthenticated,
-    hasITASystemAccess,
+    hasPabcSystemAccess,
     hasFunctioneelBeheerderAccess,
     initialized,
     initialize,

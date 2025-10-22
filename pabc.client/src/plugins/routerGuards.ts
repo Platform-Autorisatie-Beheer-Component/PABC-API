@@ -11,7 +11,6 @@ function authGuard(
   const authStore = useAuthStore();
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  console.warn("route");
   if (requiresAuth && !authStore.isAuthenticated) {
     // Don't redirect if we're likely in the middle of authentication callback
     // Give the backend time to establish the session
@@ -29,16 +28,16 @@ function authGuard(
   return next();
 }
 
-function itaAccessGuard(
+function pabcAccessGuard(
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
   const authStore = useAuthStore();
-  const requiresITAAccess = to.matched.some((record) => record.meta.requiresITAAccess);
+  const requiresPabcAccess = to.matched.some((record) => record.meta.requiresPabcAccess);
 
   return authGuard(to, from, () => {
-    if (requiresITAAccess && !authStore.hasITASystemAccess) {
+    if (requiresPabcAccess && !authStore.hasPabcSystemAccess) {
       return next({ name: "forbidden" });
     }
 
@@ -106,7 +105,7 @@ export default {
     router.beforeEach(initializeAuthGuard);
     router.beforeEach(titleGuard);
     router.beforeEach(authGuard);
-    router.beforeEach(itaAccessGuard);
+    router.beforeEach(pabcAccessGuard);
     router.beforeEach(functioneelBeheerderAccessGuard);
   }
 };

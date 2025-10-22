@@ -3,6 +3,6 @@ export type User = {
   email: string;
   name: string;
   roles: string[];
-  hasITASystemAccess: boolean;
+  hasPabcSystemAccess: boolean;
   hasFunctioneelBeheerderAccess: boolean;
 };
