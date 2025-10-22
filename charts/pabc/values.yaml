@@ -149,11 +149,14 @@ settings:
   apiKeys: []
 
   
-oidc:
-  authority: ""
-  clientId: ""
-  clientSecret: ""
-  functioneelBeheerderRole: ""
+  oidc:
+    authority: ""
+    clientId: ""
+    clientSecret: ""
+    functioneelBeheerderRole: ""
+    nameClaimType: ""
+    roleClaimType: ""
+    emailClaimType: ""
 
   aspnetcore:
     forwardedHeadersEnabled: true

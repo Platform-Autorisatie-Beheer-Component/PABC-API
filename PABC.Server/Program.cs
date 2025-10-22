@@ -46,6 +46,9 @@ if (Assembly.GetEntryAssembly()?.GetName().Name != "GetDocument.Insider")
         options.ClientId = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:ClientId");
         options.ClientSecret = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:ClientSecret");
         options.FunctioneelBeheerderRole = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:FunctioneelBeheerderRole");
+        options.NameClaimType = builder.Configuration["Oidc:NameClaimType"];
+        options.RoleClaimType = builder.Configuration["Oidc:RoleClaimType"];
+        options.EmailClaimType = builder.Configuration["Oidc:EmailClaimType"];
     });
 }
 
