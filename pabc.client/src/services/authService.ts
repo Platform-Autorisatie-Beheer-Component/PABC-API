@@ -24,7 +24,6 @@ class AuthService {
   }
 
   async login(returnUrl?: string) {
-    console.warn("login!:");
     const currentUrl = window.location.href;
 
     const encodedReturnUrl = encodeURIComponent(returnUrl || currentUrl);
