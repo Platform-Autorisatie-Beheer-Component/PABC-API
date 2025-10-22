@@ -6,7 +6,7 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // when this app is ran from aspire, we need to manually include user secrets from this specific assembly
-builder.Configuration.AddUserSecrets<Program>();
+//builder.Configuration.AddUserSecrets<Program>();
 
 builder.AddServiceDefaults();
 builder.AddPabcDbContext();
@@ -38,13 +38,16 @@ builder.Services.AddApiKeyAuth(builder.Configuration.GetSection("API_KEY")
     .OfType<string>()
     .ToArray());
 
-builder.Services.AddAuth(options =>
+if (Assembly.GetEntryAssembly()?.GetName().Name != "GetDocument.Insider")
 {
-    options.Authority = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC:AUTHORITY");
-    options.ClientId = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC:CLIENT_ID");
-    options.ClientSecret = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC:CLIENT_SECRET");
-    options.FunctioneelBeheerderRole = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "OIDC:FUNCTIONEEL_BEHEERDER_ROLE");
-});
+    builder.Services.AddAuth(options =>
+    {
+        options.Authority = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:Authority");
+        options.ClientId = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:ClientId");
+        options.ClientSecret = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:ClientSecret");
+        options.FunctioneelBeheerderRole = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:FunctioneelBeheerderRole");
+    });
+}
 
 var app = builder.Build();
 
@@ -71,7 +74,11 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapPabcAuthEndpoints();
+
+if (Assembly.GetEntryAssembly()?.GetName().Name != "GetDocument.Insider")
+{
+    app.MapPabcAuthEndpoints();
+}
 
 app.MapControllers();
 
