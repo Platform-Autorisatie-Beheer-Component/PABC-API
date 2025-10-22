@@ -5,9 +5,6 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// when this app is ran from aspire, we need to manually include user secrets from this specific assembly
-//builder.Configuration.AddUserSecrets<Program>();
-
 builder.AddServiceDefaults();
 builder.AddPabcDbContext();
 
