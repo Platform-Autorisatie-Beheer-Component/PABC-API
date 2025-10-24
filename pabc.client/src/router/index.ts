@@ -23,11 +23,11 @@ const router = createRouter({
       }
     },
     {
-      path: '/unauthorized',
-      name: 'Unauthorized',
+      path: "/forbidden",
+      name: "forbidden",
       component: UnauthorizedView,
       meta: {
-        title: '403 - Unauthorized'
+        title: "Forbidden"
       }
     }
   ]

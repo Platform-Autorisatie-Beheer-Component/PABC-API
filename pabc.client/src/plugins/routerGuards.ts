@@ -1,67 +1,23 @@
+import { authService } from "@/services/authService";
 import type { App } from "vue";
 import type { Router } from "vue-router";
 import type { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
 
-function authGuard(
+const FORBIDDEN = "forbidden";
+
+async function authGuard(
   to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
+  _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
-  const authStore = useAuthStore();
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-
-  if (requiresAuth && !authStore.isAuthenticated) {
-    // Don't redirect if we're likely in the middle of authentication callback
-    // Give the backend time to establish the session
-    if (authStore.isLoading) {
-      // Still initializing, allow navigation to continue
-      return next();
-    }
-
-    return next({
-      name: "login",
-      query: { returnUrl: to.fullPath }
-    });
+  const user = await authService.getCurrentUser();
+  if (!user?.isLoggedIn) {
+    return authService.login(to.fullPath);
   }
-
+  if (to.name !== FORBIDDEN && !user?.hasFunctioneelBeheerderAccess) {
+    return next({ name: FORBIDDEN });
+  }
   return next();
-}
-
-function pabcAccessGuard(
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) {
-  const authStore = useAuthStore();
-  const requiresPabcAccess = to.matched.some((record) => record.meta.requiresPabcAccess);
-
-  return authGuard(to, from, () => {
-    if (requiresPabcAccess && !authStore.hasPabcSystemAccess) {
-      return next({ name: "forbidden" });
-    }
-
-    return next();
-  });
-}
-
-function functioneelBeheerderAccessGuard(
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) {
-  const authStore = useAuthStore();
-  const requiresFunctioneelBeheerderAccess = to.matched.some(
-    (record) => record.meta.requiresFunctioneelBeheerderAccess
-  );
-
-  return authGuard(to, from, () => {
-    if (requiresFunctioneelBeheerderAccess && !authStore.hasFunctioneelBeheerderAccess) {
-      return next({ name: "forbidden" });
-    }
-
-    return next();
-  });
 }
 
 function titleGuard(
@@ -79,33 +35,9 @@ function titleGuard(
   return next();
 }
 
-async function initializeAuthGuard(
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) {
-  if (to.name === "login") {
-    return next();
-  }
-
-  const authStore = useAuthStore();
-  if (!authStore.initialized) {
-    try {
-      await authStore.initialize();
-    } catch (error) {
-      console.error("Auth initialization failed:", error);
-    }
-  }
-
-  return next();
-}
-
 export default {
   install(app: App, router: Router) {
-    router.beforeEach(initializeAuthGuard);
     router.beforeEach(titleGuard);
     router.beforeEach(authGuard);
-    router.beforeEach(pabcAccessGuard);
-    router.beforeEach(functioneelBeheerderAccessGuard);
   }
 };

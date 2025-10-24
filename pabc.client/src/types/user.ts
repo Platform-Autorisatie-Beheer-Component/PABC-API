@@ -3,6 +3,5 @@ export type User = {
   email: string;
   name: string;
   roles: string[];
-  hasPabcSystemAccess: boolean;
   hasFunctioneelBeheerderAccess: boolean;
 };

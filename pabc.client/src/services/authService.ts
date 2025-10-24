@@ -12,7 +12,6 @@ class AuthService {
           email: data.email || "",
           name: data.name || "",
           roles: data.roles || [],
-          hasPabcSystemAccess: data.hasPabcSystemAccess || false,
           hasFunctioneelBeheerderAccess: data.hasFunctioneelBeheerderAccess || false
         };
         return userData;
@@ -23,25 +22,12 @@ class AuthService {
     }
   }
 
-  async login(returnUrl?: string) {
+  login(returnUrl?: string) {
     const currentUrl = window.location.href;
 
     const encodedReturnUrl = encodeURIComponent(returnUrl || currentUrl);
 
     window.location.href = `/api/challenge?returnUrl=${encodedReturnUrl}`;
-  }
-
-  async logout(): Promise<void> {
-    try {
-      window.location.href = `/api/logoff`;
-    } catch (error) {
-      console.error("Logout error:", error);
-      throw error;
-    }
-  }
-
-  async isAuthenticated(): Promise<boolean> {
-    return (await this.getCurrentUser())?.isLoggedIn || false;
   }
 }
 
