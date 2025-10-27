@@ -1,6 +1,9 @@
-﻿using PABC.Data;
+﻿using System.Reflection;
+using PABC.Data;
 using PABC.Server.Auth;
-using System.Reflection;
+using PABC.Server.Helper;
+
+var isOpenApiSpecGeneration = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +37,20 @@ builder.Services.AddApiKeyAuth(builder.Configuration.GetSection("API_KEY")
     .OfType<string>()
     .ToArray());
 
+if (!isOpenApiSpecGeneration)
+{
+    builder.Services.AddAuth(options =>
+    {
+        options.Authority = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:Authority");
+        options.ClientId = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:ClientId");
+        options.ClientSecret = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:ClientSecret");
+        options.FunctioneelBeheerderRole = ConfigHelper.GetRequiredConfigValue(builder.Configuration, "Oidc:FunctioneelBeheerderRole");
+        options.NameClaimType = builder.Configuration["Oidc:NameClaimType"];
+        options.RoleClaimType = builder.Configuration["Oidc:RoleClaimType"];
+        options.EmailClaimType = builder.Configuration["Oidc:EmailClaimType"];
+    });
+}
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
@@ -42,7 +59,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
-app.UseSwagger( x=> x.RouteTemplate = "api/{documentName}/specs.json"); //documetnname = v1
+app.UseSwagger(x => x.RouteTemplate = "api/{documentName}/specs.json"); //documetnname = v1
 
 if (app.Environment.IsDevelopment())
 {
@@ -56,13 +73,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+
+if (!isOpenApiSpecGeneration)
+{
+    app.MapPabcAuthEndpoints();
+}
 
 app.MapControllers();
 
 app.UseRequestTimeouts();
 app.UseOutputCache();
 
-app.MapFallbackToFile("/index.html");
+app.MapFallbackToFile("/index.html").AllowAnonymous();
 
 app.Run();

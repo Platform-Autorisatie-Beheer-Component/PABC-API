@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
 import AdminView from "@/views/AdminView.vue";
+import UnauthorizedView from "@/views/UnauthorizedView.vue";
+import LoginView from "@/views/LoginView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +21,22 @@ const router = createRouter({
       component: AdminView,
       meta: {
         title: "PABC - Beheer"
+      }
+    },
+    {
+      path: "/forbidden",
+      name: "forbidden",
+      component: UnauthorizedView,
+      meta: {
+        title: "Forbidden"
+      }
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+      meta: {
+        title: "Login"
       }
     }
   ]

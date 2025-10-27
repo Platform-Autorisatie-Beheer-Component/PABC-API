@@ -1,3 +1,7 @@
+import toast from "../components/toast/toast";
+
+import router from "@/router";
+
 interface FetchOptions extends RequestInit {
   skipAuthCheck?: boolean;
 }
@@ -21,37 +25,43 @@ export async function fetchWrapper<T = unknown>(
   }
   fetchOptions.headers = headers;
 
-  try {
-    const response = await fetch(url, fetchOptions);
+  const response = await fetch(url, fetchOptions);
 
-    if (response.ok) {
-      const contentType = response.headers.get("content-type");
-      return contentType?.includes("application/json")
-        ? ((await response.json()) as T)
-        : ((await response.text()) as unknown as T);
-    }
-
-    if (response.status === 401 && !skipAuthCheck) {
-      // ...
-    }
-
-    if (response.status === 404) {
-      throw new Error(knownErrorMessages.notFound);
-    }
-
-    let errorMessage = `Request failed with status ${response.status}`;
-
-    try {
-      const errorData = await response.json();
-      errorMessage = errorData.message || errorData.detail || errorData.error || errorMessage;
-    } catch {
-      errorMessage = response.statusText || errorMessage;
-    }
-
-    throw new Error(errorMessage);
-  } catch (error) {
-    throw error;
+  if (response.ok) {
+    const contentType = response.headers.get("content-type");
+    return contentType?.includes("application/json")
+      ? ((await response.json()) as T)
+      : ((await response.text()) as unknown as T);
   }
+
+  if (response.status === 401 && !skipAuthCheck) {
+    toast.add({
+      text: `De sessie is verlopen. Log in op een nieuwe tab en probeer het opnieuw.`,
+      type: "error"
+    });
+    return Promise.reject(
+      new Error("De sessie is verlopen. Log in op een nieuwe tab en probeer het opnieuw.")
+    );
+  }
+
+  if (response.status === 403) {
+    router.push("/forbidden");
+  }
+
+  if (response.status === 404) {
+    throw new Error(knownErrorMessages.notFound);
+  }
+
+  let errorMessage = `Request failed with status ${response.status}`;
+
+  try {
+    const errorData = await response.json();
+    errorMessage = errorData.message || errorData.detail || errorData.error || errorMessage;
+  } catch {
+    errorMessage = response.statusText || errorMessage;
+  }
+
+  throw new Error(errorMessage);
 }
 
 function toQueryString(params: Record<string, unknown>): string {

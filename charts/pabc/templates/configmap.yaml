@@ -15,3 +15,11 @@ data:
   {{- if .Values.migrations.dataSetPath }}
   JSON_DATASET_PATH: {{ .Values.migrations.dataSetPath | toString | quote }}
   {{- end }}
+  {{- if .Values.settings.oidc.authority }}
+  Oidc__Authority: {{ .Values.settings.oidc.authority }}
+  Oidc__ClientId: {{ .Values.settings.oidc.clientId }}
+  Oidc__FunctioneelBeheerderRole: {{ .Values.settings.oidc.functioneelBeheerderRole }}
+  Oidc__NameClaimType: {{ .Values.settings.oidc.nameClaimType }}
+  Oidc__RoleClaimType: {{ .Values.settings.oidc.roleClaimType }}
+  Oidc__EmailClaimType: {{ .Values.settings.oidc.emailClaimType }}
+  {{- end }}

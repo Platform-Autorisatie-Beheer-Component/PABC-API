@@ -320,6 +320,7 @@ input:enabled:focus-visible:where([type="submit"], [type="reset"], [type="button
 header > nav {
   font-size: 1rem;
   line-height: 2;
+  color: var(--accent-bg);
 }
 
 /* Use flexbox to allow items to wrap, as needed */
@@ -345,7 +346,7 @@ header > nav ol li {
 header > nav a,
 header > nav a:visited {
   border: 1px solid transparent;
-  color: var(--accent-bg);
+  color: inherit;
   display: inline-block;
   padding: 0.1rem 1rem;
   text-decoration: none;
@@ -356,7 +357,7 @@ header > nav a.current,
 header > nav a[aria-current="page"],
 header > nav a[aria-current="true"] {
   border-color: var(--border);
-  color: var(--accent-bg);
+  color: inherit;
   cursor: pointer;
   background-color: var(--accent-hover);
 }
