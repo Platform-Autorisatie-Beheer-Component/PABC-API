@@ -6,7 +6,7 @@ import type { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 const FORBIDDEN = "forbidden";
 const LOGIN = "login";
 
-async function refreshLoginGuard(
+async function refreshUserGuard(
   _to: RouteLocationNormalized,
   _from: RouteLocationNormalized,
   next: NavigationGuardNext
@@ -60,7 +60,7 @@ function titleGuard(
 
 export default {
   install(_app: App, router: Router) {
-    router.beforeEach(refreshLoginGuard);
+    router.beforeEach(refreshUserGuard);
     router.beforeEach(loginGuard);
     router.beforeEach(functioneelBeheerGuard);
     router.beforeEach(titleGuard);
