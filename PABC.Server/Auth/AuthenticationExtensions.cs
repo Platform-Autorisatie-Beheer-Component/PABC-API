@@ -119,7 +119,7 @@ namespace PABC.Server.Auth
         private static async Task LogoffAsync(HttpContext httpContext)
         {
             await httpContext.SignOutAsync(CookieSchemeName);
-            await httpContext.SignOutAsync(ChallengeSchemeName);
+            httpContext.Response.Redirect("/");
         }
 
         private static Task RedirectToRoot<TOptions>(HandleRequestContext<TOptions> context) where TOptions : AuthenticationSchemeOptions

@@ -36,7 +36,8 @@ export async function fetchWrapper<T = unknown>(
 
   if (response.status === 401 && !skipAuthCheck) {
     toast.add({
-      text: `De sessie is verlopen. Log in op een nieuwe tab en probeer het opnieuw.`
+      text: `De sessie is verlopen. Log in op een nieuwe tab en probeer het opnieuw.`,
+      type: "error"
     });
     return Promise.reject(
       new Error("De sessie is verlopen. Log in op een nieuwe tab en probeer het opnieuw.")
