@@ -7,7 +7,7 @@ const FORBIDDEN = "forbidden";
 const LOGIN = "login";
 
 async function refreshLoginGuard(
-  to: RouteLocationNormalized,
+  _to: RouteLocationNormalized,
   _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
