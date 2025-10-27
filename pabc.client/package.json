@@ -20,8 +20,7 @@
   "dependencies": {
     "@vueuse/core": "^13.6.0",
     "vue": "^3.5.18",
-    "vue-router": "^4.5.1",
-    "pinia": "^3.0.3"
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
