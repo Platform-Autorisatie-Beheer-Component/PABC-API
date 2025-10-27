@@ -13,20 +13,22 @@ async function authGuard(
 ) {
   await refreshUser();
 
-  // Redirect logged-in users away from the login page
-  if (to.name === LOGIN && user.value.isLoggedIn)
-    return next({ path: to.query.returnUrl?.toString() || "/" });
+  const isLoginPage = to.name === LOGIN;
+  const isForbiddenPage = to.name === FORBIDDEN;
 
-  // Redirect users with access away from the forbidden page
-  if (to.name === FORBIDDEN && user.value.hasFunctioneelBeheerderAccess) return next("/");
+  // Not logged in: redirect to login page
+  if (!user.value.isLoggedIn)
+    return isLoginPage ? next() : next({ name: LOGIN, query: { returnUrl: to.fullPath } });
 
-  // Redirect non-logged-in users to the login page
-  if (to.name !== LOGIN && !user.value.isLoggedIn)
-    return next({ name: LOGIN, query: { returnUrl: to.fullPath } });
+  // Logged in: redirect away from login page
+  if (isLoginPage) return next({ path: to.query.returnUrl?.toString() || "/" });
 
-  // Redirect users without access to the forbidden page
-  if (to.name !== FORBIDDEN && !user.value.hasFunctioneelBeheerderAccess)
-    return next({ name: FORBIDDEN });
+  // No access: redirect to forbidden page
+  if (!user.value.hasFunctioneelBeheerderAccess)
+    return isForbiddenPage ? next() : next({ name: FORBIDDEN });
+
+  // Has access: redirect away from forbidden page
+  if (isForbiddenPage) return next("/");
 
   return next();
 }
