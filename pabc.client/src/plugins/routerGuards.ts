@@ -1,3 +1,4 @@
+import toast from "@/components/toast/toast";
 import { refreshUser, user } from "@/composables/use-user";
 import type { App } from "vue";
 import type { Router } from "vue-router";
@@ -11,7 +12,13 @@ async function authGuard(
   _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
-  await refreshUser();
+  await refreshUser().catch((reason) => {
+    toast.add({
+      text: "Fout bij verversen gebruikersgegevens. Neem contact op met een Beheerder.",
+      type: "error"
+    });
+    return Promise.reject(reason);
+  });
 
   const isLoginPage = to.name === LOGIN;
   const isForbiddenPage = to.name === FORBIDDEN;
