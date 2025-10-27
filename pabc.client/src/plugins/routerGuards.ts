@@ -6,40 +6,28 @@ import type { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 const FORBIDDEN = "forbidden";
 const LOGIN = "login";
 
-async function refreshUserGuard(
-  _to: RouteLocationNormalized,
+async function authGuard(
+  to: RouteLocationNormalized,
   _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
   await refreshUser();
-  return next();
-}
 
-function loginGuard(
-  to: RouteLocationNormalized,
-  _from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) {
-  if (to.name === LOGIN && user.value.isLoggedIn) {
+  // Redirect logged-in users away from the login page
+  if (to.name === LOGIN && user.value.isLoggedIn)
     return next({ path: to.query.returnUrl?.toString() || "/" });
-  }
-  if (to.name !== LOGIN && !user.value.isLoggedIn) {
-    return next({ name: LOGIN, query: { returnUrl: to.fullPath } });
-  }
-  return next();
-}
 
-function functioneelBeheerGuard(
-  to: RouteLocationNormalized,
-  _from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) {
-  if (to.name === FORBIDDEN && user.value.hasFunctioneelBeheerderAccess) {
-    return next({ path: "/" });
-  }
-  if (to.name !== FORBIDDEN && !user.value.hasFunctioneelBeheerderAccess) {
+  // Redirect users with access away from the forbidden page
+  if (to.name === FORBIDDEN && user.value.hasFunctioneelBeheerderAccess) return next("/");
+
+  // Redirect non-logged-in users to the login page
+  if (to.name !== LOGIN && !user.value.isLoggedIn)
+    return next({ name: LOGIN, query: { returnUrl: to.fullPath } });
+
+  // Redirect users without access to the forbidden page
+  if (to.name !== FORBIDDEN && !user.value.hasFunctioneelBeheerderAccess)
     return next({ name: FORBIDDEN });
-  }
+
   return next();
 }
 
@@ -60,9 +48,7 @@ function titleGuard(
 
 export default {
   install(_app: App, router: Router) {
-    router.beforeEach(refreshUserGuard);
-    router.beforeEach(loginGuard);
-    router.beforeEach(functioneelBeheerGuard);
+    router.beforeEach(authGuard);
     router.beforeEach(titleGuard);
   }
 };
