@@ -1,7 +1,9 @@
-﻿using PABC.Data;
+﻿using System.Reflection;
+using PABC.Data;
 using PABC.Server.Auth;
 using PABC.Server.Helper;
-using System.Reflection;
+
+var isOpenApiSpecGeneration = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +37,7 @@ builder.Services.AddApiKeyAuth(builder.Configuration.GetSection("API_KEY")
     .OfType<string>()
     .ToArray());
 
-if (Assembly.GetEntryAssembly()?.GetName().Name != "GetDocument.Insider")
+if (!isOpenApiSpecGeneration)
 {
     builder.Services.AddAuth(options =>
     {
@@ -75,7 +77,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-if (Assembly.GetEntryAssembly()?.GetName().Name != "GetDocument.Insider")
+if (!isOpenApiSpecGeneration)
 {
     app.MapPabcAuthEndpoints();
 }
