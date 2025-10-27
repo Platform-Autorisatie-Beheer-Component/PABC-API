@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -112,7 +112,8 @@ public static class Extensions
         // All health checks must pass for app to be considered ready to accept traffic after starting
         app.MapHealthChecks("/health")
             .CacheOutput("HealthChecks")
-            .WithRequestTimeout("HealthChecks");
+            .WithRequestTimeout("HealthChecks")
+            .AllowAnonymous();
 
         // Only health checks tagged with the "live" tag must pass for app to be considered alive
         app.MapHealthChecks("/alive", new HealthCheckOptions
@@ -120,7 +121,8 @@ public static class Extensions
             Predicate = static r => r.Tags.Contains("live")
         })
             .CacheOutput("HealthChecks")
-            .WithRequestTimeout("HealthChecks");
+            .WithRequestTimeout("HealthChecks")
+            .AllowAnonymous();
 
         return app;
     }
