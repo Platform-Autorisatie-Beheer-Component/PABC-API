@@ -6,22 +6,38 @@ import type { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 const FORBIDDEN = "forbidden";
 const LOGIN = "login";
 
-async function authGuard(
+async function refreshLoginGuard(
   to: RouteLocationNormalized,
   _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
   await refreshUser();
-  if (to.name === LOGIN) {
-    return user.value.isLoggedIn ? next({ path: to.query.returnUrl?.toString() || "/" }) : next();
+  return next();
+}
+
+function loginGuard(
+  to: RouteLocationNormalized,
+  _from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  if (to.name === LOGIN && user.value.isLoggedIn) {
+    return next({ path: to.query.returnUrl?.toString() || "/" });
   }
-  if (to.name === FORBIDDEN) {
-    return user.value.hasFunctioneelBeheerderAccess ? next({ path: "/" }) : next();
-  }
-  if (!user.value.isLoggedIn) {
+  if (to.name !== LOGIN && !user.value.isLoggedIn) {
     return next({ name: LOGIN, query: { returnUrl: to.fullPath } });
   }
-  if (!user.value.hasFunctioneelBeheerderAccess) {
+  return next();
+}
+
+function functioneelBeheerGuard(
+  to: RouteLocationNormalized,
+  _from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  if (to.name === FORBIDDEN && user.value.hasFunctioneelBeheerderAccess) {
+    return next({ path: "/" });
+  }
+  if (to.name !== FORBIDDEN && !user.value.hasFunctioneelBeheerderAccess) {
     return next({ name: FORBIDDEN });
   }
   return next();
@@ -44,7 +60,9 @@ function titleGuard(
 
 export default {
   install(_app: App, router: Router) {
+    router.beforeEach(refreshLoginGuard);
+    router.beforeEach(loginGuard);
+    router.beforeEach(functioneelBeheerGuard);
     router.beforeEach(titleGuard);
-    router.beforeEach(authGuard);
   }
 };
