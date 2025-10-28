@@ -107,6 +107,10 @@ details {
   summary {
     word-break: break-word;
   }
+
+  p {
+    margin-block: var(--spacing-default);
+  }
 }
 
 .form-group-button {
@@ -169,7 +173,7 @@ dialog {
 
 .simple-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--section-width), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--section-width-small), 1fr));
   grid-gap: var(--spacing-default);
 }
 
@@ -224,4 +228,8 @@ button:has(.icon-container) {
 
 .pre-wrap {
   white-space: pre-wrap;
+}
+
+.page {
+  inline-size: min(100%, var(--section-width-large));
 }

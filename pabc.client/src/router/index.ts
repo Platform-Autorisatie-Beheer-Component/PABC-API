@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
+import DomainsEntityTypesView from "@/views/DomainsEntityTypesView.vue";
 import AdminView from "@/views/AdminView.vue";
 import UnauthorizedView from "@/views/UnauthorizedView.vue";
 import LoginView from "@/views/LoginView.vue";
@@ -12,7 +13,15 @@ const router = createRouter({
       name: "dashboard",
       component: DashboardView,
       meta: {
-        title: "PABC"
+        title: "Dashboard"
+      }
+    },
+    {
+      path: "/domeinen",
+      name: "domains",
+      component: DomainsEntityTypesView,
+      meta: {
+        title: "Domeinen met Entiteitstypes"
       }
     },
     {
@@ -20,7 +29,7 @@ const router = createRouter({
       name: "admin",
       component: AdminView,
       meta: {
-        title: "PABC - Beheer"
+        title: "Beheer"
       }
     },
     {
@@ -40,12 +49,6 @@ const router = createRouter({
       }
     }
   ]
-});
-
-const title = document.title;
-
-router.beforeEach((to) => {
-  document.title = `${to.meta?.title ? to.meta.title + " | " : ""}${title}`;
 });
 
 export default router;
