@@ -37,7 +37,7 @@ const SubmitTypes = {
 
 type SubmitType = keyof typeof SubmitTypes;
 
-const { isOpen, submitType, loading, error, invalid } = defineProps<{
+const { isOpen, submitType } = defineProps<{
   isOpen: boolean;
   submitType: SubmitType;
   loading?: boolean;
