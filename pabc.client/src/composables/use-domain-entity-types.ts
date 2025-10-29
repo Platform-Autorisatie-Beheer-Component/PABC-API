@@ -1,10 +1,13 @@
 import { ref } from "vue";
+import toast from "@/components/toast/toast";
 import { domainEntityTypesService, type DomainEntityTypes } from "@/services/pabcService";
 
 export const useDomainEntityTypes = () => {
   const domains = ref<DomainEntityTypes[]>([]);
+
   const loading = ref(false);
   const error = ref("");
+  const invalid = ref("");
 
   const fetchDomains = async () => {
     loading.value = true;
@@ -19,10 +22,44 @@ export const useDomainEntityTypes = () => {
     }
   };
 
+  const addEntityTypeToDomain = async (domainId: string, entityTypeId: string) => {
+    loading.value = true;
+    invalid.value = "";
+
+    try {
+      await domainEntityTypesService.add(domainId, entityTypeId);
+
+      toast.add({ text: "Entiteitstype succesvol toegevoegd aan domein." });
+    } catch (err: unknown) {
+      invalid.value = `${err instanceof Error ? err.message : err}`;
+
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const removeEntityTypeFromDomain = async (domainId: string, entityTypeId: string) => {
+    loading.value = true;
+
+    try {
+      await domainEntityTypesService.remove(domainId, entityTypeId);
+
+      toast.add({ text: "Entiteitstype succesvol verwijderd uit domein." });
+    } catch (err: unknown) {
+      toast.add({ text: `${err instanceof Error ? err.message : err}`, type: "error" });
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     domains,
     loading,
     error,
-    fetchDomains
+    invalid,
+    fetchDomains,
+    addEntityTypeToDomain,
+    removeEntityTypeFromDomain
   };
 };

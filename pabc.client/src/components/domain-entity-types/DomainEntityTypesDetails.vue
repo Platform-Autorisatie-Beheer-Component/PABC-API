@@ -8,7 +8,17 @@
 
     <p v-else>Hieronder zie je de entiteitstypen die op '{{ domain.name }}' van toepassing zijn.</p>
 
-    <item-list v-if="domain.entityTypes?.length" :items="domain.entityTypes">
+    <p v-if="filteredEntityTypes.length">
+      <button type="button" class="button secondary" @click="openAddDialog">
+        <icon-container icon="plus" /> Toevoegen
+      </button>
+    </p>
+
+    <item-list
+      v-if="domain.entityTypes?.length"
+      :items="domain.entityTypes"
+      @delete="openRemoveDialog"
+    >
       <template #item="{ item: entityType }">
         <span>
           <strong>{{ entityType.type }}</strong> | {{ entityType.name }}
@@ -16,11 +26,106 @@
       </template>
     </item-list>
   </details>
+
+  <form-modal
+    :is-open="isFormDialogOpen"
+    submit-type="create"
+    :loading="loading"
+    :invalid="invalid"
+    @submit="handleAdd"
+    @cancel="formDialog.cancel"
+  >
+    <domain-entity-types-form
+      v-model:selected-entity-type-id="selectedEntityTypeId"
+      :entity-types="filteredEntityTypes"
+    />
+  </form-modal>
+
+  <form-modal
+    :is-open="isConfirmDialogOpen"
+    submit-type="delete"
+    :loading="loading"
+    @submit="handleDelete"
+    @cancel="confirmDialog.cancel"
+  >
+    <h2>Entiteitstype verwijderen uit {{ domain.name }}</h2>
+
+    <p>
+      Weet je zeker dat je entiteitstype <em>'{{ selectedEntityTypeName }}'</em> wilt verwijderen
+      uit domein <em>'{{ domain.name }}'</em>?
+    </p>
+  </form-modal>
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from "vue";
 import ItemList from "@/components/ItemList.vue";
-import type { DomainEntityTypes } from "@/services/pabcService";
+import FormModal from "@/components/FormModal.vue";
+import IconContainer from "@/components/IconContainer.vue";
+import { useDialog } from "@/composables/use-dialog";
+import { useDomainEntityTypes } from "@/composables/use-domain-entity-types";
+import type { DomainEntityTypes, EntityType } from "@/services/pabcService";
+import DomainEntityTypesForm from "./DomainEntityTypesForm.vue";
 
-const { domain } = defineProps<{ domain: DomainEntityTypes }>();
+const { domain, entityTypes } = defineProps<{
+  domain: DomainEntityTypes;
+  entityTypes: EntityType[];
+}>();
+
+const emit = defineEmits<{ (e: "refresh"): void }>();
+
+const { loading, invalid, addEntityTypeToDomain, removeEntityTypeFromDomain } =
+  useDomainEntityTypes();
+
+const selectedEntityTypeId = ref("");
+
+const selectedEntityTypeName = computed(
+  () => domain.entityTypes?.find((et) => et.id === selectedEntityTypeId.value)?.name
+);
+
+const filteredEntityTypes = computed(() =>
+  entityTypes.filter((et) => !domain.entityTypes?.some((det) => det.id === et.id))
+);
+
+const formDialog = useDialog();
+const { isOpen: isFormDialogOpen } = formDialog;
+
+const confirmDialog = useDialog();
+const { isOpen: isConfirmDialogOpen } = confirmDialog;
+
+const openAddDialog = () => {
+  selectedEntityTypeId.value = "";
+
+  formDialog.open();
+};
+
+const openRemoveDialog = (id: string) => {
+  selectedEntityTypeId.value = id;
+
+  confirmDialog.open();
+};
+
+const handleAdd = async () => {
+  if (!domain.id) return;
+
+  try {
+    await addEntityTypeToDomain(domain.id, selectedEntityTypeId.value);
+
+    formDialog.confirm();
+
+    emit("refresh");
+  } catch {
+    // Error displayed via invalid, keep dialog open
+  }
+};
+
+const handleDelete = async () => {
+  if (!domain.id) return;
+
+  await removeEntityTypeFromDomain(domain.id, selectedEntityTypeId.value);
+
+  confirmDialog.confirm();
+
+  emit("refresh");
+};
 </script>

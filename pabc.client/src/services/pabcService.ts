@@ -46,5 +46,9 @@ export const applicationRoleService = createPabcService<ApplicationRole>("applic
 
 export const domainEntityTypesService = {
   getAll: (): Promise<DomainEntityTypes[]> =>
-    get<DomainEntityTypes[]>("/api/v1/domains", { includeEntityTypes: true })
+    get<DomainEntityTypes[]>("/api/v1/domains", { includeEntityTypes: true }),
+  add: (domainId: string, entityTypeId: string): Promise<void> =>
+    post<void>(`/api/v1/domains/${domainId}/entity-types/${entityTypeId}`, undefined),
+  remove: (domainId: string, entityTypeId: string): Promise<void> =>
+    del(`/api/v1/domains/${domainId}/entity-types/${entityTypeId}`)
 };

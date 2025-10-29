@@ -13,6 +13,7 @@
 
   --section-width: 30.75rem;
   --section-width-small: 20rem;
+  --section-width-medium: 48rem;
   --section-width-large: 60rem;
 
   --header-height: 6rem;
@@ -74,6 +75,10 @@ body {
 
   input[type="date"] {
     max-inline-size: 15ch;
+  }
+
+  select {
+    inline-size: 100%;
   }
 }
 

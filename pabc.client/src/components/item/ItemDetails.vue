@@ -39,7 +39,6 @@
     :is-open="isConfirmDialogOpen"
     submit-type="delete"
     :loading="formLoading"
-    :error="formError"
     @submit="handleDelete"
     @cancel="confirmDialog.cancel"
   >
