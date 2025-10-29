@@ -403,13 +403,6 @@ dialog {
   margin-bottom: 1rem;
 }
 
-article h2:first-child,
-section h2:first-child,
-article h3:first-child,
-section h3:first-child {
-  margin-top: 1rem;
-}
-
 details {
   padding: 1rem;
 }
@@ -423,10 +416,6 @@ summary {
 
   background-color: var(--secondary-light);
   border-block-end: 1px solid var(--secondary);
-}
-
-details[open] > summary + * {
-  margin-top: 0;
 }
 
 details[open] > summary {
