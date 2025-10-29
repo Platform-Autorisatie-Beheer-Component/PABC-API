@@ -8,7 +8,7 @@
 
     <p v-else>Hieronder zie je de entiteitstypen die op '{{ domain.name }}' van toepassing zijn.</p>
 
-    <p>
+    <p v-if="filteredEntityTypes.length">
       <button type="button" class="button secondary" @click="openAddDialog">
         <icon-container icon="plus" /> Toevoegen
       </button>
@@ -37,7 +37,7 @@
   >
     <domain-entity-types-form
       v-model:selected-entity-type-id="selectedEntityTypeId"
-      :entity-types="entityTypes"
+      :entity-types="filteredEntityTypes"
     />
   </form-modal>
 
@@ -67,7 +67,10 @@ import { useDomainEntityTypes } from "@/composables/use-domain-entity-types";
 import type { DomainEntityTypes, EntityType } from "@/services/pabcService";
 import DomainEntityTypesForm from "./DomainEntityTypesForm.vue";
 
-const { domain } = defineProps<{ domain: DomainEntityTypes; entityTypes: EntityType[] }>();
+const { domain, entityTypes } = defineProps<{
+  domain: DomainEntityTypes;
+  entityTypes: EntityType[];
+}>();
 
 const emit = defineEmits<{ (e: "refresh"): void }>();
 
@@ -78,6 +81,10 @@ const selectedEntityTypeId = ref("");
 
 const selectedEntityTypeName = computed(
   () => domain.entityTypes?.find((et) => et.id === selectedEntityTypeId.value)?.name
+);
+
+const filteredEntityTypes = computed(() =>
+  entityTypes.filter((et) => !domain.entityTypes?.some((det) => det.id === et.id))
 );
 
 const formDialog = useDialog();

@@ -43,15 +43,6 @@ namespace PABC.Server.Features.Domains.PostDomainEntityType
                     });
                 }
 
-                if (domain.EntityTypes.Any(et => et.Id == entityTypeId))
-                {
-                    return Conflict(new ProblemDetails
-                    {
-                        Detail = "Entiteitstype is al toegevoegd aan dit domein",
-                        Status = StatusCodes.Status409Conflict
-                    });
-                }
-
                 domain.EntityTypes.Add(entityType);
 
                 await db.SaveChangesAsync(token);
