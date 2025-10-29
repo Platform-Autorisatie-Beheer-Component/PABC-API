@@ -69,6 +69,8 @@ import DomainEntityTypesForm from "./DomainEntityTypesForm.vue";
 
 const { domain } = defineProps<{ domain: DomainEntityTypes; entityTypes: EntityType[] }>();
 
+const emit = defineEmits<{ (e: "refresh"): void }>();
+
 const { loading, invalid, addEntityTypeToDomain, removeEntityTypeFromDomain } =
   useDomainEntityTypes();
 
@@ -104,7 +106,7 @@ const handleAdd = async () => {
 
     formDialog.confirm();
 
-    // refresh
+    emit("refresh");
   } catch {
     // Error displayed via invalid, keep dialog open
   }
@@ -117,6 +119,6 @@ const handleDelete = async () => {
 
   confirmDialog.confirm();
 
-  // refresh
+  emit("refresh");
 };
 </script>

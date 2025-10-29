@@ -69,7 +69,7 @@ const handleCancel = () => {
 
 <style lang="scss" scoped>
 dialog {
-  inline-size: min(90vw, var(--section-width));
+  inline-size: min(90vw, var(--section-width-medium));
   padding: var(--spacing-large);
   margin: auto;
   border: 1px solid var(--border);

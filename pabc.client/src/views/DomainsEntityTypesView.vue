@@ -12,7 +12,7 @@
 
     <alert-inline v-else-if="error">{{ error }}</alert-inline>
 
-    <template v-else>
+    <div v-show="!loading && !error">
       <p v-if="!domains.length">Geen domeinen gevonden.</p>
 
       <section v-else>
@@ -21,9 +21,10 @@
           :domain="domain"
           :entity-types="entityTypes"
           :key="domain.id"
+          @refresh="fetchDomainsAndEntityTypes"
         />
       </section>
-    </template>
+    </div>
   </section>
 </template>
 
@@ -50,12 +51,12 @@ const {
   items: entityTypes,
   loading: entityTypesLoading,
   error: entityTypesError,
-  fetchItems
+  fetchItems: fetchEntityTypes
 } = useItemList(entityTypeService, "Entiteitstypes");
 
 const fetchDomainsAndEntityTypes = () => {
   fetchDomains();
-  fetchItems();
+  fetchEntityTypes();
 };
 
 onMounted(() => fetchDomainsAndEntityTypes());
