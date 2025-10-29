@@ -25,7 +25,7 @@ namespace PABC.Server.Features.ApplicationRoles.PostApplicationRole
 
             try
             {
-                var applicationRole = new ApplicationRole { Name = model.Name, Application = model.Application };
+                var applicationRole = new ApplicationRole { Id = Guid.NewGuid(), Name = model.Name, Application = model.Application };
                 
                 db.ApplicationRoles.Add(applicationRole);
                 
