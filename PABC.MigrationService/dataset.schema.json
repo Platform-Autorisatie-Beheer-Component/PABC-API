@@ -19,7 +19,6 @@
           }
         },
         "required": [
-          "id",
           "name",
           "application"
         ]
@@ -39,7 +38,6 @@
           }
         },
         "required": [
-          "id",
           "name"
         ]
       }
@@ -73,7 +71,6 @@
           }
         },
         "required": [
-          "id",
           "entityTypeId",
           "type",
           "name"
@@ -104,7 +101,6 @@
           }
         },
         "required": [
-          "id",
           "name",
           "description",
           "entityTypeIds"
