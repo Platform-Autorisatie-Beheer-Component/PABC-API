@@ -13,7 +13,7 @@ namespace PABC.Server.Features.Domains.GetDomains
     {
         [HttpGet]
         [ProducesResponseType<List<Domain>>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetDomains([FromQuery] bool includeEntityTypes = true, CancellationToken token = default)
+        public async Task<IActionResult> GetDomains([FromQuery] bool includeEntityTypes = false, CancellationToken token = default)
         {
             var query = db.Domains.AsQueryable();
 
