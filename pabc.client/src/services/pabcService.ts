@@ -18,6 +18,14 @@ export type ApplicationRole = Item & {
   application: string;
 };
 
+export type DomainEntityTypes = Domain & {
+  entityTypes: EntityTypeSimple[] | null;
+};
+
+export type EntityTypeSimple = Item & {
+  type: string;
+};
+
 const createPabcService = <T extends Item>(endpoint: string) => ({
   getAll: (): Promise<T[]> => get<T[]>(`/api/v1/${endpoint}`),
   getById: (id: string): Promise<T> => get<T>(`/api/v1/${endpoint}/${id}`),
@@ -35,3 +43,12 @@ export const functionalRoleService = createPabcService<FunctionalRole>("function
 export const entityTypeService = createPabcService<EntityType>("entity-types");
 
 export const applicationRoleService = createPabcService<ApplicationRole>("application-roles");
+
+export const domainEntityTypesService = {
+  getAll: (): Promise<DomainEntityTypes[]> =>
+    get<DomainEntityTypes[]>("/api/v1/domains", { includeEntityTypes: true }),
+  add: (domainId: string, entityTypeId: string): Promise<void> =>
+    post<void>(`/api/v1/domains/${domainId}/entity-types/${entityTypeId}`, undefined),
+  remove: (domainId: string, entityTypeId: string): Promise<void> =>
+    del(`/api/v1/domains/${domainId}/entity-types/${entityTypeId}`)
+};

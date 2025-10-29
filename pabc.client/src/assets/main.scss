@@ -13,6 +13,7 @@
 
   --section-width: 30.75rem;
   --section-width-small: 20rem;
+  --section-width-medium: 48rem;
   --section-width-large: 60rem;
 
   --header-height: 6rem;
@@ -75,6 +76,10 @@ body {
   input[type="date"] {
     max-inline-size: 15ch;
   }
+
+  select {
+    inline-size: 100%;
+  }
 }
 
 // Forms error styling
@@ -106,6 +111,10 @@ form dl {
 details {
   summary {
     word-break: break-word;
+  }
+
+  p {
+    margin-block: var(--spacing-default);
   }
 }
 
@@ -169,7 +178,7 @@ dialog {
 
 .simple-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--section-width), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--section-width-small), 1fr));
   grid-gap: var(--spacing-default);
 }
 
@@ -224,4 +233,8 @@ button:has(.icon-container) {
 
 .pre-wrap {
   white-space: pre-wrap;
+}
+
+.page {
+  inline-size: min(100%, var(--section-width-large));
 }

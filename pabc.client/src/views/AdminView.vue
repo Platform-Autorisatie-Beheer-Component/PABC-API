@@ -1,11 +1,11 @@
 <template>
-  <h1>Beheer</h1>
+  <section class="page">
+    <h1>Beheer</h1>
 
-  <p>Op deze pagina kan je lijst-admin aanvullen, aanpassen of verwijderen.</p>
+    <p>Op deze pagina kan je lijst-item aanvullen, aanpassen of verwijderen.</p>
 
-  <h2>Hoofdlijsten</h2>
+    <h2>Hoofdlijsten</h2>
 
-  <section>
     <item-details
       :pabc-service="applicationRoleService"
       item-name-singular="Applicatierol"
@@ -49,11 +49,9 @@
         <functional-role-form :functional-role="form" />
       </template>
     </item-details>
-  </section>
 
-  <h2>Overige lijsten</h2>
+    <h2>Overige lijsten</h2>
 
-  <section>
     <item-details
       :pabc-service="entityTypeService"
       item-name-singular="Entiteitstype"
@@ -78,21 +76,17 @@ import {
   entityTypeService,
   applicationRoleService
 } from "@/services/pabcService";
-import ItemDetails from "@/components/admin/ItemDetails.vue";
-import DomainForm from "@/components/admin/forms/DomainForm.vue";
-import FunctionalRoleForm from "@/components/admin/forms/FunctionalRoleForm.vue";
-import EntityTypeForm from "@/components/admin/forms/EntityTypeForm.vue";
-import ApplicationRoleForm from "@/components/admin/forms/ApplicationRoleForm.vue";
+import ItemDetails from "@/components/item/ItemDetails.vue";
+import DomainForm from "@/components/item/forms/DomainForm.vue";
+import FunctionalRoleForm from "@/components/item/forms/FunctionalRoleForm.vue";
+import EntityTypeForm from "@/components/item/forms/EntityTypeForm.vue";
+import ApplicationRoleForm from "@/components/item/forms/ApplicationRoleForm.vue";
 </script>
 
 <style lang="scss" scoped>
-section {
-  inline-size: min(100%, var(--section-width-large));
-
-  h3,
-  p {
-    margin-block: 0;
-    font-size: inherit;
-  }
+h3,
+p {
+  margin-block: 0;
+  font-size: inherit;
 }
 </style>
