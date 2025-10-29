@@ -65,6 +65,7 @@ public class DatasetParser : IDatasetParser
         var schema = GenerateSchema();
         await using var file = File.OpenWrite(SchemaFilename);
         await JsonSerializer.SerializeAsync(file, schema, s_jsonSerializerOptions, cancellationToken: token);
+        await file.FlushAsync(token);
     }
 
     private static JsonSerializerOptions GetJsonSerializerOptions()
