@@ -16,7 +16,7 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRole
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<FunctionalRole>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PostFunctionalRole([FromBody] FunctionalRoleUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PostFunctionalRole([FromBody] FunctionalRoleCreateModel model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -50,5 +50,11 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRole
                 });
             }
         }
+    }
+
+    public class FunctionalRoleCreateModel
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Name { get; init; }
     }
 }

@@ -18,12 +18,26 @@ export type ApplicationRole = Item & {
   application: string;
 };
 
-export type DomainEntityTypes = Domain & {
-  entityTypes: EntityTypeSimple[] | null;
+export type Mapping = {
+  functionalRoleId: string;
+  applicationRoleId: string;
+  domainId: string | null;
+  isAllEntityTypes: boolean;
 };
 
-export type EntityTypeSimple = Item & {
-  type: string;
+export type DomainEntityTypes = Domain & {
+  entityTypes: string[];
+};
+
+export type FunctionalRoleMappings = FunctionalRole & {
+  mappings: MappingResponse[];
+};
+
+export type MappingResponse = {
+  id: string;
+  applicationRole: string;
+  domain: string | null;
+  isAllEntityTypes: boolean;
 };
 
 const createPabcService = <T extends Item>(endpoint: string) => ({
@@ -45,10 +59,18 @@ export const entityTypeService = createPabcService<EntityType>("entity-types");
 export const applicationRoleService = createPabcService<ApplicationRole>("application-roles");
 
 export const domainEntityTypesService = {
-  getAll: (): Promise<DomainEntityTypes[]> =>
-    get<DomainEntityTypes[]>("/api/v1/domains", { includeEntityTypes: true }),
+  getAll: (): Promise<DomainEntityTypes[]> => get<DomainEntityTypes[]>("/api/v1/domains"),
   add: (domainId: string, entityTypeId: string): Promise<void> =>
     post<void>(`/api/v1/domains/${domainId}/entity-types/${entityTypeId}`, undefined),
   remove: (domainId: string, entityTypeId: string): Promise<void> =>
     del(`/api/v1/domains/${domainId}/entity-types/${entityTypeId}`)
+};
+
+export const functionalRoleMappingsService = {
+  getAll: (): Promise<FunctionalRoleMappings[]> =>
+    get<FunctionalRoleMappings[]>("/api/v1/functional-roles"),
+  add: (payload: Mapping): Promise<void> =>
+    post<void>(`/api/v1/functional-roles/${payload.functionalRoleId}/mappings`, payload),
+  remove: (functionalRoleId: string, mappingId: string): Promise<void> =>
+    del(`/api/v1/functional-roles/${functionalRoleId}/mappings/${mappingId}`)
 };
