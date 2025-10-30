@@ -2,7 +2,7 @@
 {
     public class Domain
     {
-        public Guid Id { get; init; }
+        public required Guid Id { get; init; }
 
         [Json.Schema.Generation.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
         [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]

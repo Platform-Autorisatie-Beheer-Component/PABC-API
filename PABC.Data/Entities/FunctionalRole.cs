@@ -2,7 +2,7 @@
 {
     public class FunctionalRole
     {
-        public Guid Id { get; set; }
+        public required Guid Id { get; set; }
 
         [Json.Schema.Generation.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
         [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
