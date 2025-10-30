@@ -80,7 +80,7 @@ jobs:
 
 
     - name: Commit and push changes
-      if: steps.check-changes-openapi.has_changes == 'true' || steps.check-changes-dataset.has_changes
+      if: steps.check-changes-openapi.outputs.has_changes == 'true' || steps.check-changes-dataset.outputs.has_changes == 'true'
       run: |
         git status
         git commit -m "Update OpenAPI / JSON Schema documentation [skip ci]"
