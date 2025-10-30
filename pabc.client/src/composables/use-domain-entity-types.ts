@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { readonly, ref } from "vue";
 import toast from "@/components/toast/toast";
 import { domainEntityTypesService, type DomainEntityTypes } from "@/services/pabcService";
 
@@ -54,10 +54,10 @@ export const useDomainEntityTypes = () => {
   };
 
   return {
-    domains,
-    loading,
-    error,
-    invalid,
+    domains: readonly(domains),
+    loading: readonly(loading),
+    error: readonly(error),
+    invalid: readonly(invalid),
     fetchDomains,
     addEntityTypeToDomain,
     removeEntityTypeFromDomain

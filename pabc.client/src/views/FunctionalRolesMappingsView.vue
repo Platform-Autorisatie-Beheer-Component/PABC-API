@@ -15,10 +15,12 @@
     <div v-show="!loading && !error">
       <p v-if="!functionalRoles.length">Geen functionele rollen gevonden.</p>
 
-      <template v-else>
+      <template v-else-if="items">
         <functional-role-mappings-details
           v-for="functionalRole in functionalRoles"
           :functional-role="functionalRole"
+          :domains="items.domains"
+          :application-roles="items.applicationRoles"
           :key="functionalRole.id"
           @refresh="fetchFunctionalRoles"
         />
@@ -28,18 +30,32 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
 import { useFunctionalRoleMappings } from "@/composables/use-functional-role-mappings";
+import { useDomainsAndApplicationRoles } from "@/composables/use-domains-application-roles";
 import FunctionalRoleMappingsDetails from "@/components/functional-role-mappings/FunctionalRoleMappingsDetails.vue";
+
+const loading = computed(() => functionalRolesLoading.value || itemsLoading.value);
+const error = computed(() => functionalRolesError.value || itemsError.value);
 
 const {
   functionalRoles,
-  loading,
-  error,
+  loading: functionalRolesLoading,
+  error: functionalRolesError,
   fetchFunctionalRoles
 } = useFunctionalRoleMappings();
 
-onMounted(() => fetchFunctionalRoles());
+const {
+  items,
+  loading: itemsLoading,
+  error: itemsError,
+  fetchItems
+} = useDomainsAndApplicationRoles();
+
+onMounted(() => {
+  fetchFunctionalRoles();
+  fetchItems();
+});
 </script>

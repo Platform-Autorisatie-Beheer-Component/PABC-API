@@ -47,7 +47,7 @@
     :is-open="isConfirmDialogOpen"
     submit-type="delete"
     :loading="loading"
-    @submit="handleDelete"
+    @submit="handleRemove"
     @cancel="confirmDialog.cancel"
   >
     <h2>Entiteitstype verwijderen uit {{ domain.name }}</h2>
@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, type DeepReadonly } from "vue";
 import ItemList from "@/components/ItemList.vue";
 import FormModal from "@/components/FormModal.vue";
 import IconContainer from "@/components/IconContainer.vue";
@@ -70,8 +70,8 @@ import type { DomainEntityTypes, EntityType } from "@/services/pabcService";
 import DomainEntityTypesForm from "./DomainEntityTypesForm.vue";
 
 const { domain, entityTypes } = defineProps<{
-  domain: DomainEntityTypes;
-  entityTypes: EntityType[];
+  domain: DeepReadonly<DomainEntityTypes>;
+  entityTypes: DeepReadonly<EntityType[]>;
 }>();
 
 const emit = defineEmits<{ (e: "refresh"): void }>();
@@ -125,7 +125,7 @@ const handleAdd = async () => {
   }
 };
 
-const handleDelete = async () => {
+const handleRemove = async () => {
   if (!domain.id) return;
 
   await removeEntityTypeFromDomain(domain.id, selectedEntityTypeId.value);
