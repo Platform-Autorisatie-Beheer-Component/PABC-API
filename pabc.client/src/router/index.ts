@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
 import DomainsEntityTypesView from "@/views/DomainsEntityTypesView.vue";
+import FunctionalRolesMappingsView from "@/views/FunctionalRolesMappingsView.vue";
 import AdminView from "@/views/AdminView.vue";
 import UnauthorizedView from "@/views/UnauthorizedView.vue";
 import LoginView from "@/views/LoginView.vue";
@@ -22,6 +23,14 @@ const router = createRouter({
       component: DomainsEntityTypesView,
       meta: {
         title: "Domeinen met Entiteitstypes"
+      }
+    },
+    {
+      path: "/functionele-rollen",
+      name: "functionalRoles",
+      component: FunctionalRolesMappingsView,
+      meta: {
+        title: "Functionele rollen met Koppelingen"
       }
     },
     {
