@@ -1,4 +1,4 @@
-import { ref, watch } from "vue";
+import { readonly, ref, watch } from "vue";
 import toast from "@/components/toast/toast";
 import type { Item, PabcService } from "@/services/pabcService";
 
@@ -73,9 +73,9 @@ export const useItemForm = <T extends Item>(pabcService: PabcService<T>, itemNam
 
   return {
     form,
-    loading,
-    error,
-    invalid,
+    loading: readonly(loading),
+    error: readonly(error),
+    invalid: readonly(invalid),
     fetchItem,
     submitItem,
     deleteItem,

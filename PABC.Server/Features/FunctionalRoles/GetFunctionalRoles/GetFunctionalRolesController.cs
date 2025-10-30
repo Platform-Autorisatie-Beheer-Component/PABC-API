@@ -25,13 +25,13 @@ namespace PABC.Server.Features.FunctionalRoles.GetFunctionalRoles
                         .Include(m => m.ApplicationRole)
                         .Include(m => m.Domain)
                         .Where(m => m.FunctionalRoleId == fr.Id)
-                        .OrderBy(m => m.Domain!.Name)
-                        .ThenBy(m => m.ApplicationRole.Application)
+                        .OrderBy(m => m.ApplicationRole.Application)
                         .ThenBy(m => m.ApplicationRole.Name)
+                        .ThenBy(m => m.Domain!.Name)
                         .Select(m => new MappingResponse
                         {
                             Id = m.Id,
-                            ApplicationRole = $"{m.ApplicationRole.Name} ({m.ApplicationRole.Application})",
+                            Name = $"{m.ApplicationRole.Name} ({m.ApplicationRole.Application})",
                             Domain = m.Domain != null ? m.Domain.Name : null,
                             IsAllEntityTypes = m.IsAllEntityTypes
                         })
@@ -53,7 +53,7 @@ namespace PABC.Server.Features.FunctionalRoles.GetFunctionalRoles
     public class MappingResponse
     {
         public required Guid Id { get; init; }
-        public required string ApplicationRole { get; init; }
+        public required string Name { get; init; }
         public string? Domain { get; init; }
         public required bool IsAllEntityTypes { get; init; }
     }
