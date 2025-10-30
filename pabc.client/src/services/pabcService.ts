@@ -1,6 +1,6 @@
 import { del, get, post, put } from "@/utils/fetchWrapper";
 
-export type Item = { id?: string; name: string };
+export type Item = { id?: string; name?: string };
 
 export type Domain = Item & {
   description: string;
@@ -33,8 +33,7 @@ export type FunctionalRoleMappings = FunctionalRole & {
   mappings: MappingResponse[];
 };
 
-export type MappingResponse = {
-  id: string;
+export type MappingResponse = Item & {
   applicationRole: string;
   domain: string | null;
   isAllEntityTypes: boolean;
