@@ -16,7 +16,7 @@ namespace PABC.Server.Features.EntityTypes.PostEntityType
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<EntityType>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PostEntityType([FromBody] EntityTypeUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PostEntityType([FromBody] EntityTypeCreateModel model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -57,5 +57,19 @@ namespace PABC.Server.Features.EntityTypes.PostEntityType
                 });
             }
         }
+    }
+
+    public class EntityTypeCreateModel
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string EntityTypeId { get; set; }
+
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Type { get; set; }
+
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Name { get; set; }
+
+        public Uri? Uri { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace PABC.Server.Features.FunctionalRoles.PutFunctionalRole
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<FunctionalRole>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PutFunctionalRole(Guid id, [FromBody] FunctionalRoleUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PutFunctionalRole(Guid id, [FromBody] FunctionalRole model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
