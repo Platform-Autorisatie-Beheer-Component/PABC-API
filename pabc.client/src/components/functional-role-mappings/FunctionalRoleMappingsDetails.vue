@@ -4,7 +4,9 @@
       {{ functionalRole.name }}
     </summary>
 
-    <p v-if="!functionalRole.mappings.length">Geen mappings gevonden voor deze functionele rol.</p>
+    <p v-if="!functionalRole.mappings.length">
+      Geen koppelingen gevonden voor deze functionele rol.
+    </p>
 
     <p v-else>Hieronder zie je de koppelingen die op deze functionele rol van toepassing zijn.</p>
 
