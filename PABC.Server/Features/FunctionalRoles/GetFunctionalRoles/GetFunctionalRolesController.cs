@@ -22,8 +22,6 @@ namespace PABC.Server.Features.FunctionalRoles.GetFunctionalRoles
                     Id = fr.Id,
                     Name = fr.Name,
                     Mappings = db.Mappings
-                        .Include(m => m.ApplicationRole)
-                        .Include(m => m.Domain)
                         .Where(m => m.FunctionalRoleId == fr.Id)
                         .OrderBy(m => m.Domain!.Name)
                         .ThenBy(m => m.ApplicationRole.Application)

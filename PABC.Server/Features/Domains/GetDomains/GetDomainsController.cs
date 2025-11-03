@@ -16,7 +16,6 @@ namespace PABC.Server.Features.Domains.GetDomains
         public async Task<IActionResult> GetDomains(CancellationToken token = default)
         {
             var domains = await db.Domains
-                .Include(d => d.EntityTypes)
                 .OrderBy(d => d.Name)
                 .Select(d => new DomainEntityTypesResponse
                 {
