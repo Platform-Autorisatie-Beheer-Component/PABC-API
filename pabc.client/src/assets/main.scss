@@ -148,6 +148,21 @@ form menu {
 }
 
 dialog {
+  position: relative;
+  inline-size: min(90vw, var(--section-width-medium));
+  padding: var(--spacing-large);
+  margin: auto;
+  border: 1px solid var(--border);
+
+  .dialog-close {
+    position: absolute;
+    inset-inline-end: var(--spacing-large);
+    color: inherit;
+    padding: 0;
+    background: none;
+    border: none;
+  }
+
   fieldset {
     padding: 0;
     margin-inline: 0;
@@ -158,8 +173,17 @@ dialog {
     font-size: var(--font-large);
     margin-block-start: 0;
     padding-block-end: var(--spacing-default);
+    padding-inline-end: var(--spacing-extralarge);
     border-block-end: 1px solid var(--border);
   }
+
+  menu {
+    margin-block-start: var(--spacing-default);
+  }
+}
+
+::backdrop {
+  background-color: rgb(102 102 102 / 80%);
 }
 
 .input-option {

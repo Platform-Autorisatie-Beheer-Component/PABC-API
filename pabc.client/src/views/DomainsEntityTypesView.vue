@@ -1,5 +1,5 @@
 <template>
-  <section class="page">
+  <div class="page">
     <h1>Domeinen</h1>
 
     <p>
@@ -25,7 +25,7 @@
         />
       </section>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">

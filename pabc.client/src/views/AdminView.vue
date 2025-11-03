@@ -1,5 +1,5 @@
 <template>
-  <section class="page">
+  <div class="page">
     <h1>Beheer</h1>
 
     <p>Op deze pagina kan je lijst-item aanvullen, aanpassen of verwijderen.</p>
@@ -66,7 +66,7 @@
         <entity-type-form :entity-type="form" />
       </template>
     </item-details>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
