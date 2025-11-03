@@ -1,5 +1,5 @@
 <template>
-  <section class="page">
+  <div class="page">
     <h1>Dashboard</h1>
 
     <menu class="reset simple-grid">
@@ -7,7 +7,7 @@
         <router-link :to="{ name: 'domains' }">Domeinen</router-link>
       </li>
     </menu>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts"></script>

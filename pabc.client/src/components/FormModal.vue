@@ -1,5 +1,9 @@
 <template>
   <dialog ref="dialogRef" @cancel.prevent="handleCancel">
+    <button type="button" aria-label="Sluiten" class="dialog-close" @click="handleCancel">
+      <icon-container icon="xmark" />
+    </button>
+
     <form ref="formRef" @submit.prevent="handleSubmit">
       <small-spinner v-if="loading" />
 
@@ -28,6 +32,7 @@
 import { computed, ref, watch } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
+import IconContainer from "@/components/IconContainer.vue";
 
 const SubmitTypes = {
   create: "Toevoegen",
@@ -66,20 +71,3 @@ const handleCancel = () => {
   emit("cancel");
 };
 </script>
-
-<style lang="scss" scoped>
-dialog {
-  inline-size: min(90vw, var(--section-width-medium));
-  padding: var(--spacing-large);
-  margin: auto;
-  border: 1px solid var(--border);
-
-  menu {
-    margin-block-start: var(--spacing-default);
-  }
-}
-
-::backdrop {
-  background-color: rgb(102 102 102 / 80%);
-}
-</style>

@@ -4,6 +4,8 @@
       {{ domain.name }}
     </summary>
 
+    <p v-if="domain.description">{{ domain.description }}</p>
+
     <p v-if="!domain.entityTypes?.length">Geen entiteitstypes gevonden voor dit domein.</p>
 
     <p v-else>Hieronder zie je de entiteitstypen die op '{{ domain.name }}' van toepassing zijn.</p>
