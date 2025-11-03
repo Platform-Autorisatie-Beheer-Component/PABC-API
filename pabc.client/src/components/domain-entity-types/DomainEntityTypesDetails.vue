@@ -82,15 +82,15 @@ const { loading, invalid, addEntityTypeToDomain, removeEntityTypeFromDomain } =
 const selectedEntityTypeId = ref("");
 
 const selectedEntityTypeName = computed(
-  () => entityTypes?.find((et) => et.id === selectedEntityTypeId.value)?.name
+  () => entityTypes.find((et) => et.id === selectedEntityTypeId.value)?.name
 );
 
 const linkedEntityTypes = computed(() =>
-  entityTypes.filter((et) => et.id && domain.entityTypes?.includes(et.id))
+  entityTypes.filter((et) => et.id && domain.entityTypes.includes(et.id))
 );
 
 const availableEntityTypes = computed(() =>
-  entityTypes.filter((et) => et.id && !domain.entityTypes?.includes(et.id))
+  entityTypes.filter((et) => et.id && !domain.entityTypes.includes(et.id))
 );
 
 const formDialog = useDialog();

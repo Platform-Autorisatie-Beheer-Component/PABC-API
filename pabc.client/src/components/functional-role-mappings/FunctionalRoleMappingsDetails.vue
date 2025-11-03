@@ -21,8 +21,12 @@
     >
       <template #item="{ item: mapping }">
         <span>
-          <strong>{{ mapping.name }}</strong> |
-          {{ !mapping.isAllEntityTypes ? `domein ${mapping.domain}` : "alle entiteitstypes" }}
+          Is <strong>{{ mapping.name }}</strong>
+          {{
+            !mapping.isAllEntityTypes
+              ? `binnen domein ${mapping.domain}`
+              : "voor alle entiteitstypes"
+          }}
         </span>
       </template>
     </item-list>
