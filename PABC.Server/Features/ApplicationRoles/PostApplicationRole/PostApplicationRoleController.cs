@@ -25,7 +25,7 @@ namespace PABC.Server.Features.ApplicationRoles.PostApplicationRole
 
             try
             {
-                var applicationRole = new ApplicationRole { Id = Guid.NewGuid(), Name = model.Name, Application = model.Application };
+                var applicationRole = new ApplicationRole { Id = Guid.NewGuid(), Name = model.Name, ApplicationId = model.ApplicationId };
                 
                 db.ApplicationRoles.Add(applicationRole);
                 
@@ -58,6 +58,6 @@ namespace PABC.Server.Features.ApplicationRoles.PostApplicationRole
         public required string Name { get; set; }
 
         [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
-        public required string Application { get; set; }
+        public required Guid ApplicationId { get; set; }
     }
 }

@@ -32,15 +32,14 @@
             "type": "string",
             "maxLength": 256
           },
-          "application": {
-            "type": "string",
-            "maxLength": 256
+          "applicationId": {
+            "$ref": "#/$defs/guid"
           }
         },
         "required": [
           "id",
           "name",
-          "application"
+          "applicationId"
         ]
       }
     },

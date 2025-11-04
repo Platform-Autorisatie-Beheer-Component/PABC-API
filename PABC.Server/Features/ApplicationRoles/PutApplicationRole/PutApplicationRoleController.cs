@@ -38,7 +38,7 @@ namespace PABC.Server.Features.ApplicationRoles.PutApplicationRole
                 }
 
                 applicationRole.Name = model.Name;
-                applicationRole.Application = model.Application;
+                applicationRole.ApplicationId = model.ApplicationId;
 
                 db.ApplicationRoles.Update(applicationRole);
                 

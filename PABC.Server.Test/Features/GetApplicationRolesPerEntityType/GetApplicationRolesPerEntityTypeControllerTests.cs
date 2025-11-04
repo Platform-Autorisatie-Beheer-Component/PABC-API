@@ -302,7 +302,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         private static ApplicationRole RandomApplicationRole() => new()
         {
             Id = Guid.NewGuid(),
-            Application = RandomString(),
+            ApplicationId = Guid.NewGuid(),
             Name = RandomString()
         };
     }

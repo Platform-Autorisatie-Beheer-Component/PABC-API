@@ -49,10 +49,10 @@ public class ApplicationRoleModel
     /// </summary>
     /// <example>Behandelaar</example>
     public required string Name { get; set; }
-    
+
     /// <summary>
-    /// The application that this role applies to
+    /// The unique identifier for the application
     /// </summary>
     /// <example>ZAC</example>
-    public required string Application { get; set; }
+    public required Guid ApplicationId { get; set; }
 }
