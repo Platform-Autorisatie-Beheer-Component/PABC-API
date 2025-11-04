@@ -37,11 +37,17 @@ namespace PABC.Server.Features.Domains.DeleteDomain
             }
             catch (DbException ex) when (ex.IsForeignKeyException())
             {
-                return UnprocessableEntity(new ProblemDetails
-                {
-                    Detail = "Domein kan niet worden verwijderd vanwege bestaande verwijzingen.",
-                    Status = StatusCodes.Status422UnprocessableEntity
-                });
+                return ex.Message.Contains("fk_mapping_domain_domain_id", StringComparison.OrdinalIgnoreCase) == true
+                    ? UnprocessableEntity(new ProblemDetails
+                    {
+                        Detail = "Domein kan niet worden verwijderd omdat er nog één of meerdere functionele rollen zijn gekoppeld.",
+                        Status = StatusCodes.Status422UnprocessableEntity
+                    })
+                    : UnprocessableEntity(new ProblemDetails
+                    {
+                        Detail = "Domein kan niet worden verwijderd vanwege bestaande verwijzingen.",
+                        Status = StatusCodes.Status422UnprocessableEntity
+                    });
             }
             catch
             {

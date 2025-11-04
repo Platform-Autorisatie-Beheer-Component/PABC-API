@@ -86,7 +86,7 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRoleMapping
             {
                 return Conflict(new ProblemDetails
                 {
-                    Detail = "Deze mapping bestaat al",
+                    Detail = "Deze koppeling bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }

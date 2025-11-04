@@ -27,11 +27,11 @@
 </template>
 
 <script setup lang="ts" generic="T extends Item">
-import { computed, useAttrs } from "vue";
+import { computed, useAttrs, type DeepReadonly } from "vue";
 import IconContainer from "@/components/IconContainer.vue";
 import type { Item } from "@/services/pabcService";
 
-const { items } = defineProps<{ items: T[] }>();
+const { items } = defineProps<{ items: DeepReadonly<T[]> }>();
 
 const attrs = useAttrs();
 

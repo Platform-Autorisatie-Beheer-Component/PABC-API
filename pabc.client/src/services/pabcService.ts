@@ -29,13 +29,12 @@ export type DomainEntityTypes = Domain & {
   entityTypes: string[];
 };
 
-export type FunctionalRoleMappings = FunctionalRole & {
+export type FunctionalRoleMappings = Required<FunctionalRole> & {
   mappings: MappingResponse[];
 };
 
-export type MappingResponse = {
-  id: string;
-  applicationRole: string;
+export type MappingResponse = Required<Item> & {
+  applicationRoleId: string;
   domain: string | null;
   isAllEntityTypes: boolean;
 };
