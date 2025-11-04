@@ -10,7 +10,7 @@
 
     <p v-else>Hieronder zie je de entiteitstypen die op '{{ domain.name }}' van toepassing zijn.</p>
 
-    <p v-if="filteredEntityTypes.length">
+    <p v-if="availableEntityTypes.length">
       <button type="button" class="button secondary" @click="openAddDialog">
         <icon-container icon="plus" /> Toevoegen
       </button>
@@ -18,7 +18,7 @@
 
     <item-list
       v-if="domain.entityTypes?.length"
-      :items="domain.entityTypes"
+      :items="linkedEntityTypes"
       @delete="openRemoveDialog"
     >
       <template #item="{ item: entityType }">
@@ -39,7 +39,7 @@
   >
     <domain-entity-types-form
       v-model:selected-entity-type-id="selectedEntityTypeId"
-      :entity-types="filteredEntityTypes"
+      :entity-types="availableEntityTypes"
     />
   </form-modal>
 
@@ -82,11 +82,15 @@ const { loading, invalid, addEntityTypeToDomain, removeEntityTypeFromDomain } =
 const selectedEntityTypeId = ref("");
 
 const selectedEntityTypeName = computed(
-  () => domain.entityTypes?.find((et) => et.id === selectedEntityTypeId.value)?.name
+  () => entityTypes?.find((et) => et.id === selectedEntityTypeId.value)?.name
 );
 
-const filteredEntityTypes = computed(() =>
-  entityTypes.filter((et) => !domain.entityTypes?.some((det) => det.id === et.id))
+const linkedEntityTypes = computed(() =>
+  entityTypes.filter((et) => et.id && domain.entityTypes?.includes(et.id))
+);
+
+const availableEntityTypes = computed(() =>
+  entityTypes.filter((et) => et.id && !domain.entityTypes?.includes(et.id))
 );
 
 const formDialog = useDialog();

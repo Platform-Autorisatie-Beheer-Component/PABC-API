@@ -17,7 +17,7 @@ namespace PABC.Server.Features.Domains.PutDomain
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<Domain>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PutDomain(Guid id, [FromBody] DomainUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PutDomain(Guid id, [FromBody] Domain model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {

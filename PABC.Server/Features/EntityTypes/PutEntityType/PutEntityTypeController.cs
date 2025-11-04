@@ -17,7 +17,7 @@ namespace PABC.Server.Features.EntityTypes.PutEntityType
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<EntityType>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PutEntityType(Guid id, [FromBody] EntityTypeUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PutEntityType(Guid id, [FromBody] EntityType model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {

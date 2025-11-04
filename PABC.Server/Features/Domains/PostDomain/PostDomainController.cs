@@ -16,7 +16,7 @@ namespace PABC.Server.Features.Domains.PostDomain
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<Domain>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PostDomain([FromBody] DomainUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PostDomain([FromBody] DomainCreateModel model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -50,5 +50,14 @@ namespace PABC.Server.Features.Domains.PostDomain
                 });
             }
         }
+    }
+
+    public class DomainCreateModel
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Name { get; init; }
+
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Description { get; init; }
     }
 }

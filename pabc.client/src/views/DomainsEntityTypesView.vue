@@ -15,7 +15,7 @@
     <div v-show="!loading && !error">
       <p v-if="!domains.length">Geen domeinen gevonden.</p>
 
-      <section v-else>
+      <template v-else>
         <domain-entity-types-details
           v-for="domain in domains"
           :domain="domain"
@@ -23,7 +23,7 @@
           :key="domain.id"
           @refresh="fetchDomainsAndEntityTypes"
         />
-      </section>
+      </template>
     </div>
   </div>
 </template>
