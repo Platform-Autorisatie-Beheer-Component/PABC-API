@@ -18,6 +18,8 @@ export type ApplicationRole = Item & {
   application: string;
 };
 
+export type Application = Item;
+
 export type Mapping = {
   functionalRoleId: string;
   applicationRoleId: string;
@@ -56,6 +58,8 @@ export const functionalRoleService = createPabcService<FunctionalRole>("function
 export const entityTypeService = createPabcService<EntityType>("entity-types");
 
 export const applicationRoleService = createPabcService<ApplicationRole>("application-roles");
+
+export const applicationService = createPabcService<Application>("applications");
 
 export const domainEntityTypesService = {
   getAll: (): Promise<DomainEntityTypes[]> => get<DomainEntityTypes[]>("/api/v1/domains"),

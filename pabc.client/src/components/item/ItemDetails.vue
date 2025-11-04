@@ -13,7 +13,9 @@
 
       <small-spinner v-if="listLoading" />
 
-      <p v-else-if="!items.length">Geen {{ itemNamePlural }} gevonden.</p>
+      <p v-else-if="!items.length">
+        Geen <span class="lowercase">{{ itemNamePlural }}</span> gevonden.
+      </p>
 
       <item-list v-else :items="items" @update="openUpdateDialog" @delete="openDeleteDialog">
         <template #item="{ item }">
