@@ -16,6 +16,12 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
             provider: "icu",
             deterministic: false);
 
+        modelBuilder.Entity<Application>(r =>
+        {
+            r.Property(x => x.Name).HasMaxLength(MaxLengthForIndexProperties);
+            r.HasIndex(x => new { x.Name }).IsUnique();
+        });
+
         modelBuilder.Entity<ApplicationRole>(r =>
         {
             r.Property(x => x.Application).HasMaxLength(MaxLengthForIndexProperties);
@@ -64,6 +70,7 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
         configurationBuilder.Properties<string>().UseCollation("nl_case_insensitive");
     }
 
+    public required DbSet<Application> Applications { get; set; }
     public required DbSet<ApplicationRole> ApplicationRoles { get; set; }
     public required DbSet<Domain> Domains { get; set; }
     public required DbSet<EntityType> EntityTypes { get; set; }

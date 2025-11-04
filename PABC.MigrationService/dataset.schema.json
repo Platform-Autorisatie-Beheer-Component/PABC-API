@@ -1,6 +1,25 @@
 {
   "type": "object",
   "properties": {
+    "applications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/guid"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      }
+    },
     "applicationRoles": {
       "type": "array",
       "items": {
@@ -164,6 +183,7 @@
     }
   },
   "required": [
+    "applications",
     "applicationRoles",
     "functionalRoles",
     "entityTypes",
