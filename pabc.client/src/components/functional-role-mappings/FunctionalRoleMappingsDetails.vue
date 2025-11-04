@@ -24,11 +24,12 @@
       <template #item="{ item: mapping }">
         <span>
           Is <strong>{{ mapping.name }}</strong>
-          {{
-            !mapping.isAllEntityTypes
-              ? `binnen domein ${mapping.domain}`
-              : "voor alle entiteitstypes"
-          }}
+          <template v-if="mapping.isAllEntityTypes">
+            voor <strong>alle entiteittypes</strong></template
+          >
+          <template v-else-if="mapping.domain">
+            binnen domein <strong>{{ mapping.domain }}</strong></template
+          >
         </span>
       </template>
     </item-list>
