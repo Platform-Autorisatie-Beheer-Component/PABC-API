@@ -53,6 +53,20 @@
     <h2>Overige lijsten</h2>
 
     <item-details
+      :pabc-service="applicationService"
+      item-name-singular="Applicatie"
+      item-name-plural="Applicaties"
+    >
+      <template #item="{ item: application }">
+        <p>{{ application.name }}</p>
+      </template>
+
+      <template #form="{ form }">
+        <application-form :application="form" />
+      </template>
+    </item-details>
+
+    <item-details
       :pabc-service="entityTypeService"
       item-name-singular="Entiteitstype"
       item-name-plural="Entiteitstypes"
@@ -74,13 +88,15 @@ import {
   domainService,
   functionalRoleService,
   entityTypeService,
-  applicationRoleService
+  applicationRoleService,
+  applicationService
 } from "@/services/pabcService";
 import ItemDetails from "@/components/item/ItemDetails.vue";
 import DomainForm from "@/components/item/forms/DomainForm.vue";
 import FunctionalRoleForm from "@/components/item/forms/FunctionalRoleForm.vue";
 import EntityTypeForm from "@/components/item/forms/EntityTypeForm.vue";
 import ApplicationRoleForm from "@/components/item/forms/ApplicationRoleForm.vue";
+import ApplicationForm from "@/components/item/forms/ApplicationForm.vue";
 </script>
 
 <style lang="scss" scoped>
