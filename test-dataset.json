@@ -1,5 +1,15 @@
 {
   "$schema": "./PABC.MigrationService/dataset.schema.json",
+  "applications": [
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "name": "ZAC"
+    },
+    {
+      "id": "789abcde-f012-3456-7890-abcdef123456",
+      "name": "MyApplication2"
+    }
+  ],
   "applicationRoles": [
     {
       "id": "7839298d-9ac9-4b02-bcfc-18b5e6e00227",
