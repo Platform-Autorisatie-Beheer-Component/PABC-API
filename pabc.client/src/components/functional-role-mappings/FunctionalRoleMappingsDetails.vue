@@ -35,14 +35,7 @@
     </item-list>
   </details>
 
-  <form-modal
-    :is-open="isFormDialogOpen"
-    submit-type="create"
-    :loading="loading"
-    :invalid="invalid"
-    @submit="handleAdd"
-    @cancel="handleCancel"
-  >
+  <form-modal submit-type="create" @submit="handleAdd" ref="add-dialog">
     <functional-role-mappings-form
       v-model:mapping="mapping"
       :application-roles="applicationRoles"
@@ -50,13 +43,7 @@
     />
   </form-modal>
 
-  <form-modal
-    :is-open="isConfirmDialogOpen"
-    submit-type="delete"
-    :loading="loading"
-    @submit="handleRemove"
-    @cancel="confirmDialog.cancel"
-  >
+  <form-modal submit-type="delete" @submit="handleRemove" ref="confirm-dialog">
     <h2>Koppeling verwijderen uit {{ functionalRole.name }}</h2>
 
     <p>
@@ -66,11 +53,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, type DeepReadonly } from "vue";
+import { computed, ref, useTemplateRef, type DeepReadonly } from "vue";
 import ItemList from "@/components/ItemList.vue";
 import FormModal from "@/components/FormModal.vue";
 import IconContainer from "@/components/IconContainer.vue";
-import { useDialog } from "@/composables/use-dialog";
 import { useFunctionalRoleMappings } from "@/composables/use-functional-role-mappings";
 import type {
   ApplicationRole,
@@ -88,7 +74,10 @@ const { functionalRole } = defineProps<{
 
 const emit = defineEmits<{ (e: "refresh"): void }>();
 
-const { loading, invalid, addMapping, removeMapping, clearInvalid } = useFunctionalRoleMappings();
+const formDialog = useTemplateRef("add-dialog");
+const confirmDialog = useTemplateRef("confirm-dialog");
+
+const { addMapping, removeMapping } = useFunctionalRoleMappings();
 
 const initMapping = (): Mapping => ({
   functionalRoleId: functionalRole.id,
@@ -105,47 +94,23 @@ const selectedMapping = computed(() =>
   functionalRole.mappings.find((fr) => fr.id === selectedMappingId.value)
 );
 
-const formDialog = useDialog();
-const { isOpen: isFormDialogOpen } = formDialog;
-
-const confirmDialog = useDialog();
-const { isOpen: isConfirmDialogOpen } = confirmDialog;
-
 const openAddDialog = () => {
   mapping.value = initMapping();
-
-  formDialog.open();
+  formDialog.value?.open();
 };
 
 const openRemoveDialog = (id: string) => {
   selectedMappingId.value = id;
-
-  confirmDialog.open();
+  confirmDialog.value?.open();
 };
 
 const handleAdd = async () => {
-  try {
-    await addMapping(mapping.value);
-
-    formDialog.confirm();
-
-    emit("refresh");
-  } catch {
-    // Error displayed via invalid, keep dialog open
-  }
-};
-
-const handleCancel = () => {
-  clearInvalid();
-
-  formDialog.cancel();
+  await addMapping(mapping.value);
+  emit("refresh");
 };
 
 const handleRemove = async () => {
   await removeMapping(functionalRole.id, selectedMappingId.value);
-
-  confirmDialog.confirm();
-
   emit("refresh");
 };
 </script>

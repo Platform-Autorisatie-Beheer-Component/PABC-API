@@ -24,23 +24,14 @@
   </details>
 
   <form-modal
-    :is-open="isFormDialogOpen"
+    ref="form-dialog"
     :submit-type="!form.id ? `create` : `update`"
-    :loading="formLoading"
-    :invalid="formInvalid"
     @submit="handleSubmit"
-    @cancel="handleCancel"
   >
     <slot name="form" :form="form"></slot>
   </form-modal>
 
-  <form-modal
-    :is-open="isConfirmDialogOpen"
-    submit-type="delete"
-    :loading="formLoading"
-    @submit="handleDelete"
-    @cancel="confirmDialog.cancel"
-  >
+  <form-modal ref="confirm-dialog" submit-type="delete" @submit="handleDelete">
     <h2>{{ itemNameSingular }} verwijderen</h2>
 
     <p>
@@ -52,7 +43,7 @@
 </template>
 
 <script setup lang="ts" generic="T extends Item">
-import { onMounted, ref, type DeepReadonly } from "vue";
+import { onMounted, ref, useTemplateRef, type DeepReadonly } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
 import FormModal from "@/components/FormModal.vue";
@@ -61,7 +52,6 @@ import ItemList from "@/components/ItemList.vue";
 import type { Item, PabcService } from "@/services/pabcService";
 import { useItemList } from "@/composables/use-item-list";
 import { useItem } from "@/composables/use-item";
-import { useDialog } from "@/composables/use-dialog";
 
 const { pabcService, itemNameSingular, itemNamePlural } = defineProps<{
   pabcService: PabcService<T>;
@@ -71,11 +61,8 @@ const { pabcService, itemNameSingular, itemNamePlural } = defineProps<{
 
 const form = ref<T>({} as T);
 
-const formDialog = useDialog();
-const { isOpen: isFormDialogOpen } = formDialog;
-
-const confirmDialog = useDialog();
-const { isOpen: isConfirmDialogOpen } = confirmDialog;
+const formDialog = useTemplateRef("form-dialog");
+const confirmDialog = useTemplateRef("confirm-dialog");
 
 const {
   items,
@@ -84,58 +71,37 @@ const {
   fetchItems
 } = useItemList(pabcService, itemNamePlural);
 
-const {
-  loading: formLoading,
-  invalid: formInvalid,
-  submitItem,
-  deleteItem,
-  clearInvalid
-} = useItem(pabcService, itemNameSingular);
+const { submitItem, deleteItem } = useItem(pabcService, itemNameSingular);
 
 const getItem = (id: string) => (items.value as DeepReadonly<T[]>).find((i) => i.id === id);
 
 const openCreateDialog = () => {
   form.value = {};
 
-  formDialog.open();
+  formDialog.value?.open();
 };
 
 const openUpdateDialog = (id: string) => {
   form.value = getItem(id);
 
-  formDialog.open();
+  formDialog.value?.open();
 };
 
 const openDeleteDialog = (id: string) => {
   form.value = getItem(id);
 
-  confirmDialog.open();
+  confirmDialog.value?.open();
 };
 
 const handleSubmit = async () => {
-  try {
-    await submitItem(form.value);
-
-    formDialog.confirm();
-
-    fetchItems();
-  } catch {
-    // Error displayed via formInvalid, keep dialog open
-  }
-};
-
-const handleCancel = () => {
-  clearInvalid();
-
-  formDialog.cancel();
+  await submitItem(form.value);
+  fetchItems();
 };
 
 const handleDelete = async () => {
   const { id } = form.value as T;
 
   if (id) await deleteItem(id);
-
-  confirmDialog.confirm();
 
   fetchItems();
 };
