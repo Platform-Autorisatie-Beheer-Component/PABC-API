@@ -27,7 +27,6 @@
     :is-open="isFormDialogOpen"
     :submit-type="!form.id ? `create` : `update`"
     :loading="formLoading"
-    :error="formError"
     :invalid="formInvalid"
     @submit="handleSubmit"
     @cancel="handleCancel"
@@ -53,7 +52,7 @@
 </template>
 
 <script setup lang="ts" generic="T extends Item">
-import { onMounted } from "vue";
+import { onMounted, ref, type DeepReadonly } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
 import FormModal from "@/components/FormModal.vue";
@@ -61,7 +60,7 @@ import IconContainer from "@/components/IconContainer.vue";
 import ItemList from "@/components/ItemList.vue";
 import type { Item, PabcService } from "@/services/pabcService";
 import { useItemList } from "@/composables/use-item-list";
-import { useItemForm } from "@/composables/use-item-form";
+import { useItem } from "@/composables/use-item";
 import { useDialog } from "@/composables/use-dialog";
 
 const { pabcService, itemNameSingular, itemNamePlural } = defineProps<{
@@ -69,6 +68,8 @@ const { pabcService, itemNameSingular, itemNamePlural } = defineProps<{
   itemNameSingular: string;
   itemNamePlural: string;
 }>();
+
+const form = ref<T>({} as T);
 
 const formDialog = useDialog();
 const { isOpen: isFormDialogOpen } = formDialog;
@@ -84,37 +85,36 @@ const {
 } = useItemList(pabcService, itemNamePlural);
 
 const {
-  form,
   loading: formLoading,
-  error: formError,
   invalid: formInvalid,
-  fetchItem,
   submitItem,
   deleteItem,
-  clearItem
-} = useItemForm(pabcService, itemNameSingular);
+  clearInvalid
+} = useItem(pabcService, itemNameSingular);
+
+const getItem = (id: string) => (items.value as DeepReadonly<T[]>).find((i) => i.id === id);
 
 const openCreateDialog = () => {
-  clearItem();
+  form.value = {};
 
   formDialog.open();
 };
 
 const openUpdateDialog = (id: string) => {
-  fetchItem(id);
+  form.value = getItem(id);
 
   formDialog.open();
 };
 
 const openDeleteDialog = (id: string) => {
-  fetchItem(id);
+  form.value = getItem(id);
 
   confirmDialog.open();
 };
 
 const handleSubmit = async () => {
   try {
-    await submitItem();
+    await submitItem(form.value);
 
     formDialog.confirm();
 
@@ -125,13 +125,15 @@ const handleSubmit = async () => {
 };
 
 const handleCancel = () => {
-  clearItem();
+  clearInvalid();
 
   formDialog.cancel();
 };
 
 const handleDelete = async () => {
-  await deleteItem();
+  const { id } = form.value as T;
+
+  if (id) await deleteItem(id);
 
   confirmDialog.confirm();
 

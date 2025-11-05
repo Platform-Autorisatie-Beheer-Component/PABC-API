@@ -35,7 +35,7 @@
     :loading="loading"
     :invalid="invalid"
     @submit="handleAdd"
-    @cancel="formDialog.cancel"
+    @cancel="handleCancel"
   >
     <domain-entity-types-form
       v-model:selected-entity-type-id="selectedEntityTypeId"
@@ -76,7 +76,7 @@ const { domain, entityTypes } = defineProps<{
 
 const emit = defineEmits<{ (e: "refresh"): void }>();
 
-const { loading, invalid, addEntityTypeToDomain, removeEntityTypeFromDomain } =
+const { loading, invalid, addEntityTypeToDomain, removeEntityTypeFromDomain, clearInvalid } =
   useDomainEntityTypes();
 
 const selectedEntityTypeId = ref("");
@@ -123,6 +123,12 @@ const handleAdd = async () => {
   } catch {
     // Error displayed via invalid, keep dialog open
   }
+};
+
+const handleCancel = () => {
+  clearInvalid();
+
+  formDialog.cancel();
 };
 
 const handleRemove = async () => {

@@ -41,7 +41,7 @@
     :loading="loading"
     :invalid="invalid"
     @submit="handleAdd"
-    @cancel="formDialog.cancel"
+    @cancel="handleCancel"
   >
     <functional-role-mappings-form
       v-model:mapping="mapping"
@@ -88,7 +88,7 @@ const { functionalRole } = defineProps<{
 
 const emit = defineEmits<{ (e: "refresh"): void }>();
 
-const { loading, invalid, addMapping, removeMapping } = useFunctionalRoleMappings();
+const { loading, invalid, addMapping, removeMapping, clearInvalid } = useFunctionalRoleMappings();
 
 const initMapping = (): Mapping => ({
   functionalRoleId: functionalRole.id,
@@ -133,6 +133,12 @@ const handleAdd = async () => {
   } catch {
     // Error displayed via invalid, keep dialog open
   }
+};
+
+const handleCancel = () => {
+  clearInvalid();
+
+  formDialog.cancel();
 };
 
 const handleRemove = async () => {

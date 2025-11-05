@@ -57,6 +57,8 @@ export const useFunctionalRoleMappings = () => {
     }
   };
 
+  const clearInvalid = () => (invalid.value = "");
+
   return {
     functionalRoles: readonly(functionalRoles),
     loading: readonly(loading),
@@ -64,6 +66,7 @@ export const useFunctionalRoleMappings = () => {
     invalid: readonly(invalid),
     fetchFunctionalRoles,
     removeMapping,
-    addMapping
+    addMapping,
+    clearInvalid
   };
 };
