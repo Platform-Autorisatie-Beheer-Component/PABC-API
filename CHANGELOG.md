@@ -9,6 +9,7 @@
 - [Authentication via OIDC for the user interface #10](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/10)
 - [UI - Application roles #14](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/14)
 - [UI – Link entity types and domains #15](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/15)
+- [UI - Link functional roles to application roles within domains #3](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/3)
 
 
 ### Maintenance
