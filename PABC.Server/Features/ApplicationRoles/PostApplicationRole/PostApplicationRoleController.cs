@@ -16,7 +16,7 @@ namespace PABC.Server.Features.ApplicationRoles.PostApplicationRole
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ApplicationRole>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PostApplicationRole([FromBody] ApplicationRole model, CancellationToken token = default)
+        public async Task<IActionResult> PostApplicationRole([FromBody] ApplicationRoleCreateModel model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -50,5 +50,14 @@ namespace PABC.Server.Features.ApplicationRoles.PostApplicationRole
                 });
             }
         }
+    }
+
+    public class ApplicationRoleCreateModel
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Name { get; set; }
+
+        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
+        public required string Application { get; set; }
     }
 }
