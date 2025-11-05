@@ -17,6 +17,20 @@
         Geen <span class="lowercase">{{ itemNamePlural }}</span> gevonden.
       </p>
 
+      <template
+        v-else-if="groupedApplicationRoles.length"
+        v-for="{ application, roles } in groupedApplicationRoles"
+        :key="application"
+      >
+        <h3>{{ application }}</h3>
+
+        <item-list :items="roles" @update="openUpdateDialog" @delete="openDeleteDialog">
+          <template #item="{ item }">
+            <slot name="item" :item="item"></slot>
+          </template>
+        </item-list>
+      </template>
+
       <item-list v-else :items="items" @update="openUpdateDialog" @delete="openDeleteDialog">
         <template #item="{ item }">
           <slot name="item" :item="item"></slot>
@@ -45,13 +59,13 @@
 </template>
 
 <script setup lang="ts" generic="T extends Item">
-import { onMounted, ref, useTemplateRef, type DeepReadonly } from "vue";
+import { computed, onMounted, ref, useTemplateRef, type DeepReadonly } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
 import FormModal from "@/components/FormModal.vue";
 import IconContainer from "@/components/IconContainer.vue";
 import ItemList from "@/components/ItemList.vue";
-import type { Item, PabcService } from "@/services/pabcService";
+import type { ApplicationRole, Item, PabcService } from "@/services/pabcService";
 import { useItemList } from "@/composables/use-item-list";
 import { useItem } from "@/composables/use-item";
 
@@ -108,10 +122,30 @@ const handleDelete = async () => {
   fetchItems();
 };
 
+const groupedApplicationRoles = computed(() => {
+  if (!(items.value.length && "applicationId" in items.value[0])) return [];
+
+  return Object.entries(
+    (items.value as DeepReadonly<ApplicationRole[]>).reduce(
+      (acc, item) => ({ ...acc, [item.application]: [...(acc[item.application] || []), item] }),
+      {} as Record<string, ApplicationRole[]>
+    )
+  ).map(([application, roles]) => ({
+    application,
+    roles
+  }));
+});
+
 onMounted(() => fetchItems());
 </script>
 
 <style lang="scss" scoped>
+h3 {
+  font-size: inherit;
+  margin-block-start: var(--spacing-large);
+  margin-block-end: var(--spacing-default);
+}
+
 .lowercase {
   text-transform: lowercase;
 }

@@ -17,7 +17,6 @@
       item-name-plural="Applicatierollen"
     >
       <template #item="{ item: applicationRole }">
-        <h3>{{ applicationRole.application }}</h3>
         <p>{{ applicationRole.name }}</p>
       </template>
 
