@@ -17,7 +17,7 @@ namespace PABC.Server.Features.ApplicationRoles.PutApplicationRole
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ApplicationRole>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PutApplicationRole(Guid id, [FromBody] ApplicationRole model, CancellationToken token = default)
+        public async Task<IActionResult> PutApplicationRole(Guid id, [FromBody] ApplicationRoleUpsertModel model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {

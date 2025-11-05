@@ -15,6 +15,7 @@ export type EntityType = Item & {
 };
 
 export type ApplicationRole = Item & {
+  applicationId: string;
   application: string;
 };
 
