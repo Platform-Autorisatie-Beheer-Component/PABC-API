@@ -7,14 +7,12 @@
     <form ref="formRef" @submit.prevent="handleSubmit">
       <small-spinner v-if="loading" />
 
-      <alert-inline v-else-if="error">{{ error }}</alert-inline>
-
       <slot v-else></slot>
 
       <alert-inline v-if="invalid">{{ invalid }}</alert-inline>
 
       <menu v-if="!loading" class="reset">
-        <li v-if="!error">
+        <li>
           <button type="submit" :class="['button', { danger: isDelete }]">
             {{ SubmitTypes[submitType] }}
           </button>
@@ -46,7 +44,6 @@ const { isOpen, submitType } = defineProps<{
   isOpen: boolean;
   submitType: SubmitType;
   loading?: boolean;
-  error?: string;
   invalid?: string;
 }>();
 

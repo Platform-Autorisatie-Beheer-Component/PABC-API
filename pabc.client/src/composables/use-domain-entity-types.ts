@@ -53,6 +53,8 @@ export const useDomainEntityTypes = () => {
     }
   };
 
+  const clearInvalid = () => (invalid.value = "");
+
   return {
     domains: readonly(domains),
     loading: readonly(loading),
@@ -60,6 +62,7 @@ export const useDomainEntityTypes = () => {
     invalid: readonly(invalid),
     fetchDomains,
     addEntityTypeToDomain,
-    removeEntityTypeFromDomain
+    removeEntityTypeFromDomain,
+    clearInvalid
   };
 };
