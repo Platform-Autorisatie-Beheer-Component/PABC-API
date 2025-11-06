@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PABC.Data;
@@ -11,9 +12,11 @@ using PABC.Data;
 namespace PABC.Data.Migrations
 {
     [DbContext(typeof(PabcDbContext))]
-    partial class PabcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251104110607_AddApplication")]
+    partial class AddApplication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +76,12 @@ namespace PABC.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("ApplicationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("application_id");
+                    b.Property<string>("Application")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("application")
+                        .UseCollation("nl_case_insensitive");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -87,9 +93,9 @@ namespace PABC.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_application_role");
 
-                    b.HasIndex("ApplicationId", "Name")
+                    b.HasIndex("Application", "Name")
                         .IsUnique()
-                        .HasDatabaseName("ix_application_role_application_id_name");
+                        .HasDatabaseName("ix_application_role_application_name");
 
                     b.ToTable("application_role", (string)null);
                 });
@@ -248,18 +254,6 @@ namespace PABC.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_domain_entity_type_entity_type_entity_types_id");
-                });
-
-            modelBuilder.Entity("PABC.Data.Entities.ApplicationRole", b =>
-                {
-                    b.HasOne("PABC.Data.Entities.Application", "Application")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_application_role_application_application_id");
-
-                    b.Navigation("Application");
                 });
 
             modelBuilder.Entity("PABC.Data.Entities.Mapping", b =>

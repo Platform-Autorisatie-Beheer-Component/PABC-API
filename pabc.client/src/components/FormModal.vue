@@ -46,11 +46,9 @@ const { submitType, onSubmit } = defineProps<{
 }>();
 
 const loading = ref(false);
-
 const invalid = ref("");
 
 const dialogRef = ref<HTMLDialogElement>();
-
 const formRef = ref<HTMLFormElement>();
 
 const isDelete = computed(() => submitType === ("delete" satisfies SubmitType));
@@ -64,9 +62,10 @@ const promiseTry = <T,>(func: () => T | Promise<T>) =>
     }
   });
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   invalid.value = "";
   loading.value = true;
+
   return promiseTry(onSubmit)
     .then(() => {
       dialogRef.value?.close();

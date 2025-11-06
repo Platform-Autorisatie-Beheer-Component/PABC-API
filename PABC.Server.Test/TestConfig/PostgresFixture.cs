@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PABC.Data;
+using PABC.Data.Entities;
 
 namespace PABC.Server.Test.TestConfig
 {
@@ -28,7 +29,7 @@ namespace PABC.Server.Test.TestConfig
             var _postgresConnectionString = await _postgres.Resource.GetConnectionStringAsync();
             var services = new ServiceCollection();
             services.AddDbContext<PabcDbContext>(opt =>
-         opt.UseNpgsql(_postgresConnectionString)
+            opt.UseNpgsql(_postgresConnectionString)
             .UseSnakeCaseNamingConvention());
             _serviceScope = services.BuildServiceProvider().CreateScope();
             DbContext = _serviceScope.ServiceProvider.GetRequiredService<PabcDbContext>();
@@ -47,6 +48,20 @@ namespace PABC.Server.Test.TestConfig
             {
                 _app.Dispose();
             }
+        }
+
+        public async Task<Application> CreateTestApplicationAsync()
+        {
+            var application = new Application
+            {
+                Id = Guid.NewGuid(),
+                Name = $"TestApplication_{Guid.NewGuid()}"
+            };
+
+            DbContext.Add(application);
+            await DbContext.SaveChangesAsync();
+            
+            return application;
         }
     }
 }

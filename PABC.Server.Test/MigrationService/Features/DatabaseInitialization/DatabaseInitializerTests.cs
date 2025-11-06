@@ -52,6 +52,7 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
             await initializer.Initialize(
                 new DataSet
                 {
+                    Applications = [],
                     ApplicationRoles = [],
                     Domains = [],
                     EntityTypes = [],

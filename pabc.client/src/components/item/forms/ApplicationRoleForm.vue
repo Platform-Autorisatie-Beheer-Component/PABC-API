@@ -5,20 +5,25 @@
     </h2>
 
     <div class="form-group">
-      <label for="name">Applicatie *</label>
+      <label for="applicationId">Applicatie *</label>
 
-      <input
-        id="name"
-        type="text"
-        v-model.trim="applicationRole.application"
-        :maxlength="MAXLENGTH"
+      <select
+        name="applicationId"
+        id="applicationId"
+        v-model="applicationRole.applicationId"
         required
         aria-required="true"
-        aria-describedby="applicationError"
-        :aria-invalid="!applicationRole.application"
-      />
+        aria-describedby="applicationIdError"
+        :aria-invalid="!applicationRole.applicationId"
+      >
+        <option v-if="!applicationRole.applicationId" value="">- Selecteer -</option>
 
-      <span id="applicationError" class="error">Applicatie is een verplicht veld</span>
+        <option v-for="{ id, name } in applications" :key="id" :value="id">
+          {{ name }}
+        </option>
+      </select>
+
+      <span id="applicationIdError" class="error">Applicatie is een verplicht veld</span>
     </div>
 
     <div class="form-group">
@@ -41,7 +46,10 @@
 </template>
 
 <script setup lang="ts">
-import type { ApplicationRole } from "@/services/pabcService";
+import { type DeepReadonly } from "vue";
+import type { Application, ApplicationRole } from "@/services/pabcService";
+
+defineProps<{ applications: DeepReadonly<Application[]> }>();
 
 const applicationRole = defineModel<ApplicationRole>("applicationRole", { required: true });
 

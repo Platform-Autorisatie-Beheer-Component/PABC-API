@@ -23,12 +23,12 @@ namespace PABC.Server.Features.FunctionalRoles.GetFunctionalRoles
                     Name = fr.Name,
                     Mappings = db.Mappings
                         .Where(m => m.FunctionalRoleId == fr.Id)
-                        .OrderBy(m => m.ApplicationRole.Application)
+                        .OrderBy(m => m.ApplicationRole.Application.Name)
                         .ThenBy(m => m.ApplicationRole.Name)
                         .Select(m => new MappingResponse
                         {
                             Id = m.Id,
-                            Name = $"{m.ApplicationRole.Name} ({m.ApplicationRole.Application})",
+                            Name = $"{m.ApplicationRole.Name} ({m.ApplicationRole.Application.Name})",
                             ApplicationRoleId = m.ApplicationRoleId,
                             Domain = m.Domain != null ? m.Domain.Name : null,
                             IsAllEntityTypes = m.IsAllEntityTypes

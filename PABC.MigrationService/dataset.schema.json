@@ -1,6 +1,25 @@
 {
   "type": "object",
   "properties": {
+    "applications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/guid"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      }
+    },
     "applicationRoles": {
       "type": "array",
       "items": {
@@ -13,15 +32,14 @@
             "type": "string",
             "maxLength": 256
           },
-          "application": {
-            "type": "string",
-            "maxLength": 256
+          "applicationId": {
+            "$ref": "#/$defs/guid"
           }
         },
         "required": [
           "id",
           "name",
-          "application"
+          "applicationId"
         ]
       }
     },
@@ -164,6 +182,7 @@
     }
   },
   "required": [
+    "applications",
     "applicationRoles",
     "functionalRoles",
     "entityTypes",

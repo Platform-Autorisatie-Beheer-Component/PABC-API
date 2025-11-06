@@ -23,12 +23,14 @@ namespace PABC.MigrationService.Features.DatabaseInitialization
         {
             // Clear existing entries from relevant tables
             await dbContext.ApplicationRoles.ExecuteDeleteAsync(cancellationToken);
+            await dbContext.Applications.ExecuteDeleteAsync(cancellationToken);
             await dbContext.FunctionalRoles.ExecuteDeleteAsync(cancellationToken);
             await dbContext.Domains.ExecuteDeleteAsync(cancellationToken);
             await dbContext.EntityTypes.ExecuteDeleteAsync(cancellationToken);
             await dbContext.Mappings.ExecuteDeleteAsync(cancellationToken);
 
             // Insert new records
+            await dbContext.Applications.AddRangeAsync(dataSet.Applications, cancellationToken);
             await dbContext.ApplicationRoles.AddRangeAsync(dataSet.ApplicationRoles, cancellationToken);
             await dbContext.FunctionalRoles.AddRangeAsync(dataSet.FunctionalRoles, cancellationToken);
             await dbContext.Domains.AddRangeAsync(dataSet.Domains, cancellationToken);

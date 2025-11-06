@@ -13,7 +13,9 @@ namespace PABC.Server.Test.Data
         [Fact]
         public async Task DuplicateMappingRowsAreImpossible()
         {
-            var appRole = new ApplicationRole { Id = Guid.NewGuid(), Application = string.Empty, Name = string.Empty };
+            var application = await fixture.CreateTestApplicationAsync();
+
+            var appRole = new ApplicationRole { Id = Guid.NewGuid(), ApplicationId = application.Id, Name = string.Empty };
             var domain = new Domain { Id = Guid.NewGuid(), Description = string.Empty, Name = string.Empty };
             var funcRole = new FunctionalRole { Id = Guid.NewGuid(), Name = string.Empty };
 
@@ -31,14 +33,15 @@ namespace PABC.Server.Test.Data
         [Fact]
         public async Task DuplicateApplicationRolesAreImpossible()
         {
-            var appRole = new ApplicationRole { Id = Guid.NewGuid(), Application = string.Empty, Name = string.Empty };
-            var appRole2 = new ApplicationRole { Id = Guid.NewGuid(), Application = string.Empty, Name = string.Empty };
+            var application = await fixture.CreateTestApplicationAsync();
+
+            var appRole = new ApplicationRole { Id = Guid.NewGuid(), ApplicationId = application.Id, Name = string.Empty };
+            var appRole2 = new ApplicationRole { Id = Guid.NewGuid(), ApplicationId = application.Id, Name = string.Empty };
 
             fixture.DbContext.Add(appRole);
             await fixture.DbContext.SaveChangesAsync();
 
             fixture.DbContext.Add(appRole2);
-
             await Assert.ThrowsAsync<DbUpdateException>(() => fixture.DbContext.SaveChangesAsync());
         }
 

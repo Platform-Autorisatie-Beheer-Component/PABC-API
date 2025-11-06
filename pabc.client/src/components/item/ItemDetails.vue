@@ -13,19 +13,23 @@
 
       <small-spinner v-if="listLoading" />
 
-      <p v-else-if="!items.length">Geen {{ itemNamePlural }} gevonden.</p>
+      <p v-else-if="!items.length">
+        Geen <span class="lowercase">{{ itemNamePlural }}</span> gevonden.
+      </p>
 
-      <item-list v-else :items="items" @update="openUpdateDialog" @delete="openDeleteDialog">
-        <template #item="{ item }">
-          <slot name="item" :item="item"></slot>
-        </template>
-      </item-list>
+      <slot name="list" :items="items" :on-update="openUpdateDialog" :on-delete="openDeleteDialog">
+        <item-list :items="items" @update="openUpdateDialog" @delete="openDeleteDialog">
+          <template #item="{ item }">
+            <slot name="item" :item="item"></slot>
+          </template>
+        </item-list>
+      </slot>
     </template>
   </details>
 
   <form-modal
     ref="form-dialog"
-    :submit-type="!form.id ? `create` : `update`"
+    :submit-type="!form?.id ? `create` : `update`"
     @submit="handleSubmit"
   >
     <slot name="form" :form="form"></slot>
@@ -36,7 +40,7 @@
 
     <p>
       Weet je zeker dat je
-      <span class="lowercase">{{ itemNameSingular }}</span> <em>'{{ form.name }}'</em>
+      <span class="lowercase">{{ itemNameSingular }}</span> <em>'{{ form?.name }}'</em>
       wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.
     </p>
   </form-modal>
@@ -73,23 +77,20 @@ const {
 
 const { submitItem, deleteItem } = useItem(pabcService, itemNameSingular);
 
-const getItem = (id: string) => (items.value as DeepReadonly<T[]>).find((i) => i.id === id);
+const getItem = (id: string) => (items.value as DeepReadonly<T[]>).find((i) => i.id === id) as T;
 
 const openCreateDialog = () => {
-  form.value = {};
-
+  form.value = pabcService.createEmpty();
   formDialog.value?.open();
 };
 
 const openUpdateDialog = (id: string) => {
   form.value = getItem(id);
-
   formDialog.value?.open();
 };
 
 const openDeleteDialog = (id: string) => {
   form.value = getItem(id);
-
   confirmDialog.value?.open();
 };
 
@@ -110,6 +111,12 @@ onMounted(() => fetchItems());
 </script>
 
 <style lang="scss" scoped>
+h3 {
+  font-size: inherit;
+  margin-block-start: var(--spacing-large);
+  margin-block-end: var(--spacing-default);
+}
+
 .lowercase {
   text-transform: lowercase;
 }

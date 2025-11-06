@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
 
-namespace PABC.Server.Features.ApplicationRoles.PutApplicationRole
+namespace PABC.Server.Features.Applications.PutApplication
 {
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("/api/v1/application-roles")]
-    public class PutApplicationRoleController(PabcDbContext db) : Controller
+    [Route("/api/v1/applications")]
+    public class PutApplicationController(PabcDbContext db) : Controller
     {
         [HttpPut("{id}")]
         [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, MediaTypeNames.Application.ProblemJson)]
-        [ProducesResponseType<ApplicationRole>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
+        [ProducesResponseType<Application>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
-        public async Task<IActionResult> PutApplicationRole(Guid id, [FromBody] ApplicationRoleUpsertModel model, CancellationToken token = default)
+        public async Task<IActionResult> PutApplication(Guid id, [FromBody] Application model, CancellationToken token = default)
         {
             if (!ModelState.IsValid)
             {
@@ -26,9 +26,9 @@ namespace PABC.Server.Features.ApplicationRoles.PutApplicationRole
 
             try
             {
-                var applicationRole = await db.ApplicationRoles.FindAsync([id], token);
+                var application = await db.Applications.FindAsync([id], token);
 
-                if (applicationRole == null)
+                if (application == null)
                 {
                     return NotFound(new ProblemDetails
                     {
@@ -37,20 +37,19 @@ namespace PABC.Server.Features.ApplicationRoles.PutApplicationRole
                     });
                 }
 
-                applicationRole.Name = model.Name;
-                applicationRole.ApplicationId = model.ApplicationId;
+                application.Name = model.Name;
 
-                db.ApplicationRoles.Update(applicationRole);
+                db.Applications.Update(application);
                 
                 await db.SaveChangesAsync(token);
 
-                return Ok(applicationRole);
+                return Ok(application);
             }
             catch (DbUpdateException ex) when (ex.IsDuplicateException())
             {
                 return Conflict(new ProblemDetails
                 {
-                    Detail = "Combinatie Naam en Applicatie bestaat al",
+                    Detail = "Applicatienaam bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }

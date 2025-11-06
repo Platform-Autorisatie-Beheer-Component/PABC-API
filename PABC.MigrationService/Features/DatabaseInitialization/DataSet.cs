@@ -4,6 +4,7 @@ using PABC.Data.Entities;
 
 public record DataSet
 {
+    public required IReadOnlyList<Application> Applications { get; init; }
     public required IReadOnlyList<ApplicationRole> ApplicationRoles { get; init; }
     public required IReadOnlyList<FunctionalRole> FunctionalRoles { get; init; }
     public required IReadOnlyList<EntityType> EntityTypes { get; init; }

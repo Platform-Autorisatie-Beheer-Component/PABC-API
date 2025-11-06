@@ -53,7 +53,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             var theExpectedEntityType = RandomEntityType();
             var theExpectedDomain = RandomDomain(theExpectedEntityType);
 
-            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), theExpectedDomain, isAllEntityTypes: false);
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(await fixture.CreateTestApplicationAsync()), theExpectedDomain, isAllEntityTypes: false);
 
             // ACT
             var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name));
@@ -78,7 +78,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             var theExpectedEntityType = RandomEntityType();
             var theExpectedDomain = RandomDomain(theExpectedEntityType);
 
-            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), theExpectedDomain, isAllEntityTypes: false);
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(await fixture.CreateTestApplicationAsync()), theExpectedDomain, isAllEntityTypes: false);
 
             // ACT
             var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name, RandomString(), RandomString()));
@@ -121,7 +121,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         public async Task Post_HandlesDuplicateFunctionalRoleNames_WithoutDuplication()
         {
             // ARRAMGE
-            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(RandomEntityType()), isAllEntityTypes: false);
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(await fixture.CreateTestApplicationAsync()), RandomDomain(RandomEntityType()), isAllEntityTypes: false);
             
             // ACT
             var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name, mapping.FunctionalRole.Name));
@@ -143,7 +143,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             var domain1 = RandomDomain(entityType);
             var domain2 = RandomDomain(entityType);
 
-            var applicationRole = RandomApplicationRole();
+            var applicationRole = RandomApplicationRole(await fixture.CreateTestApplicationAsync());
             var mapping1 = InsertTestMapping(RandomFunctionalRole(), applicationRole, domain1, isAllEntityTypes: false);
             var mapping2 = InsertTestMapping(RandomFunctionalRole(), applicationRole, domain2, isAllEntityTypes: false);
 
@@ -172,7 +172,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             _dbContext.AddRange(domain1, domain2);
             _dbContext.SaveChanges();
 
-            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), domain: null, isAllEntityTypes: true);
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(await fixture.CreateTestApplicationAsync()), domain: null, isAllEntityTypes: true);
 
 
             // ACT
@@ -199,8 +199,8 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             // ARRANGE
             var entityType1 = RandomEntityType();
             var entityType2 = RandomEntityType();
-            var mapping1 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(entityType1), isAllEntityTypes:  false);
-            var mapping2 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), RandomDomain(entityType2), isAllEntityTypes:  false);
+            var mapping1 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(await fixture.CreateTestApplicationAsync()), RandomDomain(entityType1), isAllEntityTypes:  false);
+            var mapping2 = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(await fixture.CreateTestApplicationAsync()), RandomDomain(entityType2), isAllEntityTypes:  false);
 
             // ACT
             var result = await CreateController().Post(CreateRequest(mapping1.FunctionalRole.Name, mapping2.FunctionalRole.Name));
@@ -230,7 +230,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             _dbContext.Add(domain);
             _dbContext.SaveChanges();
 
-            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(), domain: null, isAllEntityTypes: false);
+            var mapping = InsertTestMapping(RandomFunctionalRole(), RandomApplicationRole(await fixture.CreateTestApplicationAsync()), domain: null, isAllEntityTypes: false);
 
             // ACT
             var result = await CreateController().Post(CreateRequest(mapping.FunctionalRole.Name));
@@ -299,10 +299,10 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
             Name = RandomString()
         };
 
-        private static ApplicationRole RandomApplicationRole() => new()
+        private static ApplicationRole RandomApplicationRole(Application application) => new()
         {
             Id = Guid.NewGuid(),
-            Application = RandomString(),
+            ApplicationId = application.Id,
             Name = RandomString()
         };
     }

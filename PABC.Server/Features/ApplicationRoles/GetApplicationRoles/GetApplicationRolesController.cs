@@ -16,8 +16,15 @@ namespace PABC.Server.Features.ApplicationRoles.GetApplicationRoles
         public async Task<IActionResult> GetApplicationRoles(CancellationToken token = default)
         {
             var applicationRoles = await db.ApplicationRoles
-                .OrderBy(d => d.Application)
-                .ThenBy(d => d.Name)
+                .OrderBy(ar => ar.Application.Name)
+                .ThenBy(ar => ar.Name)
+                .Select(ar => new ApplicationRoleResponse
+                {
+                    Id = ar.Id,
+                    Name = ar.Name,
+                    Application = ar.Application.Name,
+                    ApplicationId = ar.ApplicationId
+                })
                 .ToListAsync(token);
 
             return Ok(applicationRoles);
