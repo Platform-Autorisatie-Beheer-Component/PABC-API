@@ -108,8 +108,6 @@ const openDeleteDialog = (id: string) => {
 };
 
 const handleSubmit = async () => {
-  if (!form.value) return;
-
   await submitItem(form.value);
   fetchItems();
 };
