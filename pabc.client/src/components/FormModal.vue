@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
 import IconContainer from "@/components/IconContainer.vue";
@@ -40,14 +40,14 @@ const SubmitTypes = {
 
 type SubmitType = keyof typeof SubmitTypes;
 
-const { isOpen, submitType } = defineProps<{
-  isOpen: boolean;
+const { submitType, onSubmit } = defineProps<{
   submitType: SubmitType;
-  loading?: boolean;
-  invalid?: string;
+  onSubmit: () => unknown;
 }>();
 
-const emit = defineEmits<{ (e: "submit"): void; (e: "cancel"): void }>();
+const loading = ref(false);
+
+const invalid = ref("");
 
 const dialogRef = ref<HTMLDialogElement>();
 
@@ -55,16 +55,35 @@ const formRef = ref<HTMLFormElement>();
 
 const isDelete = computed(() => submitType === ("delete" satisfies SubmitType));
 
-watch(
-  () => isOpen,
-  (value) => (value ? dialogRef.value?.showModal() : dialogRef.value?.close())
-);
+const promiseTry = <T,>(func: () => T | Promise<T>) =>
+  new Promise<T>((resolve, reject) => {
+    try {
+      resolve(func());
+    } catch (error) {
+      reject(error);
+    }
+  });
 
-const handleSubmit = () => emit("submit");
+const handleSubmit = () => {
+  invalid.value = "";
+  loading.value = true;
+  return promiseTry(onSubmit)
+    .then(() => {
+      dialogRef.value?.close();
+    })
+    .catch((err) => {
+      invalid.value = err instanceof Error ? err.message : err;
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 
 const handleCancel = () => {
   formRef.value?.reset();
-
-  emit("cancel");
+  dialogRef.value?.close();
+  invalid.value = "";
 };
+
+defineExpose({ open: () => dialogRef?.value?.showModal() });
 </script>
