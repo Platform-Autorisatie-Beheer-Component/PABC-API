@@ -35,7 +35,7 @@
     </item-list>
   </details>
 
-  <form-modal submit-type="create" @submit="handleAdd" ref="add-dialog">
+  <form-modal submit-type="create" @submit="handleCreate" ref="add-dialog">
     <functional-role-mappings-form
       v-model:mapping="mapping"
       :application-roles="applicationRoles"
@@ -79,14 +79,14 @@ const confirmDialog = useTemplateRef("confirm-dialog");
 
 const { addMapping, removeMapping } = useFunctionalRoleMappings();
 
-const initMapping = (): Mapping => ({
+const createEmptyMapping = (): Mapping => ({
   functionalRoleId: functionalRole.id,
   applicationRoleId: "",
   domainId: "",
   isAllEntityTypes: false
 });
 
-const mapping = ref(initMapping());
+const mapping = ref(createEmptyMapping());
 
 const selectedMappingId = ref("");
 
@@ -95,7 +95,7 @@ const selectedMapping = computed(() =>
 );
 
 const openAddDialog = () => {
-  mapping.value = initMapping();
+  mapping.value = createEmptyMapping();
   formDialog.value?.open();
 };
 
@@ -104,7 +104,7 @@ const openRemoveDialog = (id: string) => {
   confirmDialog.value?.open();
 };
 
-const handleAdd = async () => {
+const handleCreate = async () => {
   await addMapping(mapping.value);
   emit("refresh");
 };

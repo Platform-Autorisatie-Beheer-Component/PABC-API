@@ -17,8 +17,9 @@
         Geen <span class="lowercase">{{ itemNamePlural }}</span> gevonden.
       </p>
 
+      <!-- exception for application roles: roles should be grouped by application -->
       <template
-        v-else-if="groupedApplicationRoles.length"
+        v-else-if="groupedApplicationRoles"
         v-for="{ application, roles } in groupedApplicationRoles"
         :key="application"
       >
@@ -41,7 +42,7 @@
 
   <form-modal
     ref="form-dialog"
-    :submit-type="!form.id ? `create` : `update`"
+    :submit-type="!form?.id ? `create` : `update`"
     @submit="handleSubmit"
   >
     <slot name="form" :form="form"></slot>
@@ -52,7 +53,7 @@
 
     <p>
       Weet je zeker dat je
-      <span class="lowercase">{{ itemNameSingular }}</span> <em>'{{ form.name }}'</em>
+      <span class="lowercase">{{ itemNameSingular }}</span> <em>'{{ form?.name }}'</em>
       wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.
     </p>
   </form-modal>
@@ -89,27 +90,26 @@ const {
 
 const { submitItem, deleteItem } = useItem(pabcService, itemNameSingular);
 
-const getItem = (id: string) => (items.value as DeepReadonly<T[]>).find((i) => i.id === id);
+const getItem = (id: string) => (items.value as DeepReadonly<T[]>).find((i) => i.id === id) as T;
 
 const openCreateDialog = () => {
-  form.value = {};
-
+  form.value = pabcService.createEmpty();
   formDialog.value?.open();
 };
 
 const openUpdateDialog = (id: string) => {
   form.value = getItem(id);
-
   formDialog.value?.open();
 };
 
 const openDeleteDialog = (id: string) => {
   form.value = getItem(id);
-
   confirmDialog.value?.open();
 };
 
 const handleSubmit = async () => {
+  if (!form.value) return;
+
   await submitItem(form.value);
   fetchItems();
 };
@@ -123,7 +123,8 @@ const handleDelete = async () => {
 };
 
 const groupedApplicationRoles = computed(() => {
-  if (!(items.value.length && "applicationId" in items.value[0])) return [];
+  if (!(items.value.length && "applicationId" in items.value[0] && "application" in items.value[0]))
+    return;
 
   return Object.entries(
     (items.value as DeepReadonly<ApplicationRole[]>).reduce(

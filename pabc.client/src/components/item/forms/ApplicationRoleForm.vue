@@ -23,8 +23,6 @@
         </option>
       </select>
 
-      {{ applicationRole }}
-
       <span id="applicationIdError" class="error">Applicatie is een verplicht veld</span>
     </div>
 

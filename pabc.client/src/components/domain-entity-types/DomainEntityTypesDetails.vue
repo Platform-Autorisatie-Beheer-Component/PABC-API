@@ -29,7 +29,7 @@
     </item-list>
   </details>
 
-  <form-modal ref="form-dialog" submit-type="create" @submit="handleAdd">
+  <form-modal ref="form-dialog" submit-type="create" @submit="handleCreate">
     <domain-entity-types-form
       v-model:selected-entity-type-id="selectedEntityTypeId"
       :entity-types="availableEntityTypes"
@@ -79,29 +79,28 @@ const availableEntityTypes = computed(() =>
 );
 
 const formDialog = useTemplateRef("form-dialog");
-
 const confirmDialog = useTemplateRef("confirm-dialog");
 
 const openAddDialog = () => {
   selectedEntityTypeId.value = "";
-
   formDialog.value?.open();
 };
 
 const openRemoveDialog = (id: string) => {
   selectedEntityTypeId.value = id;
-
   confirmDialog.value?.open();
 };
 
-const handleAdd = async () => {
+const handleCreate = async () => {
   if (!domain.id) return;
+
   await addEntityTypeToDomain(domain.id, selectedEntityTypeId.value);
   emit("refresh");
 };
 
 const handleRemove = async () => {
   if (!domain.id) return;
+
   await removeEntityTypeFromDomain(domain.id, selectedEntityTypeId.value);
   emit("refresh");
 };
