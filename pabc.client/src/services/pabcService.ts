@@ -15,6 +15,7 @@ export type EntityType = Item & {
 };
 
 export type ApplicationRole = Item & {
+  applicationId: string;
   application: string;
 };
 
@@ -41,25 +42,45 @@ export type MappingResponse = Required<Item> & {
   isAllEntityTypes: boolean;
 };
 
-const createPabcService = <T extends Item>(endpoint: string) => ({
+const createPabcService = <T extends Item>(endpoint: string, createEmpty: () => T) => ({
   getAll: (): Promise<T[]> => get<T[]>(`/api/v1/${endpoint}`),
   getById: (id: string): Promise<T> => get<T>(`/api/v1/${endpoint}/${id}`),
   create: (payload: T): Promise<T> => post<T>(`/api/v1/${endpoint}`, payload),
   update: (payload: T): Promise<T> => put<T>(`/api/v1/${endpoint}/${payload.id}`, payload),
-  delete: (id: string): Promise<void> => del(`/api/v1/${endpoint}/${id}`)
+  delete: (id: string): Promise<void> => del(`/api/v1/${endpoint}/${id}`),
+  createEmpty
 });
 
 export type PabcService<T extends Item> = ReturnType<typeof createPabcService<T>>;
 
-export const domainService = createPabcService<Domain>("domains");
+export const domainService = createPabcService<Domain>("domains", () => ({
+  name: "",
+  description: ""
+}));
 
-export const functionalRoleService = createPabcService<FunctionalRole>("functional-roles");
+export const functionalRoleService = createPabcService<FunctionalRole>("functional-roles", () => ({
+  name: ""
+}));
 
-export const entityTypeService = createPabcService<EntityType>("entity-types");
+export const entityTypeService = createPabcService<EntityType>("entity-types", () => ({
+  type: "",
+  entityTypeId: "",
+  name: "",
+  uri: ""
+}));
 
-export const applicationRoleService = createPabcService<ApplicationRole>("application-roles");
+export const applicationRoleService = createPabcService<ApplicationRole>(
+  "application-roles",
+  () => ({
+    name: "",
+    applicationId: "",
+    application: ""
+  })
+);
 
-export const applicationService = createPabcService<Application>("applications");
+export const applicationService = createPabcService<Application>("applications", () => ({
+  name: ""
+}));
 
 export const domainEntityTypesService = {
   getAll: (): Promise<DomainEntityTypes[]> => get<DomainEntityTypes[]>("/api/v1/domains"),

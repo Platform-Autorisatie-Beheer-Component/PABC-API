@@ -24,9 +24,9 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<ApplicationRole>(r =>
         {
-            r.Property(x => x.Application).HasMaxLength(MaxLengthForIndexProperties);
             r.Property(x => x.Name).HasMaxLength(MaxLengthForIndexProperties);
-            r.HasIndex(x => new { x.Application, x.Name }).IsUnique();
+            r.HasIndex(x => new { x.ApplicationId, x.Name }).IsUnique();
+            r.HasOne(x => x.Application).WithMany();
         });
 
         modelBuilder.Entity<Domain>(d =>

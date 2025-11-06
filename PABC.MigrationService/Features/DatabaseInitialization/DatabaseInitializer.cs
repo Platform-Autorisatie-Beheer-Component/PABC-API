@@ -22,8 +22,8 @@ namespace PABC.MigrationService.Features.DatabaseInitialization
         private async Task UpserDataSet(DataSet dataSet, CancellationToken cancellationToken)
         {
             // Clear existing entries from relevant tables
-            await dbContext.Applications.ExecuteDeleteAsync(cancellationToken);
             await dbContext.ApplicationRoles.ExecuteDeleteAsync(cancellationToken);
+            await dbContext.Applications.ExecuteDeleteAsync(cancellationToken);
             await dbContext.FunctionalRoles.ExecuteDeleteAsync(cancellationToken);
             await dbContext.Domains.ExecuteDeleteAsync(cancellationToken);
             await dbContext.EntityTypes.ExecuteDeleteAsync(cancellationToken);

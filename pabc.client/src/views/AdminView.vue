@@ -6,18 +6,33 @@
 
     <h2>Hoofdlijsten</h2>
 
+    <small-spinner v-if="loading" />
+
+    <alert-inline v-else-if="error">{{ error }}</alert-inline>
+
     <item-details
+      v-else
       :pabc-service="applicationRoleService"
       item-name-singular="Applicatierol"
       item-name-plural="Applicatierollen"
     >
-      <template #item="{ item: applicationRole }">
-        <h3>{{ applicationRole.application }}</h3>
-        <p>{{ applicationRole.name }}</p>
+      <template #list="{ items, ...listeners }">
+        <template
+          v-for="[application, roles] in groupBy(items, (i) => i.application)"
+          :key="application"
+        >
+          <h3 class="item-group-heading">{{ application }}</h3>
+
+          <item-list :items="roles" v-bind="listeners">
+            <template #item="{ item: applicationRole }">
+              <p>{{ applicationRole.name }}</p>
+            </template>
+          </item-list>
+        </template>
       </template>
 
       <template #form="{ form }">
-        <application-role-form :application-role="form" />
+        <application-role-form :application-role="form" :applications="applications" />
       </template>
     </item-details>
 
@@ -84,6 +99,10 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
+import AlertInline from "@/components/AlertInline.vue";
+import SmallSpinner from "@/components/SmallSpinner.vue";
+import ItemList from "@/components/ItemList.vue";
 import {
   domainService,
   functionalRoleService,
@@ -91,18 +110,54 @@ import {
   applicationRoleService,
   applicationService
 } from "@/services/pabcService";
+import { useItemList } from "@/composables/use-item-list";
 import ItemDetails from "@/components/item/ItemDetails.vue";
 import DomainForm from "@/components/item/forms/DomainForm.vue";
 import FunctionalRoleForm from "@/components/item/forms/FunctionalRoleForm.vue";
 import EntityTypeForm from "@/components/item/forms/EntityTypeForm.vue";
 import ApplicationRoleForm from "@/components/item/forms/ApplicationRoleForm.vue";
 import ApplicationForm from "@/components/item/forms/ApplicationForm.vue";
+
+const {
+  items: applications,
+  loading,
+  error,
+  fetchItems: fetchApplications
+} = useItemList(applicationService, "Applicaties");
+
+function groupBy<T, K>(items: readonly T[], selector: (i: T) => K) {
+  const map = new Map<K, T[]>();
+
+  for (const item of items) {
+    const key = selector(item);
+    const group = map.get(key);
+
+    if (group) {
+      group.push(item);
+    } else {
+      map.set(key, [item]);
+    }
+  }
+
+  return map;
+}
+
+onMounted(() => fetchApplications());
 </script>
 
 <style lang="scss" scoped>
+.spinner {
+  margin-block-end: var(--spacing-default);
+}
+
 h3,
 p {
   margin-block: 0;
   font-size: inherit;
+}
+
+.item-group-heading {
+  margin-block-start: var(--spacing-large);
+  margin-block-end: var(--spacing-default);
 }
 </style>

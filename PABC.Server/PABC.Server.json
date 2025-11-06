@@ -65,7 +65,7 @@
     "schemas": {
       "ApplicationRoleModel": {
         "required": [
-          "application",
+          "applicationId",
           "name"
         ],
         "type": "object",
@@ -75,9 +75,10 @@
             "description": "The name of the application role",
             "example": "Behandelaar"
           },
-          "application": {
+          "applicationId": {
             "type": "string",
-            "description": "The application that this role applies to",
+            "description": "The unique identifier for the application",
+            "format": "uuid",
             "example": "ZAC"
           }
         },

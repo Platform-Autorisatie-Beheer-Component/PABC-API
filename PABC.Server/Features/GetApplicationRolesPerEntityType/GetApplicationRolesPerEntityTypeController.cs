@@ -56,9 +56,9 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
                     ApplicationRoles = g
                         .Select(x => new ApplicationRoleModel
                         {
-                            Name = x.ApplicationRole.Name, Application = x.ApplicationRole.Application
+                            Name = x.ApplicationRole.Name, ApplicationId = x.ApplicationRole.ApplicationId
                         })
-                        .DistinctBy(ar => new { ar.Name, ar.Application })
+                        .DistinctBy(ar => new { ar.Name, ar.ApplicationId })
                         .ToList()
                 })
                 .ToList();

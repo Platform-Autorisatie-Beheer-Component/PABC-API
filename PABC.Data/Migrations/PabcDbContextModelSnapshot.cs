@@ -73,12 +73,9 @@ namespace PABC.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Application")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("application")
-                        .UseCollation("nl_case_insensitive");
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("application_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -90,9 +87,9 @@ namespace PABC.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_application_role");
 
-                    b.HasIndex("Application", "Name")
+                    b.HasIndex("ApplicationId", "Name")
                         .IsUnique()
-                        .HasDatabaseName("ix_application_role_application_name");
+                        .HasDatabaseName("ix_application_role_application_id_name");
 
                     b.ToTable("application_role", (string)null);
                 });
@@ -251,6 +248,18 @@ namespace PABC.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_domain_entity_type_entity_type_entity_types_id");
+                });
+
+            modelBuilder.Entity("PABC.Data.Entities.ApplicationRole", b =>
+                {
+                    b.HasOne("PABC.Data.Entities.Application", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_application_role_application_application_id");
+
+                    b.Navigation("Application");
                 });
 
             modelBuilder.Entity("PABC.Data.Entities.Mapping", b =>

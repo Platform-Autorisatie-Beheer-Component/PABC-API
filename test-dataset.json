@@ -13,37 +13,37 @@
   "applicationRoles": [
     {
       "id": "7839298d-9ac9-4b02-bcfc-18b5e6e00227",
-      "application": "ZAC",
+      "applicationId": "123e4567-e89b-12d3-a456-426614174000",
       "name": "Raadpleger"
     },
     {
       "id": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1",
-      "application": "ZAC",
+      "applicationId": "123e4567-e89b-12d3-a456-426614174000",
       "name": "Behandelaar"
     },
     {
       "id": "03224fbe-84fc-46ad-8392-e7aa883f21aa",
-      "application": "ZAC",
+      "applicationId": "123e4567-e89b-12d3-a456-426614174000",
       "name": "Co\u00F6rdinator"
     },
     {
       "id": "fb0e0fb8-5a16-469c-82f4-d3ef6a767828",
-      "application": "ZAC",
+      "applicationId": "123e4567-e89b-12d3-a456-426614174000",
       "name": "Recordmanager"
     },
     {
       "id": "29fd3e52-193c-48e2-8471-2899130db153",
-      "application": "ZAC",
+      "applicationId": "123e4567-e89b-12d3-a456-426614174000",
       "name": "Beheerder"
     },
     {
       "id": "f5cf1465-c05a-4c95-98da-0ec6402161a0",
-      "application": "MyApplication2",
+      "applicationId": "789abcde-f012-3456-7890-abcdef123456",
       "name": "MyAppRole2"
     },
     {
       "id": "d8b091f0-fc70-4825-9dac-5fcdec931f8e",
-      "application": "MyApplication2",
+      "applicationId": "789abcde-f012-3456-7890-abcdef123456",
       "name": "NoEntityApplicationRole"
     }
   ],

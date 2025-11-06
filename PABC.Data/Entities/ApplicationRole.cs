@@ -9,8 +9,9 @@ namespace PABC.Data.Entities
         [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
         public required string Name { get; set; }
 
-        [Json.Schema.Generation.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
-        [System.ComponentModel.DataAnnotations.MaxLength(PabcDbContext.MaxLengthForIndexProperties)]
-        public required string Application { get; set; }
+        public required Guid ApplicationId { get; set; }
+
+        [Json.Schema.Generation.JsonExclude]
+        public Application Application { get; private init; } = null!;
     }
 }

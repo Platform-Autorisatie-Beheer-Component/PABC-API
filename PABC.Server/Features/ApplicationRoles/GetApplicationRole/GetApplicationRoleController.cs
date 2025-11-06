@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PABC.Data;
 using PABC.Data.Entities;
 
@@ -16,7 +17,16 @@ namespace PABC.Server.Features.ApplicationRoles.GetApplicationRole
         [ProducesResponseType<ApplicationRole>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetApplicationRoleById(Guid id, CancellationToken token = default)
         {
-            var applicationRole = await db.ApplicationRoles.FindAsync([id], token);
+            var applicationRole = await db.ApplicationRoles
+                .Where(ar => ar.Id == id)
+                .Select(ar => new ApplicationRoleResponse
+                {
+                    Id = ar.Id,
+                    Name = ar.Name,
+                    Application = ar.Application.Name,
+                    ApplicationId = ar.ApplicationId
+                })
+                .FirstOrDefaultAsync(token);
 
             if (applicationRole == null)
             {

@@ -91,6 +91,7 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
         {
             await Test("""
             {
+                "applications": [],
                 "applicationRoles": [],
                 "functionalRoles": [],
                 "domains": [],
@@ -105,6 +106,7 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
         {
             var error = await TestThrowsJsonSchemaValidationExceptionWithSingleError($$"""
             {
+                "applications": [],
                 "applicationRoles": [],
                 "functionalRoles": [
                     {
@@ -125,6 +127,7 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
         {
             var error = await TestThrowsJsonSchemaValidationExceptionWithSingleError("""
             {
+                "applications": [],
                 "applicationRoles": [],
                 "functionalRoles": [],
                 "domains": [],
