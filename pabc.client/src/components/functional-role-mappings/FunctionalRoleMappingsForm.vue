@@ -25,31 +25,25 @@
     </div>
 
     <div class="form-group">
-      <label for="domainId">Domein *</label>
+      <label> <input type="checkbox" v-model="mapping.isAllEntityTypes" /> IsAllEntityTypes </label>
+    </div>
 
-      <select
-        name="domainId"
-        id="domainId"
-        v-model="mapping.domainId"
-        required
-        aria-required="true"
-        aria-describedby="domainIdError"
-        :aria-invalid="!mapping.domainId"
-      >
-        <option v-if="!mapping.domainId" value="">- Selecteer -</option>
+    <div v-if="!mapping.isAllEntityTypes" class="form-group">
+      <label for="domainId">Domein</label>
+
+      <select name="domainId" id="domainId" v-model="mapping.domainId">
+        <option :value="null">- Geen domein gelecteerd -</option>
 
         <option v-for="{ id, name } in domains" :key="id" :value="id">
           {{ name }}
         </option>
       </select>
-
-      <span id="domainIdError" class="error">Domein is een verplicht veld</span>
     </div>
   </fieldset>
 </template>
 
 <script setup lang="ts">
-import type { DeepReadonly } from "vue";
+import { watch, type DeepReadonly } from "vue";
 import type { ApplicationRole, Domain, Mapping } from "@/services/pabcService";
 
 defineProps<{
@@ -58,4 +52,9 @@ defineProps<{
 }>();
 
 const mapping = defineModel<Mapping>("mapping", { required: true });
+
+watch(
+  () => mapping.value.isAllEntityTypes,
+  (isAllEntityTypes) => !isAllEntityTypes && (mapping.value.domainId = null)
+);
 </script>

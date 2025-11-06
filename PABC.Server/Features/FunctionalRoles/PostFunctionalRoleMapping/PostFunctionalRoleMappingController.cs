@@ -42,14 +42,13 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRoleMapping
                     });
                 }
 
-                // If not IsAllEntityTypes, domain must be provided and must exist
-                if (!model.IsAllEntityTypes)
+                if (model.DomainId != null)
                 {
-                    if (model.DomainId == null)
+                    if (model.IsAllEntityTypes)
                     {
                         return BadRequest(new ProblemDetails
                         {
-                            Detail = "Domein is verplicht",
+                            Detail = "Domein is niet toegestaan",
                             Status = StatusCodes.Status400BadRequest
                         });
                     }

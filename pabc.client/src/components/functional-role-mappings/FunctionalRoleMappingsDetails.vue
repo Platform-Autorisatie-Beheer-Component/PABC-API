@@ -82,7 +82,7 @@ const { addMapping, removeMapping } = useFunctionalRoleMappings();
 const createEmptyMapping = (): Mapping => ({
   functionalRoleId: functionalRole.id,
   applicationRoleId: "",
-  domainId: "",
+  domainId: null,
   isAllEntityTypes: false
 });
 
