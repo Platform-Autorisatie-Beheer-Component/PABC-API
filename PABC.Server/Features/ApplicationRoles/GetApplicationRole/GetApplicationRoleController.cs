@@ -18,7 +18,6 @@ namespace PABC.Server.Features.ApplicationRoles.GetApplicationRole
         public async Task<IActionResult> GetApplicationRoleById(Guid id, CancellationToken token = default)
         {
             var applicationRole = await db.ApplicationRoles
-                .Include(ar => ar.Application)
                 .Where(ar => ar.Id == id)
                 .Select(ar => new ApplicationRoleResponse
                 {

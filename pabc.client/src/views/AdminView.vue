@@ -16,8 +16,19 @@
       item-name-singular="Applicatierol"
       item-name-plural="Applicatierollen"
     >
-      <template #item="{ item: applicationRole }">
-        <p>{{ applicationRole.name }}</p>
+      <template #list="{ items, ...listeners }">
+        <template
+          v-for="[application, roles] in groupBy(items, (i) => i.application)"
+          :key="application"
+        >
+          <h3 class="item-group-heading">{{ application }}</h3>
+
+          <item-list :items="roles" v-bind="listeners">
+            <template #item="{ item: applicationRole }">
+              <p>{{ applicationRole.name }}</p>
+            </template>
+          </item-list>
+        </template>
       </template>
 
       <template #form="{ form }">
@@ -91,6 +102,7 @@
 import { onMounted } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
+import ItemList from "@/components/ItemList.vue";
 import {
   domainService,
   functionalRoleService,
@@ -113,6 +125,23 @@ const {
   fetchItems: fetchApplications
 } = useItemList(applicationService, "Applicaties");
 
+function groupBy<T, K>(items: readonly T[], selector: (i: T) => K) {
+  const map = new Map<K, T[]>();
+
+  for (const item of items) {
+    const key = selector(item);
+    const group = map.get(key);
+
+    if (group) {
+      group.push(item);
+    } else {
+      map.set(key, [item]);
+    }
+  }
+
+  return map;
+}
+
 onMounted(() => fetchApplications());
 </script>
 
@@ -125,5 +154,10 @@ h3,
 p {
   margin-block: 0;
   font-size: inherit;
+}
+
+.item-group-heading {
+  margin-block-start: var(--spacing-large);
+  margin-block-end: var(--spacing-default);
 }
 </style>
