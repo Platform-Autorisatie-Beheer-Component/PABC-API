@@ -71,14 +71,14 @@
       <select
         name="domainId"
         id="domainId"
-        v-model="domainId"
+        v-model="mapping.domainId"
         required
         aria-label="Domein"
         aria-required="true"
         aria-describedby="domainIdError"
-        :aria-invalid="!domainId"
+        :aria-invalid="!mapping.domainId"
       >
-        <option v-if="!domainId" value="">- Selecteer domein -</option>
+        <option v-if="!mapping.domainId" value="">- Selecteer domein -</option>
 
         <option v-for="{ id, name } in domains" :key="id" :value="id">
           {{ name }}
@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, watch } from "vue";
 import type { ApplicationRole, Domain, Mapping } from "@/services/pabcService";
 
 defineProps<{
@@ -101,26 +101,20 @@ defineProps<{
 
 const mapping = defineModel<Mapping>("mapping", { required: true });
 
-const domainId = ref("");
-
-// reset domainId when mapping reference changes (createEmptyMapping)
-watch(mapping, () => (domainId.value = mapping.value.domainId || ""));
-
-// set mapping.domainId when domainId is selected
-watch(domainId, (id) => (mapping.value.domainId = id));
-
 const selectedOption = computed({
   get() {
     if (mapping.value.isAllEntityTypes) return "all";
-    if (mapping.value.domainId === null) return "none";
-
-    return "domain";
+    if (mapping.value.domainId != null) return "domain";
+    return "none";
   },
-  set(value: "all" | "none" | "domain") {
+  set(value) {
     mapping.value.isAllEntityTypes = value === "all";
-    mapping.value.domainId = value === "domain" ? domainId.value : null;
+    mapping.value.domainId = value === "domain" ? "" : null;
   }
 });
+
+// init selectedOption
+watch(mapping, () => (mapping.value.domainId = ""), { flush: "post" });
 </script>
 
 <style lang="scss" scoped>

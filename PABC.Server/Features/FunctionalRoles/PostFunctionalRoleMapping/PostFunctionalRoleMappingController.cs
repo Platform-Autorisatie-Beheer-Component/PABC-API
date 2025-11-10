@@ -85,7 +85,9 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRoleMapping
             {
                 return Conflict(new ProblemDetails
                 {
-                    Detail = "Deze koppeling bestaat al",
+                    Detail = model.DomainId == null
+                        ? "Deze koppeling van functionele rol en applicatierol bestaat al"
+                        : "Deze koppeling van functionele rol, applicatierol en domein bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }
