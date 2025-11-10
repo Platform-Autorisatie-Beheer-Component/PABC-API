@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts" generic="T extends Item">
-import { onMounted, ref, useTemplateRef, type DeepReadonly } from "vue";
+import { onMounted, ref, toRaw, useTemplateRef } from "vue";
 import AlertInline from "@/components/AlertInline.vue";
 import SmallSpinner from "@/components/SmallSpinner.vue";
 import FormModal from "@/components/FormModal.vue";
@@ -79,7 +79,7 @@ const {
 
 const { submitItem, deleteItem } = useItem(pabcService, itemNameSingular);
 
-const getItem = (id: string) => (items.value as DeepReadonly<T[]>).find((i) => i.id === id) as T;
+const getItem = (id: string) => toRaw((items.value as readonly T[]).find((i) => i.id === id));
 
 const openCreateDialog = () => {
   form.value = pabcService.createEmpty();
@@ -87,18 +87,18 @@ const openCreateDialog = () => {
 };
 
 const openUpdateDialog = (id: string) => {
-  form.value = getItem(id);
+  form.value = { ...getItem(id) };
   formDialog.value?.open();
 };
 
 const openDeleteDialog = (id: string) => {
-  form.value = getItem(id);
+  form.value = { ...getItem(id) };
   confirmDialog.value?.open();
 };
 
 const handleSubmit = async () => {
   await submitItem(form.value);
-  
+
   fetchItems();
   emit("refresh");
 };
