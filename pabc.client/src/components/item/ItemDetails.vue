@@ -63,6 +63,8 @@ const { pabcService, itemNameSingular, itemNamePlural } = defineProps<{
   itemNamePlural: string;
 }>();
 
+const emit = defineEmits<{ (e: "refresh"): void }>();
+
 const form = ref<T>({} as T);
 
 const formDialog = useTemplateRef("form-dialog");
@@ -96,7 +98,9 @@ const openDeleteDialog = (id: string) => {
 
 const handleSubmit = async () => {
   await submitItem(form.value);
+  
   fetchItems();
+  emit("refresh");
 };
 
 const handleDelete = async () => {
@@ -105,6 +109,7 @@ const handleDelete = async () => {
   if (id) await deleteItem(id);
 
   fetchItems();
+  emit("refresh");
 };
 
 onMounted(() => fetchItems());

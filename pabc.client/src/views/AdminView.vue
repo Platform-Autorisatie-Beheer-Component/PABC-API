@@ -71,6 +71,7 @@
       :pabc-service="applicationService"
       item-name-singular="Applicatie"
       item-name-plural="Applicaties"
+      @refresh="fetchApplications"
     >
       <template #item="{ item: application }">
         <p>{{ application.name }}</p>
@@ -152,12 +153,12 @@ onMounted(() => fetchApplications());
 
 h3,
 p {
-  margin-block: 0;
   font-size: inherit;
-}
+  margin-block: 0;
 
-.item-group-heading {
-  margin-block-start: var(--spacing-large);
-  margin-block-end: var(--spacing-default);
+  &.item-group-heading {
+    margin-block-start: var(--spacing-large);
+    margin-block-end: var(--spacing-default);
+  }
 }
 </style>
