@@ -46,10 +46,9 @@
 </template>
 
 <script setup lang="ts">
-import { type DeepReadonly } from "vue";
 import type { Application, ApplicationRole } from "@/services/pabcService";
 
-defineProps<{ applications: DeepReadonly<Application[]> }>();
+defineProps<{ applications: readonly Application[] }>();
 
 const applicationRole = defineModel<ApplicationRole>("applicationRole", { required: true });
 
