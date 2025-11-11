@@ -91,7 +91,7 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRoleMapping
                     {
                         return Conflict(new ProblemDetails
                         {
-                            Detail = "Er bestaan al domein-specifieke koppelingen met deze functionele rol en applicatierol",
+                            Detail = "Er bestaan al één of meerdere domein-specifieke koppelingen met deze functionele rol en applicatierol",
                             Status = StatusCodes.Status409Conflict
                         });
                     }
