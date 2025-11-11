@@ -24,7 +24,7 @@
       <span id="applicationRoleIdError" class="error">Applicatierol is een verplicht veld</span>
     </div>
 
-    <div role="radiogroup" aria-labelledby="entityTypes" class="form-group">
+    <div role="radiogroup" aria-labelledby="entityTypes" class="form-group" :key="radioGroupKey">
       <h3 id="entityTypes">Deze koppeling geldt voor *</h3>
 
       <label>
@@ -32,7 +32,7 @@
           type="radio"
           name="entityTypeOption"
           value="all"
-          v-model="selectedOption"
+          v-model="mode"
           required
           aria-required="true"
         />
@@ -45,7 +45,7 @@
           type="radio"
           name="entityTypeOption"
           value="none"
-          v-model="selectedOption"
+          v-model="mode"
           required
           aria-required="true"
         />
@@ -58,7 +58,7 @@
           type="radio"
           name="entityTypeOption"
           value="domain"
-          v-model="selectedOption"
+          v-model="mode"
           required
           aria-required="true"
         />
@@ -67,7 +67,7 @@
       </label>
     </div>
 
-    <div class="form-group" v-if="selectedOption === 'domain'">
+    <div class="form-group" v-if="mode === 'domain'">
       <select
         name="domainId"
         id="domainId"
@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import type { ApplicationRole, Domain, Mapping } from "@/services/pabcService";
 
 defineProps<{
@@ -101,7 +101,7 @@ defineProps<{
 
 const mapping = defineModel<Mapping>("mapping", { required: true });
 
-const selectedOption = computed({
+const mode = computed({
   get() {
     if (mapping.value.isAllEntityTypes) return "all";
     if (mapping.value.domainId != null) return "domain";
@@ -113,8 +113,10 @@ const selectedOption = computed({
   }
 });
 
-// init selectedOption
-watch(mapping, () => (mapping.value.domainId = ""), { flush: "post" });
+// remount radiogroup when mapping reference changes
+// to resync derived radio state, which might be lost after e.g. native form reset
+const radioGroupKey = ref(0);
+watch(mapping, () => radioGroupKey.value++);
 </script>
 
 <style lang="scss" scoped>

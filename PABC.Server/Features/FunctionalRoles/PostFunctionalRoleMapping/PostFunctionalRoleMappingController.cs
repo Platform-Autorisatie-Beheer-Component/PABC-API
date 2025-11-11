@@ -63,6 +63,38 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRoleMapping
                             Status = StatusCodes.Status404NotFound
                         });
                     }
+
+                    var globalMappingExists = await db.Mappings
+                        .AnyAsync(m =>
+                            m.FunctionalRoleId == functionalRoleId &&
+                            m.ApplicationRoleId == model.ApplicationRoleId &&
+                            m.DomainId == null, token);
+
+                    if (globalMappingExists)
+                    {
+                        return Conflict(new ProblemDetails
+                        {
+                            Detail = "Er bestaat al een domein-onafhankelijke koppeling met deze functionele rol en applicatierol",
+                            Status = StatusCodes.Status409Conflict
+                        });
+                    }
+                }
+                else
+                {
+                    var specificMappingsExist = await db.Mappings
+                        .AnyAsync(m =>
+                            m.FunctionalRoleId == functionalRoleId &&
+                            m.ApplicationRoleId == model.ApplicationRoleId &&
+                            m.DomainId != null, token);
+
+                    if (specificMappingsExist)
+                    {
+                        return Conflict(new ProblemDetails
+                        {
+                            Detail = "Er bestaan al domein-specifieke koppelingen met deze functionele rol en applicatierol",
+                            Status = StatusCodes.Status409Conflict
+                        });
+                    }
                 }
 
                 var mapping = new Mapping

@@ -33,7 +33,7 @@ export const useFunctionalRoleMappings = () => {
     try {
       await functionalRoleMappingsService.add(payload);
 
-      toast.add({ text: "Mapping succesvol toegevoegd aan functionele rol." });
+      toast.add({ text: "Koppeling succesvol toegevoegd aan functionele rol." });
     } catch (err: unknown) {
       invalid.value = `${err instanceof Error ? err.message : err}`;
 
@@ -49,7 +49,7 @@ export const useFunctionalRoleMappings = () => {
     try {
       await functionalRoleMappingsService.remove(functionalRoleId, mappingId);
 
-      toast.add({ text: "Mapping succesvol verwijderd van functionele rol." });
+      toast.add({ text: "Koppeling succesvol verwijderd van functionele rol." });
     } catch (err: unknown) {
       toast.add({ text: `${err instanceof Error ? err.message : err}`, type: "error" });
     } finally {
