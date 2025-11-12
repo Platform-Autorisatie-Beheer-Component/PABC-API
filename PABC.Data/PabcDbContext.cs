@@ -51,9 +51,15 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<Mapping>(m =>
         {
-            m.HasIndex(x => new { x.ApplicationRoleId, x.DomainId, x.FunctionalRoleId }).IsUnique();
             var domainIdColumn = m.Metadata.GetProperty(nameof(Mapping.DomainId)).GetColumnName();
             var isAllEntityTypesColumn = m.Metadata.GetProperty(nameof(Mapping.IsAllEntityTypes)).GetColumnName();
+
+            m.HasIndex(x => new { x.ApplicationRoleId, x.DomainId, x.FunctionalRoleId }).IsUnique()
+                .HasFilter($"\"{domainIdColumn}\" IS NOT NULL");
+
+            m.HasIndex(x => new { x.ApplicationRoleId, x.FunctionalRoleId }).IsUnique()
+                .HasFilter($"\"{domainIdColumn}\" IS NULL");
+
             m.ToTable(t => t.HasCheckConstraint(
                 $"CK_Mapping_{domainIdColumn}_{isAllEntityTypesColumn}",
                 $"\"{isAllEntityTypesColumn}\" = false OR \"{domainIdColumn}\" IS NULL"));

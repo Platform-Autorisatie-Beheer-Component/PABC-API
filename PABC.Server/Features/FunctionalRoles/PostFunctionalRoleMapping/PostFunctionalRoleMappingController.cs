@@ -42,14 +42,13 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRoleMapping
                     });
                 }
 
-                // If not IsAllEntityTypes, domain must be provided and must exist
-                if (!model.IsAllEntityTypes)
+                if (model.DomainId != null)
                 {
-                    if (model.DomainId == null)
+                    if (model.IsAllEntityTypes)
                     {
                         return BadRequest(new ProblemDetails
                         {
-                            Detail = "Domein is verplicht",
+                            Detail = "Domein is niet toegestaan",
                             Status = StatusCodes.Status400BadRequest
                         });
                     }
@@ -62,6 +61,38 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRoleMapping
                         {
                             Detail = "Domein niet gevonden",
                             Status = StatusCodes.Status404NotFound
+                        });
+                    }
+
+                    var globalMappingExists = await db.Mappings
+                        .AnyAsync(m =>
+                            m.FunctionalRoleId == functionalRoleId &&
+                            m.ApplicationRoleId == model.ApplicationRoleId &&
+                            m.DomainId == null, token);
+
+                    if (globalMappingExists)
+                    {
+                        return Conflict(new ProblemDetails
+                        {
+                            Detail = "Er bestaat al een domein-onafhankelijke koppeling met deze functionele rol en applicatierol",
+                            Status = StatusCodes.Status409Conflict
+                        });
+                    }
+                }
+                else
+                {
+                    var specificMappingsExist = await db.Mappings
+                        .AnyAsync(m =>
+                            m.FunctionalRoleId == functionalRoleId &&
+                            m.ApplicationRoleId == model.ApplicationRoleId &&
+                            m.DomainId != null, token);
+
+                    if (specificMappingsExist)
+                    {
+                        return Conflict(new ProblemDetails
+                        {
+                            Detail = "Er bestaan al één of meerdere domein-specifieke koppelingen met deze functionele rol en applicatierol",
+                            Status = StatusCodes.Status409Conflict
                         });
                     }
                 }
@@ -86,7 +117,9 @@ namespace PABC.Server.Features.FunctionalRoles.PostFunctionalRoleMapping
             {
                 return Conflict(new ProblemDetails
                 {
-                    Detail = "Deze koppeling bestaat al",
+                    Detail = model.DomainId == null
+                        ? "Deze koppeling van functionele rol en applicatierol bestaat al"
+                        : "Deze koppeling van functionele rol, applicatierol en domein bestaat al",
                     Status = StatusCodes.Status409Conflict
                 });
             }

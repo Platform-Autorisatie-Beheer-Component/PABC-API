@@ -25,7 +25,7 @@
         <span>
           Is <strong>{{ mapping.name }}</strong>
           <template v-if="mapping.isAllEntityTypes">
-            voor <strong>alle entiteittypes</strong></template
+            voor <strong>alle entiteitstypes</strong></template
           >
           <template v-else-if="mapping.domain">
             binnen domein <strong>{{ mapping.domain }}</strong></template
@@ -68,8 +68,8 @@ import FunctionalRoleMappingsForm from "./FunctionalRoleMappingsForm.vue";
 
 const { functionalRole } = defineProps<{
   functionalRole: DeepReadonly<FunctionalRoleMappings>;
-  applicationRoles: DeepReadonly<ApplicationRole[]>;
-  domains: DeepReadonly<Domain[]>;
+  applicationRoles: readonly ApplicationRole[];
+  domains: readonly Domain[];
 }>();
 
 const emit = defineEmits<{ (e: "refresh"): void }>();

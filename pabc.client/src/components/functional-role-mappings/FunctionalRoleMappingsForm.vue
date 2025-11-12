@@ -24,19 +24,61 @@
       <span id="applicationRoleIdError" class="error">Applicatierol is een verplicht veld</span>
     </div>
 
-    <div class="form-group">
-      <label for="domainId">Domein *</label>
+    <div role="radiogroup" aria-labelledby="entityTypes" class="form-group" :key="radioGroupKey">
+      <h3 id="entityTypes">Deze koppeling geldt voor *</h3>
 
+      <label>
+        <input
+          type="radio"
+          name="entityTypeOption"
+          value="all"
+          v-model="mode"
+          required
+          aria-required="true"
+        />
+
+        Alle entiteitstypes
+      </label>
+
+      <label>
+        <input
+          type="radio"
+          name="entityTypeOption"
+          value="none"
+          v-model="mode"
+          required
+          aria-required="true"
+        />
+
+        Geen enkel entiteitstype
+      </label>
+
+      <label>
+        <input
+          type="radio"
+          name="entityTypeOption"
+          value="domain"
+          v-model="mode"
+          required
+          aria-required="true"
+        />
+
+        De entiteitstypes van een specifiek domein
+      </label>
+    </div>
+
+    <div class="form-group" v-if="mode === 'domain'">
       <select
         name="domainId"
         id="domainId"
         v-model="mapping.domainId"
         required
+        aria-label="Domein"
         aria-required="true"
         aria-describedby="domainIdError"
         :aria-invalid="!mapping.domainId"
       >
-        <option v-if="!mapping.domainId" value="">- Selecteer -</option>
+        <option v-if="!mapping.domainId" value="">- Selecteer domein -</option>
 
         <option v-for="{ id, name } in domains" :key="id" :value="id">
           {{ name }}
@@ -49,13 +91,46 @@
 </template>
 
 <script setup lang="ts">
-import type { DeepReadonly } from "vue";
+import { computed, ref, watch } from "vue";
 import type { ApplicationRole, Domain, Mapping } from "@/services/pabcService";
 
 defineProps<{
-  applicationRoles: DeepReadonly<ApplicationRole[]>;
-  domains: DeepReadonly<Domain[]>;
+  applicationRoles: readonly ApplicationRole[];
+  domains: readonly Domain[];
 }>();
 
 const mapping = defineModel<Mapping>("mapping", { required: true });
+
+const mode = computed({
+  get() {
+    if (mapping.value.isAllEntityTypes) return "all";
+    if (mapping.value.domainId != null) return "domain";
+    return "none";
+  },
+  set(value) {
+    mapping.value.isAllEntityTypes = value === "all";
+    mapping.value.domainId = value === "domain" ? "" : null;
+  }
+});
+
+// remount radiogroup when mapping reference changes
+// to resync derived radio state, which might be lost after e.g. native form reset
+const radioGroupKey = ref(0);
+watch(mapping, () => radioGroupKey.value++);
 </script>
+
+<style lang="scss" scoped>
+[role="radiogroup"] {
+  margin-block-end: 0;
+
+  h3 {
+    font-size: inherit;
+    margin-block-start: 0;
+    margin-block-end: var(--spacing-default);
+  }
+
+  label {
+    font-weight: 300;
+  }
+}
+</style>
