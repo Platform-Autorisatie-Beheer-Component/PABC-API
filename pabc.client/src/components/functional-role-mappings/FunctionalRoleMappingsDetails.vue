@@ -27,8 +27,11 @@
           <template v-if="mapping.isAllEntityTypes">
             voor <strong>alle entiteitstypes</strong></template
           >
+          <template v-else-if="mapping.domain === null">
+            voor <strong>geen enkel entiteitstype</strong></template
+          >
           <template v-else-if="mapping.domain">
-            binnen domein <strong>{{ mapping.domain }}</strong></template
+            voor de entiteitstypes van domein <strong>{{ mapping.domain }}</strong></template
           >
         </span>
       </template>
