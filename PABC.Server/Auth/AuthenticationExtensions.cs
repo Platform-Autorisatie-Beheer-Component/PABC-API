@@ -68,11 +68,8 @@ namespace PABC.Server.Auth
                     options.CorrelationCookie.HttpOnly = true;
                     options.CorrelationCookie.IsEssential = true;
                     options.CorrelationCookie.SameSite = SameSiteMode.None;
-                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
-
-                    //temporary workaround for dev environments without https
-                    options.RequireHttpsMetadata = false;
-
+                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;                    
+                    options.RequireHttpsMetadata = authOptions.RequireHttpsForIdentityProvider ?? true;
                     options.Authority = authOptions.Authority;
                     options.ClientId = authOptions.ClientId;
                     options.ClientSecret = authOptions.ClientSecret;

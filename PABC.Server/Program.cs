@@ -48,6 +48,7 @@ if (!isOpenApiSpecGeneration)
         options.NameClaimType = builder.Configuration["Oidc:NameClaimType"];
         options.RoleClaimType = builder.Configuration["Oidc:RoleClaimType"];
         options.EmailClaimType = builder.Configuration["Oidc:EmailClaimType"];
+        options.RequireHttpsForIdentityProvider = builder.Configuration.GetValue<bool?>("Oidc:RequireHttps");
     });
 }
 
