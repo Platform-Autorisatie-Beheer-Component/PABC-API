@@ -9,5 +9,6 @@
         public string? RoleClaimType { get; set; }
         public string? NameClaimType { get; set; }
         public string? EmailClaimType { get; internal set; }
+        public bool? RequireHttpsForIdentityProvider { get; set; }
     }
 }

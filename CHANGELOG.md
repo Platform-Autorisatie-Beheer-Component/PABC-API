@@ -12,6 +12,7 @@
 - [UI - Link functional roles to application roles within domains #3](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/3)
 - [Create, modify, and delete applications separately #78](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/78)
 - [UI - configure the two types of 'special' roles #89](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/89)
+- [PABC lokaal kunnen gebruiken met een OIDC/OAuth provider over HTTP (i.p.v. HTTPS) #116](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/116)
 
 
 ### Maintenance
