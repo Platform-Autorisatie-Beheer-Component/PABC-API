@@ -172,7 +172,6 @@ settings:
     environment: ""
     httpPorts: ""
 
-# -- Configuration for the migration job to initialize or update the database schema
 migrations:
   image:
     repository: "ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"
