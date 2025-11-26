@@ -150,19 +150,29 @@ settings:
 
   
   oidc:
+    # -- URL of the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `https://login.microsoftonline.com/ce1a3f2d-2265-4517-a8b4-3e4f381461ab/v2.0` </details>
     authority: ""
+    # -- Client ID for accessing the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `54f66f54-71e5-45f1-8634-9158c41f602a` </details>
     clientId: ""
+    # -- Secret for the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details>
     clientSecret: ""
+    # -- Value of the role claim in the JWT token from the OpenID Connect Provider required for access to the user interface for management functions. <details> <summary>More information</summary> For example: `PABC-Functioneel-Beheerder` </details>
     functioneelBeheerderRole: ""
+    # -- The name of the claim in the JWT token from the OpenID Connect Provider that contains the full name of the logged-in user. <br/> (default value is `name`)
     nameClaimType: ""
+    # -- The name of the claim in the JWT token from the OpenID Connect Provider that contains the roles of the logged-in user. <br/> (default value is `roles`)
     roleClaimType: ""
+    # -- The name of the claim in the JWT token from the OpenID Connect Provider that contains the email address of the logged-in user. <br/> (default value is `email`)
     emailClaimType: ""
+    # -- Optional setting to allow an OpenID Connect Identity Provider running on HTTP. <details> <summary>More information</summary> Add this variable with the value `false` if the identity provider communicates over an HTTP connection. This can be useful in a local development environment. If the provider uses HTTPS, you may omit this variable or set it to `true`. </details>
+    requireHttps: true
 
   aspnetcore:
     forwardedHeadersEnabled: true
     environment: ""
     httpPorts: ""
 
+# -- Configuration for the migration job to initialize or update the database schema
 migrations:
   image:
     repository: "ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"
@@ -171,7 +181,7 @@ migrations:
   restartPolicy: Never
   # -- Optionally specify a path to a data set json file to insert into the database. <details> <summary>More information</summary>You can use the extraVolumes and extraVolumeMounts values to mount a data set file into the running container. The file needs to be valid according to <a href="../../PABC.MigrationService/dataset.schema.json">the json schema</a></details>
   dataSetPath: null
-  # -- Optionally specify extra list of additional volumes, for example to trust extra ca certificates.
+  # -- Optionally specify extra list of additional volumes, for example to mount a dataset file.
   extraVolumes: []
   # e.g:
   # extraVolumes:
@@ -179,7 +189,7 @@ migrations:
   #     configMap:
   #       name: my-configmap-containing-my-dataset
 
-  # -- Optionally specify extra list of additional volumeMounts, for example to trust extra ca certificates.
+  # -- Optionally specify extra list of additional volumeMounts, for example to mount a dataset file.
   extraVolumeMounts: []
   # e.g:
   # extraVolumeMounts:
