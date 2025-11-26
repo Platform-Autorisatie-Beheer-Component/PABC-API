@@ -43,10 +43,13 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | livenessProbe.periodSeconds | int | `10` |  |
 | livenessProbe.successThreshold | int | `1` |  |
 | livenessProbe.timeoutSeconds | int | `5` |  |
-| migrations | object | `{"dataSetPath":null,"extraVolumeMounts":[],"extraVolumes":[],"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations","tag":""},"restartPolicy":"Never"}` | Configuration for the migration job to initialize or update the database schema |
 | migrations.dataSetPath | string | `nil` | Optionally specify a path to a data set json file to insert into the database. <details> <summary>More information</summary>You can use the extraVolumes and extraVolumeMounts values to mount a data set file into the running container. The file needs to be valid according to <a href="../../PABC.MigrationService/dataset.schema.json">the json schema</a></details> |
 | migrations.extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts, for example to mount a dataset file. |
 | migrations.extraVolumes | list | `[]` | Optionally specify extra list of additional volumes, for example to mount a dataset file. |
+| migrations.image.pullPolicy | string | `"IfNotPresent"` |  |
+| migrations.image.repository | string | `"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"` |  |
+| migrations.image.tag | string | `""` |  |
+| migrations.restartPolicy | string | `"Never"` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | pdb.create | bool | `false` |  |
