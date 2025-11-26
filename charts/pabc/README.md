@@ -43,13 +43,10 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | livenessProbe.periodSeconds | int | `10` |  |
 | livenessProbe.successThreshold | int | `1` |  |
 | livenessProbe.timeoutSeconds | int | `5` |  |
+| migrations | object | `{"dataSetPath":null,"extraVolumeMounts":[],"extraVolumes":[],"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations","tag":""},"restartPolicy":"Never"}` | Configuration for the migration job to initialize or update the database schema |
 | migrations.dataSetPath | string | `nil` | Optionally specify a path to a data set json file to insert into the database. <details> <summary>More information</summary>You can use the extraVolumes and extraVolumeMounts values to mount a data set file into the running container. The file needs to be valid according to <a href="../../PABC.MigrationService/dataset.schema.json">the json schema</a></details> |
-| migrations.extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts, for example to trust extra ca certificates. |
-| migrations.extraVolumes | list | `[]` | Optionally specify extra list of additional volumes, for example to trust extra ca certificates. |
-| migrations.image.pullPolicy | string | `"IfNotPresent"` |  |
-| migrations.image.repository | string | `"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"` |  |
-| migrations.image.tag | string | `""` |  |
-| migrations.restartPolicy | string | `"Never"` |  |
+| migrations.extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts, for example to mount a dataset file. |
+| migrations.extraVolumes | list | `[]` | Optionally specify extra list of additional volumes, for example to mount a dataset file. |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | pdb.create | bool | `false` |  |
@@ -99,13 +96,14 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | settings.database.password | string | `""` |  |
 | settings.database.port | int | `5432` |  |
 | settings.database.username | string | `""` |  |
-| settings.oidc.authority | string | `""` |  |
-| settings.oidc.clientId | string | `""` |  |
-| settings.oidc.clientSecret | string | `""` |  |
-| settings.oidc.emailClaimType | string | `""` |  |
-| settings.oidc.functioneelBeheerderRole | string | `""` |  |
-| settings.oidc.nameClaimType | string | `""` |  |
-| settings.oidc.roleClaimType | string | `""` |  |
+| settings.oidc.authority | string | `""` | URL of the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `https://login.microsoftonline.com/ce1a3f2d-2265-4517-a8b4-3e4f381461ab/v2.0` </details> |
+| settings.oidc.clientId | string | `""` | Client ID for accessing the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `54f66f54-71e5-45f1-8634-9158c41f602a` </details> |
+| settings.oidc.clientSecret | string | `""` | Secret for the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details> |
+| settings.oidc.emailClaimType | string | `""` | The name of the claim in the JWT token from the OpenID Connect Provider that contains the email address of the logged-in user. <br/> (default value is `email`) |
+| settings.oidc.functioneelBeheerderRole | string | `""` | Value of the role claim in the JWT token from the OpenID Connect Provider required for access to the user interface for management functions. <details> <summary>More information</summary> For example: `PABC-Functioneel-Beheerder` </details> |
+| settings.oidc.nameClaimType | string | `""` | The name of the claim in the JWT token from the OpenID Connect Provider that contains the full name of the logged-in user. <br/> (default value is `name`) |
+| settings.oidc.requireHttps | bool | `true` | Optional setting to allow an OpenID Connect Identity Provider running on HTTP. <details> <summary>More information</summary> Add this variable with the value `false` if the identity provider communicates over an HTTP connection. This can be useful in a local development environment. If the provider uses HTTPS, you may omit this variable or set it to `true`. </details> |
+| settings.oidc.roleClaimType | string | `""` | The name of the claim in the JWT token from the OpenID Connect Provider that contains the roles of the logged-in user. <br/> (default value is `roles`) |
 | tolerations | list | `[]` |  |
 
 ----------------------------------------------
