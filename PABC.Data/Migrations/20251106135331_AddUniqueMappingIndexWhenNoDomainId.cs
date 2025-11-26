@@ -14,16 +14,6 @@ namespace PABC.Data.Migrations
                 name: "ix_mapping_application_role_id_domain_id_functional_role_id",
                 table: "mapping");
 
-            // Delete duplicate mappings where DomainId IS NULL, keep one
-            migrationBuilder.Sql(@"
-                DELETE FROM mapping 
-                WHERE id NOT IN (
-                    SELECT DISTINCT ON (application_role_id, functional_role_id) id
-                    FROM mapping
-                    WHERE domain_id IS NULL
-                );
-            ");
-
             migrationBuilder.CreateIndex(
                 name: "ix_mapping_application_role_id_domain_id_functional_role_id",
                 table: "mapping",
