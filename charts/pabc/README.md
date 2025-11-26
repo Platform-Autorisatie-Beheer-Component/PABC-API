@@ -99,6 +99,13 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | settings.database.password | string | `""` |  |
 | settings.database.port | int | `5432` |  |
 | settings.database.username | string | `""` |  |
+| settings.oidc.authority | string | `""` |  |
+| settings.oidc.clientId | string | `""` |  |
+| settings.oidc.clientSecret | string | `""` |  |
+| settings.oidc.emailClaimType | string | `""` |  |
+| settings.oidc.functioneelBeheerderRole | string | `""` |  |
+| settings.oidc.nameClaimType | string | `""` |  |
+| settings.oidc.roleClaimType | string | `""` |  |
 | tolerations | list | `[]` |  |
 
 ----------------------------------------------
