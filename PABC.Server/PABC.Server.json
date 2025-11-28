@@ -59,6 +59,84 @@
           }
         ]
       }
+    },
+    "/api/v1/groups": {
+      "get": {
+        "tags": [
+          "GetGroupsByApplicationRoleAndEntityType"
+        ],
+        "operationId": "Get groups by application role and entity type",
+        "parameters": [
+          {
+            "name": "application-name",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ZAC"
+            },
+            "example": "ZAC"
+          },
+          {
+            "name": "application-role-name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Raadpleger"
+            },
+            "example": "Raadpleger"
+          },
+          {
+            "name": "entity-type-id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "melding-klein-kansspel"
+            },
+            "example": "melding-klein-kansspel"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGroupsByApplicationRoleAndEntityTypeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [ ]
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -160,6 +238,42 @@
               "$ref": "#/components/schemas/ApplicationRoleModel"
             },
             "description": "List of application roles associated with this entity type"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetGroupsByApplicationRoleAndEntityTypeResponse": {
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroupBase"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GroupBase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
         "additionalProperties": false

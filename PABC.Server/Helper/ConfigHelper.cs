@@ -1,8 +1,8 @@
 ﻿namespace PABC.Server.Helper
 {
-    public class ConfigHelper
+    public static class ConfigHelper
     {
-        public static string GetRequiredConfigValue(IConfiguration configuration, string key)
+        public static string GetRequiredConfigValue(this IConfiguration configuration, string key)
         {
             var value = configuration[key];
             if (string.IsNullOrEmpty(value))

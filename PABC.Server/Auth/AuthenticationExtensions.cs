@@ -1,5 +1,7 @@
-﻿using Duende.AccessTokenManagement.OpenIdConnect;
+﻿using Duende.AccessTokenManagement;
+using Duende.AccessTokenManagement.OpenIdConnect;
 using Duende.IdentityModel;
+using Duende.IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,6 +17,8 @@ namespace PABC.Server.Auth
         {
             var authOptions = new AuthOptions();
             setOptions(authOptions);
+
+            services.AddSingleton(authOptions);
 
             var emailClaimType = string.IsNullOrWhiteSpace(authOptions.EmailClaimType) ? JwtClaimTypes.Email : authOptions.EmailClaimType;
             var nameClaimType = string.IsNullOrWhiteSpace(authOptions.NameClaimType) ? JwtClaimTypes.Name : authOptions.NameClaimType;
@@ -85,7 +89,7 @@ namespace PABC.Server.Auth
                     {
                         RoleClaimType = roleClaimType,
                     };
-
+                    
 
                     options.Events.OnRemoteFailure = RedirectToRoot;
                     options.Events.OnSignedOutCallbackRedirect = RedirectToRoot;
@@ -103,8 +107,10 @@ namespace PABC.Server.Auth
             }
             services.AddAuthorizationBuilder()
                 .AddFallbackPolicy(FunctioneelBeheerderPolicy.Name, policy => policy.RequireRole(authOptions.FunctioneelBeheerderRole));
-            services.AddDistributedMemoryCache();
+            
             services.AddOpenIdConnectAccessTokenManagement();
+
+            services.AddSingleton(new DiscoveryCache(authOptions.Authority));
         }
 
         public static IEndpointRouteBuilder MapPabcAuthEndpoints(this IEndpointRouteBuilder endpoints)
