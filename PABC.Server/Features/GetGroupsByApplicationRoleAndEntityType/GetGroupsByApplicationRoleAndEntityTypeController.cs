@@ -21,11 +21,12 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
             MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized,
             MediaTypeNames.Application.ProblemJson)]
-        public async Task<ActionResult<GetGroupsByApplicationRoleAndEntityTypeResponse>> Get([FromQuery] GetGroupsByApplicationRoleAndEntityTypeRequest request, CancellationToken token)
+        public ActionResult<GetGroupsByApplicationRoleAndEntityTypeResponse> Get([FromQuery] GetGroupsByApplicationRoleAndEntityTypeRequest request, CancellationToken token)
         {
-            return new GetGroupsByApplicationRoleAndEntityTypeResponse(
-                GetGroups(request, token)
-            );
+            return new GetGroupsByApplicationRoleAndEntityTypeResponse
+            {
+                Groups = GetGroups(request, token)
+            };
         }
 
         private async IAsyncEnumerable<GroupRepresentation> GetGroups(GetGroupsByApplicationRoleAndEntityTypeRequest request, [EnumeratorCancellation] CancellationToken token)
@@ -55,24 +56,24 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
 
     public class GetGroupsByApplicationRoleAndEntityTypeRequest
     {
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary>The name of the application.</summary>
         /// <example>Zaakafhandelcomponent</example>
         [FromQuery(Name = "application-name")]
         public required string ApplicationName { get; init; }
 
+        /// <summary>The name of the application role.</summary>
         /// <example>Raadpleger</example>
         [FromQuery(Name = "application-role-name")]
         public required string ApplicationRoleName { get; init; }
 
+        /// <summary>The ID of the entity type.</summary>
         /// <example>Test zaaktype 1</example>
         [FromQuery(Name = "entity-type-id")]
         public required string EntityTypeId { get; init; }
     }
 
     public record GetGroupsByApplicationRoleAndEntityTypeResponse
-    (
-        IAsyncEnumerable<GroupRepresentation> Groups
-    );
+    {
+        public required IAsyncEnumerable<GroupRepresentation> Groups { get; init; }
+    }
 }
