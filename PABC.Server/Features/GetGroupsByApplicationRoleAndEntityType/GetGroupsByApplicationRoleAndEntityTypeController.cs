@@ -62,12 +62,12 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
         public required string ApplicationName { get; init; }
 
         /// <summary>The name of the application role.</summary>
-        /// <example>Raadpleger</example>
+        /// <example>behandelaar</example>
         [FromQuery(Name = "application-role-name")]
         public required string ApplicationRoleName { get; init; }
 
         /// <summary>The ID of the entity type.</summary>
-        /// <example>Test zaaktype 1</example>
+        /// <example>melding-klein-kansspel</example>
         [FromQuery(Name = "entity-type-id")]
         public required string EntityTypeId { get; init; }
     }

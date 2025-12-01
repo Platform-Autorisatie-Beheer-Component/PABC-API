@@ -85,9 +85,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "Raadpleger"
+              "example": "behandelaar"
             },
-            "example": "Raadpleger"
+            "example": "behandelaar"
           },
           {
             "name": "entity-type-id",
@@ -96,9 +96,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "Test zaaktype 1"
+              "example": "melding-klein-kansspel"
             },
-            "example": "Test zaaktype 1"
+            "example": "melding-klein-kansspel"
           }
         ],
         "responses": {
