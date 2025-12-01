@@ -13,7 +13,7 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
     [ApiController]
     [Route("/api/v1/groups")]
     [Authorize(Policy = ApiKeyAuthentication.Policy)]
-    public class GetGroupsByApplicationRoleAndEntityTypeController(KeycloakClient keycloakClient, PabcDbContext db) : ControllerBase
+    public class GetGroupsByApplicationRoleAndEntityTypeController(IKeycloakAdminClient keycloakClient, PabcDbContext db) : ControllerBase
     {
         [HttpGet(Name = "Get groups by application role and entity type")]
         [ProducesResponseType<GetGroupsByApplicationRoleAndEntityTypeResponse>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
@@ -28,29 +28,26 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
             );
         }
 
-        private async IAsyncEnumerable<GroupBase> GetGroups(GetGroupsByApplicationRoleAndEntityTypeRequest request, [EnumeratorCancellation] CancellationToken token)
+        private async IAsyncEnumerable<GroupRepresentation> GetGroups(GetGroupsByApplicationRoleAndEntityTypeRequest request, [EnumeratorCancellation] CancellationToken token)
         {
             var functionalRoles = db.Mappings
                 .Where(m => m.ApplicationRole.Name == request.ApplicationRoleName
                     && m.ApplicationRole.Application.Name == request.ApplicationName
-                    && m.Domain!.EntityTypes.Any(e => e.EntityTypeId == request.EntityTypeId))
+                    && (m.Domain!.EntityTypes.Any(e => e.EntityTypeId == request.EntityTypeId) || m.IsAllEntityTypes))
                 .Select(m => m.FunctionalRole.Name)
                 .Distinct()
                 .AsAsyncEnumerable();
 
-            var groupIds = new HashSet<string>();
-            var roles = new HashSet<string>();
+            var uniqueGroupNames = new HashSet<string>();
 
             await foreach (var role in functionalRoles)
             {
-                roles.Add(role);
-            }
-
-            await foreach (var group in keycloakClient.GetGroups(roles, token))
-            {
-                if (groupIds.Add(group.Id))
+                await foreach (var group in keycloakClient.GetGroups(role, token))
                 {
-                    yield return group;
+                    if (uniqueGroupNames.Add(group.Name))
+                    {
+                        yield return group;
+                    }
                 }
             }
         }
@@ -61,7 +58,7 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
         /// <summary>
         /// 
         /// </summary>
-        /// <example>ZAC</example>
+        /// <example>Zaakafhandelcomponent</example>
         [FromQuery(Name = "application-name")]
         public required string ApplicationName { get; init; }
 
@@ -69,13 +66,13 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
         [FromQuery(Name = "application-role-name")]
         public required string ApplicationRoleName { get; init; }
 
-        /// <example>melding-klein-kansspel</example>
+        /// <example>Test zaaktype 1</example>
         [FromQuery(Name = "entity-type-id")]
         public required string EntityTypeId { get; init; }
     }
 
     public record GetGroupsByApplicationRoleAndEntityTypeResponse
     (
-        IAsyncEnumerable<GroupBase> Groups
+        IAsyncEnumerable<GroupRepresentation> Groups
     );
 }

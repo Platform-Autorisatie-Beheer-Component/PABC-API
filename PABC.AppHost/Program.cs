@@ -9,7 +9,7 @@ var postgres = builder.AddPostgres("postgres")
 
 var postgresdb = postgres.AddDatabase("Pabc");
 
-var keycloak = builder.AddKeycloak("keycloak", 8080)
+var keycloak = builder.AddKeycloak("keycloak", 8080, adminPassword: builder.AddParameter("keycloakAdminPassword", "unsafe-development-password", secret: true))
     .WithRealmImport("./Realms")
     .WithLifetime(ContainerLifetime.Persistent);
 
@@ -24,10 +24,8 @@ builder.AddProject<Projects.PABC_Server>("pabc-server")
     .WithEnvironment("Oidc__ClientId", "zaakafhandelcomponent")
     .WithEnvironment("Oidc__ClientSecret", "keycloakZaakafhandelcomponentClientSecret")
     .WithEnvironment("Oidc__RequireHttps", "false")
-    .WithEnvironment("Keycloak__Admin__RealmUrl", "http://localhost:8080/admin/realms/zaakafhandelcomponent/")
-    .WithEnvironment("Keycloak__Admin__TokenEndpoint", "http://localhost:8080/realms/zaakafhandelcomponent/protocol/openid-connect/token")
-    .WithEnvironment("Keycloak__Admin__ClientId", "zaakafhandelcomponent-admin-client")
-    .WithEnvironment("Keycloak__Admin__ClientSecret", "zaakafhandelcomponentAdminClientSecret")
+    .WithEnvironment("KeycloakAdmin__ClientId", "zaakafhandelcomponent-admin-client")
+    .WithEnvironment("KeycloakAdmin__ClientSecret", "zaakafhandelcomponentAdminClientSecret")
     .WithReference(postgresdb)
     .WithReference(keycloak)
     .WaitFor(keycloak)

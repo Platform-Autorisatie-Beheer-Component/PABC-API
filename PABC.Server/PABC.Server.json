@@ -74,9 +74,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "ZAC"
+              "example": "Zaakafhandelcomponent"
             },
-            "example": "ZAC"
+            "example": "Zaakafhandelcomponent"
           },
           {
             "name": "application-role-name",
@@ -94,9 +94,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "melding-klein-kansspel"
+              "example": "Test zaaktype 1"
             },
-            "example": "melding-klein-kansspel"
+            "example": "Test zaaktype 1"
           }
         ],
         "responses": {
@@ -248,18 +248,15 @@
           "groups": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GroupBase"
+              "$ref": "#/components/schemas/GroupRepresentation"
             }
           }
         },
         "additionalProperties": false
       },
-      "GroupBase": {
+      "GroupRepresentation": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "name": {
             "type": "string"
           },

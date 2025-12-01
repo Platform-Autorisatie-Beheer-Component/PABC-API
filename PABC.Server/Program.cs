@@ -1,7 +1,4 @@
 ﻿using System.Reflection;
-using Duende.AccessTokenManagement;
-using Duende.AccessTokenManagement.OpenIdConnect;
-using Microsoft.Extensions.Options;
 using PABC.Data;
 using PABC.Server.Auth;
 using PABC.Server.Helper;
@@ -54,22 +51,14 @@ if (!isOpenApiSpecGeneration)
         options.EmailClaimType = builder.Configuration["Oidc:EmailClaimType"];
         options.RequireHttpsForIdentityProvider = builder.Configuration.GetValue<bool?>("Oidc:RequireHttps");
     });
+
+    builder.Services.AddKeycloakAdminClient(
+        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientId"),
+        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientSecret")
+    );
 }
 
-var keycloakAdminClientName = ClientCredentialsClientName.Parse("KeycloakAdmin");
 
-builder.Services.AddClientCredentialsTokenManagement()
-    .AddClient(keycloakAdminClientName, client =>
-    {
-        client.ClientId = ClientId.Parse(builder.Configuration.GetRequiredConfigValue("Keycloak:Admin:ClientId"));
-        client.ClientSecret = ClientSecret.Parse(builder.Configuration.GetRequiredConfigValue("Keycloak:Admin:ClientSecret"));
-        client.TokenEndpoint = new Uri(builder.Configuration.GetRequiredConfigValue("Keycloak:Admin:TokenEndpoint"));
-    });
-
-builder.Services.AddHttpClient<KeycloakClient>()
-    .AddClientCredentialsTokenHandler(keycloakAdminClientName)
-    .ConfigureHttpClient(x=> 
-    x.BaseAddress = new(builder.Configuration["Keycloak:Admin:RealmUrl"]!));
 
 var app = builder.Build();
 
