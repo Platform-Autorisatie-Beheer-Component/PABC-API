@@ -2631,7 +2631,7 @@
       "enabled": true,
       "serviceAccountClientId": "zaakafhandelcomponent-admin-client",
       "clientRoles": {
-        "realm-management": [ "view-users", "view-groups" ],
+        "realm-management": [ "view-users", "view-groups", "view-realm" ],
         "account": [ "view-groups" ]
       }
     },
