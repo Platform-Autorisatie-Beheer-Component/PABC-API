@@ -10,22 +10,18 @@ namespace PABC.Server.Keycloak
         IAsyncEnumerable<GroupRepresentation> GetGroups(string role, CancellationToken token);
     }
 
-    public class KeycloakAdminClient(HttpClient httpClient, AuthOptions authOptions) : IKeycloakAdminClient
+    public class KeycloakAdminClient(HttpClient httpClient) : IKeycloakAdminClient
     {
         public async IAsyncEnumerable<GroupRepresentation> GetGroups(string role, [EnumeratorCancellation] CancellationToken token)
         {
-            var clientGuid = await GetClientGuid(token);
-            using var response = await httpClient.GetAsync($"clients/{clientGuid}/roles/{role}/groups?briefRepresentation=false", token);
-            if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            using var response = await httpClient.GetAsync($"roles/{role}/groups?briefRepresentation=false", HttpCompletionOption.ResponseHeadersRead, token);
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 yield break;
             }
-            if (!response.IsSuccessStatusCode)
-            {
-                var str = await response.Content.ReadAsStringAsync(token);
-                Console.WriteLine(str);
-            }
+
             response.EnsureSuccessStatusCode();
+            
             await foreach (var item in response.Content.ReadFromJsonAsAsyncEnumerable<GroupRepresentation>(cancellationToken: token))
             {
                 if (item is not null)
@@ -34,20 +30,6 @@ namespace PABC.Server.Keycloak
                 }
             }
         }
-
-        private async Task<Guid> GetClientGuid(CancellationToken token)
-        {
-            using var response = await httpClient.GetAsync($"clients?clientId={authOptions.ClientId}", token);
-            response.EnsureSuccessStatusCode();
-            var clients = await response.Content.ReadFromJsonAsync<KeycloakClientResponse[]>(cancellationToken: token);
-            if (clients is not { Length: > 0 })
-            {
-                throw new InvalidOperationException($"Client with id '{authOptions.ClientId}' not found in Keycloak.");
-            }
-            return clients[0].Id;
-        }
-
-        private record KeycloakClientResponse(Guid Id);
     }
 
 
