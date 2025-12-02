@@ -167,6 +167,12 @@ settings:
     # -- Optional setting to allow an OpenID Connect Identity Provider running on HTTP. <details> <summary>More information</summary> Add this variable with the value `false` if the identity provider communicates over an HTTP connection. This can be useful in a local development environment. If the provider uses HTTPS, you may omit this variable or set it to `true`. </details>
     requireHttps: true
 
+  keycloakAdmin:
+    # -- Client ID for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `admin-cli` </details>
+    clientId: ""
+    # -- Client secret for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details>
+    clientSecret: ""
+
   aspnetcore:
     forwardedHeadersEnabled: true
     environment: ""

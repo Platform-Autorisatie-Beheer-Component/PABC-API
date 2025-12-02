@@ -51,11 +51,15 @@ if (!isOpenApiSpecGeneration)
         options.EmailClaimType = builder.Configuration["Oidc:EmailClaimType"];
         options.RequireHttpsForIdentityProvider = builder.Configuration.GetValue<bool?>("Oidc:RequireHttps");
     });
+}
 
-    builder.Services.AddKeycloakAdminClient(
-        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientId"),
-        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientSecret")
-    );
+if (builder.Configuration["KeycloakAdmin:ClientId"] is { } keycloakClientId 
+    && builder.Configuration["KeycloakAdmin:ClientSecret"] is { } keycloakClientSecret
+    && !string.IsNullOrWhiteSpace(keycloakClientId) 
+    && !string.IsNullOrWhiteSpace(keycloakClientSecret)
+    )
+{
+    builder.Services.AddKeycloakAdminClient(keycloakClientId, keycloakClientSecret);
 }
 
 

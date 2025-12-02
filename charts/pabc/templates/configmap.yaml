@@ -24,3 +24,6 @@ data:
   Oidc__EmailClaimType: {{ .Values.settings.oidc.emailClaimType }}
   Oidc__RequireHttps: {{ .Values.settings.oidc.requireHttps }}
   {{- end }}
+  {{- if .Values.settings.keycloakAdmin }}
+  KeycloakAdmin__ClientId: {{ .Values.settings.keycloakAdmin.clientId }}
+  {{- end}}

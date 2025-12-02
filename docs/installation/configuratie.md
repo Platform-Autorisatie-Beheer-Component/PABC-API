@@ -18,4 +18,6 @@ Als je PABC installeert met de helm chart, worden deze variabelen geconfigureerd
 | Oidc__NameClaimType                                  | De naam van de claim in het JWT token van de OpenID Connect Provider waarin de volledige naam van de ingelogde gebruiker staat <br/> (default waarde is `name`) |
 | Oidc__RoleClaimType                                  | De naam van de claim in het JWT token van de OpenID Connect Provider waarin de rollen van de ingelogde gebruiker staan. <br/> (default waarde is `roles`)  |
 | Oidc__EmailClaimType                                 | De naam van de claim in het JWT token van de OpenID Connect Provider waarin het e-mailadres van de ingelogde gebruiker staat. <br/> (default waarde is `email`)   |
+| KeycloakAdmin__ClientId  |  Voor toegang tot de Admin REST API van Keycloak <details> <summary>Meer informatie </summary>Bijvoorbeeld: `pabc-admin-client` </details>    |  |
+| KeycloakAdmin__ClientSecret                                   | Secret voor de Admin REST API van Keycloak <details> <summary>Meer informatie </summary>Bijvoorbeeld: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details>    |  |
 |  |  |
