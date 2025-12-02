@@ -168,7 +168,7 @@ settings:
     requireHttps: true
 
   keycloakAdmin:
-    # -- Client ID for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `admin-cli` </details>
+    # -- Client ID for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `pabc-admin-client` </details>
     clientId: ""
     # -- Client secret for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details>
     clientSecret: ""
