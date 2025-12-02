@@ -79,8 +79,6 @@ namespace PABC.Server.Auth
                     options.ResponseType = OidcConstants.ResponseTypes.Code;
                     options.UsePkce = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
-                    // needed to log out from keycloak
-                    options.SaveTokens = true;
                     options.Scope.Clear();
                     options.Scope.Add(OidcConstants.StandardScopes.OpenId);
                     options.Scope.Add(OidcConstants.StandardScopes.Profile); 
@@ -95,12 +93,19 @@ namespace PABC.Server.Auth
                     options.Events.OnSignedOutCallbackRedirect = RedirectToRoot;
                     options.Events.OnRedirectToIdentityProvider = (ctx) =>
                     {
+                        
                         if (!ctx.Request.IsBrowserNavigation())
                         {
                             ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             ctx.Response.Headers.Location = ctx.ProtocolMessage.CreateAuthenticationRequestUrl();
                             ctx.HandleResponse();
                         }
+                        return Task.CompletedTask;
+                    };
+                    options.Events.OnRedirectToIdentityProviderForSignOut = (ctx) =>
+                    {
+                        // needed for logging out from keycloak
+                        ctx.ProtocolMessage.Parameters.Add("client_id", authOptions.ClientId);
                         return Task.CompletedTask;
                     };
                 });
