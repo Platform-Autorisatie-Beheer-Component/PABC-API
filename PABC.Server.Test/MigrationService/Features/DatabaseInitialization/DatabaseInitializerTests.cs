@@ -81,7 +81,7 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
                 .ThenInclude(x => x.EntityTypes)
                 .ToListAsync();
 
-            Assert.Equal(8, result.Count);
+            Assert.Equal(11, result.Count);
 
             Assert.Contains(result, m => m.IsAllEntityTypes);
 
@@ -89,7 +89,7 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
             Assert.Equal(7, appRoleIds.Count);
 
             var funcRoleIds = result.Select(m => m.FunctionalRoleId).Distinct().ToList();
-            Assert.Equal(4, funcRoleIds.Count);
+            Assert.Equal(6, funcRoleIds.Count);
 
             var domainIds = result.Where(m => m.DomainId.HasValue)
                 .Select(m => m.DomainId.Value)

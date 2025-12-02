@@ -3,7 +3,7 @@
   "applications": [
     {
       "id": "123e4567-e89b-12d3-a456-426614174000",
-      "name": "ZAC"
+      "name": "zaakafhandelcomponent"
     },
     {
       "id": "789abcde-f012-3456-7890-abcdef123456",
@@ -14,27 +14,27 @@
     {
       "id": "7839298d-9ac9-4b02-bcfc-18b5e6e00227",
       "applicationId": "123e4567-e89b-12d3-a456-426614174000",
-      "name": "Raadpleger"
+      "name": "raadpleger"
     },
     {
       "id": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1",
       "applicationId": "123e4567-e89b-12d3-a456-426614174000",
-      "name": "Behandelaar"
+      "name": "behandelaar"
     },
     {
       "id": "03224fbe-84fc-46ad-8392-e7aa883f21aa",
       "applicationId": "123e4567-e89b-12d3-a456-426614174000",
-      "name": "Co\u00F6rdinator"
+      "name": "coordinator"
     },
     {
       "id": "fb0e0fb8-5a16-469c-82f4-d3ef6a767828",
       "applicationId": "123e4567-e89b-12d3-a456-426614174000",
-      "name": "Recordmanager"
+      "name": "recordmanager"
     },
     {
       "id": "29fd3e52-193c-48e2-8471-2899130db153",
       "applicationId": "123e4567-e89b-12d3-a456-426614174000",
-      "name": "Beheerder"
+      "name": "beheerder"
     },
     {
       "id": "f5cf1465-c05a-4c95-98da-0ec6402161a0",
@@ -50,13 +50,43 @@
   "functionalRoles": [
     { "id": "72d77855-318a-47e5-bdc8-aa1c3360d3eb", "name": "GemeenteRol1" },
     { "id": "09b78850-75cd-4b5f-b56c-3bee5261a0f9", "name": "GemeenteRol2" },
-    { "id": "e5a7c8f9-3b12-4d67-9e8f-1a2b3c4d5e6f", "name": "AllEntityFunctionalRole" },
-    { "id": "d5c09974-3eba-44de-a3c9-85d7bcbd0c66", "name": "NoEntityFunctionalRole" }
+    {
+      "id": "e5a7c8f9-3b12-4d67-9e8f-1a2b3c4d5e6f",
+      "name": "AllEntityFunctionalRole"
+    },
+    {
+      "id": "d5c09974-3eba-44de-a3c9-85d7bcbd0c66",
+      "name": "NoEntityFunctionalRole"
+    },
+    {
+      "id": "3704cc69-5e91-4243-835e-fcfb8e589327",
+      "name": "behandelaar_alle_zaaktypes"
+    },
+    {
+      "id": "21076d48-22fb-4280-9418-b707c1df820b",
+      "name": "behandelaar_leefomgeving"
+    },
+    {
+      "id": "753d4407-9716-4ac3-b1a0-deef2fe65ec9",
+      "name": "behandelaar_bedrijfsvoering"
+    },
+    {
+      "id": "c7764a52-b4ed-40f4-a308-f33a744ffabb",
+      "name": "coordinator_alle_zaaktypes"
+    },
+    {
+      "id": "a82d12ba-eb30-4e04-9114-0fc192ba669e",
+      "name": "coordinator_bedrijfsvoering"
+    },
+    {
+      "id": "74ad238f-6380-435d-b73e-9203f78b195e",
+      "name": "coordinator_leefomgeving"
+    }
   ],
   "entityTypes": [
     {
       "id": "49a3a65e-85d5-483f-94ef-cacde9b46392",
-      "entityTypeId": "9554bf85-25f3-4fd0-af41-bb760bba997e",
+      "entityTypeId": "melding-klein-kansspel",
       "type": "zaaktype",
       "name": "Melding klein kansspel",
       "description": null,
@@ -164,6 +194,24 @@
       "id": "eecc3f96-0a40-4e1f-832a-dbaffe5aa61d",
       "functionalRoleId": "d5c09974-3eba-44de-a3c9-85d7bcbd0c66",
       "applicationRoleId": "d8b091f0-fc70-4825-9dac-5fcdec931f8e"
+    },
+    {
+      "id": "2ef0cd45-b452-459e-a18c-04115be983af",
+      "functionalRoleId": "3704cc69-5e91-4243-835e-fcfb8e589327",
+      "applicationRoleId": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1",
+      "isAllEntityTypes": true
+    },
+    {
+      "id": "7f439dcc-f545-48c2-a75c-994b0816ffc7",
+      "functionalRoleId": "21076d48-22fb-4280-9418-b707c1df820b",
+      "applicationRoleId": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1",
+      "domainId": "afb5dc7f-b75b-4b85-99b6-c9f141d3cab7"
+    },
+    {
+      "id": "c66fc0e6-97fd-4e64-a3fc-ab0c7092ecc9",
+      "functionalRoleId": "21076d48-22fb-4280-9418-b707c1df820b",
+      "applicationRoleId": "a6706ade-d3d5-4d9e-be84-032acf5bf9d1",
+      "domainId": "b9767da1-fb07-4e99-b790-04bf54482daf"
     }
   ]
 }
