@@ -16,6 +16,8 @@ namespace PABC.Server.Auth
             var authOptions = new AuthOptions();
             setOptions(authOptions);
 
+            services.AddSingleton(authOptions);
+
             var emailClaimType = string.IsNullOrWhiteSpace(authOptions.EmailClaimType) ? JwtClaimTypes.Email : authOptions.EmailClaimType;
             var nameClaimType = string.IsNullOrWhiteSpace(authOptions.NameClaimType) ? JwtClaimTypes.Name : authOptions.NameClaimType;
             var roleClaimType = string.IsNullOrWhiteSpace(authOptions.RoleClaimType) ? JwtClaimTypes.Roles : authOptions.RoleClaimType;
@@ -85,18 +87,25 @@ namespace PABC.Server.Auth
                     {
                         RoleClaimType = roleClaimType,
                     };
-
+                    
 
                     options.Events.OnRemoteFailure = RedirectToRoot;
                     options.Events.OnSignedOutCallbackRedirect = RedirectToRoot;
                     options.Events.OnRedirectToIdentityProvider = (ctx) =>
                     {
+                        
                         if (!ctx.Request.IsBrowserNavigation())
                         {
                             ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             ctx.Response.Headers.Location = ctx.ProtocolMessage.CreateAuthenticationRequestUrl();
                             ctx.HandleResponse();
                         }
+                        return Task.CompletedTask;
+                    };
+                    options.Events.OnRedirectToIdentityProviderForSignOut = (ctx) =>
+                    {
+                        // needed for logging out from keycloak
+                        ctx.ProtocolMessage.Parameters.Add("client_id", authOptions.ClientId);
                         return Task.CompletedTask;
                     };
                 });
@@ -116,10 +125,17 @@ namespace PABC.Server.Auth
             return endpoints;
         }
 
-        private static async Task LogoffAsync(HttpContext httpContext)
+        private static async Task LogoffAsync(HttpContext httpContext, bool? logOutFromIdentityProvider)
         {
             await httpContext.SignOutAsync(CookieSchemeName);
-            httpContext.Response.Redirect("/");
+            if(logOutFromIdentityProvider ?? true)
+            {
+                await httpContext.SignOutAsync(ChallengeSchemeName);
+            }
+            else
+            {
+                httpContext.Response.Redirect("/");
+            }
         }
 
         private static Task RedirectToRoot<TOptions>(HandleRequestContext<TOptions> context) where TOptions : AuthenticationSchemeOptions
