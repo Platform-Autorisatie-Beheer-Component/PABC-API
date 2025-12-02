@@ -1,7 +1,5 @@
-﻿using Duende.AccessTokenManagement;
-using Duende.AccessTokenManagement.OpenIdConnect;
+﻿using Duende.AccessTokenManagement.OpenIdConnect;
 using Duende.IdentityModel;
-using Duende.IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 
