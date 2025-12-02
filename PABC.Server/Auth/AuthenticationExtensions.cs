@@ -79,6 +79,8 @@ namespace PABC.Server.Auth
                     options.ResponseType = OidcConstants.ResponseTypes.Code;
                     options.UsePkce = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
+                    // needed to log out from keycloak
+                    options.SaveTokens = true;
                     options.Scope.Clear();
                     options.Scope.Add(OidcConstants.StandardScopes.OpenId);
                     options.Scope.Add(OidcConstants.StandardScopes.Profile); 
@@ -118,10 +120,17 @@ namespace PABC.Server.Auth
             return endpoints;
         }
 
-        private static async Task LogoffAsync(HttpContext httpContext)
+        private static async Task LogoffAsync(HttpContext httpContext, bool? logOutFromIdentityProvider)
         {
             await httpContext.SignOutAsync(CookieSchemeName);
-            httpContext.Response.Redirect("/");
+            if(logOutFromIdentityProvider ?? true)
+            {
+                await httpContext.SignOutAsync(ChallengeSchemeName);
+            }
+            else
+            {
+                httpContext.Response.Redirect("/");
+            }
         }
 
         private static Task RedirectToRoot<TOptions>(HandleRequestContext<TOptions> context) where TOptions : AuthenticationSchemeOptions
