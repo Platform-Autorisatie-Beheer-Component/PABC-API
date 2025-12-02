@@ -13,7 +13,6 @@
     <SpaRoot>..\pabc.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>http://localhost:52450</SpaProxyServerUrl>
-    <UserSecretsId>fa44a77a-e912-4fe3-a371-24c64b50c779</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup> 
