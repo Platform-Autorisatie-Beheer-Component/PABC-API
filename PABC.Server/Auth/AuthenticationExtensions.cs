@@ -107,10 +107,8 @@ namespace PABC.Server.Auth
             }
             services.AddAuthorizationBuilder()
                 .AddFallbackPolicy(FunctioneelBeheerderPolicy.Name, policy => policy.RequireRole(authOptions.FunctioneelBeheerderRole));
-            
+            services.AddDistributedMemoryCache();
             services.AddOpenIdConnectAccessTokenManagement();
-
-            services.AddSingleton(new DiscoveryCache(authOptions.Authority));
         }
 
         public static IEndpointRouteBuilder MapPabcAuthEndpoints(this IEndpointRouteBuilder endpoints)
