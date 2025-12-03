@@ -125,10 +125,10 @@ namespace PABC.Server.Auth
             return endpoints;
         }
 
-        private static async Task LogoffAsync(HttpContext httpContext, bool? logOutFromIdentityProvider)
+        private static async Task LogoffAsync(HttpContext httpContext, AuthOptions authOptions)
         {
             await httpContext.SignOutAsync(CookieSchemeName);
-            if(logOutFromIdentityProvider ?? true)
+            if(authOptions.LogoutFromIdentityProvider ?? true)
             {
                 await httpContext.SignOutAsync(ChallengeSchemeName);
             }
