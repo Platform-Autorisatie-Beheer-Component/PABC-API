@@ -21,7 +21,7 @@ namespace PABC.Server.Auth
             var emailClaimType = string.IsNullOrWhiteSpace(authOptions.EmailClaimType) ? JwtClaimTypes.Email : authOptions.EmailClaimType;
             var nameClaimType = string.IsNullOrWhiteSpace(authOptions.NameClaimType) ? JwtClaimTypes.Name : authOptions.NameClaimType;
             var roleClaimType = string.IsNullOrWhiteSpace(authOptions.RoleClaimType) ? JwtClaimTypes.Roles : authOptions.RoleClaimType;
-          
+
             services.AddHttpContextAccessor();
 
             services.AddScoped(s =>
@@ -30,7 +30,7 @@ namespace PABC.Server.Auth
                 var isLoggedIn = user?.Identity?.IsAuthenticated ?? false;
                 var name = user?.FindFirst(nameClaimType)?.Value ?? string.Empty;
                 var email = user?.FindFirst(emailClaimType)?.Value ?? string.Empty;
-                var roles = user?.FindAll(roleClaimType).Select(x=> x.Value).ToArray() ?? [];
+                var roles = user?.FindAll(roleClaimType).Select(x => x.Value).ToArray() ?? [];
                 var hasFunctioneelBeheerderAccess = roles.Contains(authOptions.FunctioneelBeheerderRole);
 
                 return new PabcUser { IsLoggedIn = isLoggedIn, Name = name, Email = email, Roles = roles, HasFunctioneelBeheerderAccess = hasFunctioneelBeheerderAccess };
@@ -48,11 +48,11 @@ namespace PABC.Server.Auth
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.IsEssential = true;
-                options.Cookie.HttpOnly = true; 
+                options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                options.SlidingExpiration = true; 
+                options.SlidingExpiration = true;
                 options.Events.OnRedirectToAccessDenied = (ctx) =>
-                { 
+                {
                     ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return Task.CompletedTask;
                 };
@@ -70,7 +70,7 @@ namespace PABC.Server.Auth
                     options.CorrelationCookie.HttpOnly = true;
                     options.CorrelationCookie.IsEssential = true;
                     options.CorrelationCookie.SameSite = SameSiteMode.None;
-                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;                    
+                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.RequireHttpsMetadata = authOptions.RequireHttpsForIdentityProvider ?? true;
                     options.Authority = authOptions.Authority;
                     options.ClientId = authOptions.ClientId;
@@ -81,19 +81,19 @@ namespace PABC.Server.Auth
                     options.GetClaimsFromUserInfoEndpoint = true;
                     options.Scope.Clear();
                     options.Scope.Add(OidcConstants.StandardScopes.OpenId);
-                    options.Scope.Add(OidcConstants.StandardScopes.Profile); 
+                    options.Scope.Add(OidcConstants.StandardScopes.Profile);
                     options.MapInboundClaims = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         RoleClaimType = roleClaimType,
                     };
-                    
+
 
                     options.Events.OnRemoteFailure = RedirectToRoot;
                     options.Events.OnSignedOutCallbackRedirect = RedirectToRoot;
                     options.Events.OnRedirectToIdentityProvider = (ctx) =>
                     {
-                        
+
                         if (!ctx.Request.IsBrowserNavigation())
                         {
                             ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -128,7 +128,7 @@ namespace PABC.Server.Auth
         private static async Task LogoffAsync(HttpContext httpContext, AuthOptions authOptions)
         {
             await httpContext.SignOutAsync(CookieSchemeName);
-            if(authOptions.LogoutFromIdentityProvider ?? true)
+            if (authOptions.LogoutFromIdentityProvider ?? true)
             {
                 await httpContext.SignOutAsync(ChallengeSchemeName);
             }
@@ -172,7 +172,7 @@ namespace PABC.Server.Auth
                 RedirectUri = returnPath,
             });
         }
-         
+
         private static string GetRelativeReturnUrl(HttpRequest request)
         {
             var returnUrl = request.Query["returnUrl"].FirstOrDefault();
