@@ -10,14 +10,21 @@ namespace PABC.Server.Keycloak
         IAsyncEnumerable<GroupRepresentation> GetGroups(string role, CancellationToken token);
     }
 
-    public class KeycloakAdminClient(HttpClient httpClient) : IKeycloakAdminClient
+    public class KeycloakAdminClient(HttpClient httpClient, ILogger<KeycloakAdminClient> logger) : IKeycloakAdminClient
     {
         public async IAsyncEnumerable<GroupRepresentation> GetGroups(string role, [EnumeratorCancellation] CancellationToken token)
         {
             using var response = await httpClient.GetAsync($"roles/{role}/groups?briefRepresentation=false", HttpCompletionOption.ResponseHeadersRead, token);
+            
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 yield break;
+            }
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync(token);
+                logger.LogError("unexpected result from keycloak while fetching groups for role {Role}: {StatusCode}, {Body}", role, response.StatusCode, body);
             }
 
             response.EnsureSuccessStatusCode();
