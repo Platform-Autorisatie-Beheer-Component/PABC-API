@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Net.Mime;
-using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,15 +20,7 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
             MediaTypeNames.Application.ProblemJson)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized,
             MediaTypeNames.Application.ProblemJson)]
-        public ActionResult<GetGroupsByApplicationRoleAndEntityTypeResponse> Get([FromQuery] GetGroupsByApplicationRoleAndEntityTypeRequest request, CancellationToken token)
-        {
-            return new GetGroupsByApplicationRoleAndEntityTypeResponse
-            {
-                Groups = GetGroups(request, token)
-            };
-        }
-
-        private async IAsyncEnumerable<GroupRepresentation> GetGroups(GetGroupsByApplicationRoleAndEntityTypeRequest request, [EnumeratorCancellation] CancellationToken token)
+        public async Task<ActionResult<GetGroupsByApplicationRoleAndEntityTypeResponse>> Get([FromQuery] GetGroupsByApplicationRoleAndEntityTypeRequest request, CancellationToken token)
         {
             var functionalRoles = db.Mappings
                 .Where(m => m.ApplicationRole.Name == request.ApplicationRoleName
@@ -37,9 +28,11 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
                     && (m.Domain!.EntityTypes.Any(e => e.EntityTypeId == request.EntityTypeId) || m.IsAllEntityTypes))
                 .Select(m => m.FunctionalRole.Name)
                 .Distinct()
-                .AsAsyncEnumerable();
+                .AsAsyncEnumerable()
+                .WithCancellation(token);
 
             var uniqueGroupNames = new HashSet<string>();
+            var groups = new List<GroupRepresentation>();
 
             await foreach (var role in functionalRoles)
             {
@@ -47,10 +40,12 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
                 {
                     if (uniqueGroupNames.Add(group.Name))
                     {
-                        yield return group;
+                        groups.Add(group);
                     }
                 }
             }
+
+            return new GetGroupsByApplicationRoleAndEntityTypeResponse { Groups = groups };
         }
     }
 
@@ -74,6 +69,6 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
 
     public record GetGroupsByApplicationRoleAndEntityTypeResponse
     {
-        public required IAsyncEnumerable<GroupRepresentation> Groups { get; init; }
+        public required IReadOnlyList<GroupRepresentation> Groups { get; init; }
     }
 }
