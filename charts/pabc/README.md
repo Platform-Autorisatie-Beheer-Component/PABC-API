@@ -99,7 +99,7 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | settings.database.password | string | `""` |  |
 | settings.database.port | int | `5432` |  |
 | settings.database.username | string | `""` |  |
-| settings.keycloakAdmin.clientId | string | `""` | Client ID for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `pabc-admin-client` </details> |
+| settings.keycloakAdmin.clientId | string | `""` | Client ID for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `pabc-admin-client`. This client needs the following roles in Keycloak: `view-realm`, `view-groups`, `view-users`. </details> |
 | settings.keycloakAdmin.clientSecret | string | `""` | Client secret for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details> |
 | settings.oidc.authority | string | `""` | URL of the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `https://login.microsoftonline.com/ce1a3f2d-2265-4517-a8b4-3e4f381461ab/v2.0` </details> |
 | settings.oidc.clientId | string | `""` | Client ID for accessing the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `54f66f54-71e5-45f1-8634-9158c41f602a` </details> |
