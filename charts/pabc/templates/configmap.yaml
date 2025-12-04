@@ -23,7 +23,7 @@ data:
   Oidc__RoleClaimType: {{ .Values.settings.oidc.roleClaimType }}
   Oidc__EmailClaimType: {{ .Values.settings.oidc.emailClaimType }}
   Oidc__RequireHttps: {{ .Values.settings.oidc.requireHttps }}
-  Oidc__LogoutFromIdentityProvider: {{ .Values.settings.oidc.logoutFromIdentityProvider }}
+  Oidc__LogoutFromIdentityProvider: {{ .Values.settings.oidc.logoutFromIdentityProvider | toString | quote }}
   {{- end }}
   {{- if .Values.settings.keycloakAdmin }}
   KeycloakAdmin__ClientId: {{ .Values.settings.keycloakAdmin.clientId }}
