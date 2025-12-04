@@ -59,6 +59,86 @@
           }
         ]
       }
+    },
+    "/api/v1/groups": {
+      "get": {
+        "tags": [
+          "GetGroupsByApplicationRoleAndEntityType"
+        ],
+        "operationId": "Get groups by application role and entity type",
+        "parameters": [
+          {
+            "name": "application-name",
+            "in": "query",
+            "description": "The name of the application.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Zaakafhandelcomponent"
+            },
+            "example": "Zaakafhandelcomponent"
+          },
+          {
+            "name": "application-role-name",
+            "in": "query",
+            "description": "The name of the application role.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "behandelaar"
+            },
+            "example": "behandelaar"
+          },
+          {
+            "name": "entity-type-id",
+            "in": "query",
+            "description": "The ID of the entity type.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "melding-klein-kansspel"
+            },
+            "example": "melding-klein-kansspel"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGroupsByApplicationRoleAndEntityTypeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [ ]
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -160,6 +240,42 @@
               "$ref": "#/components/schemas/ApplicationRoleModel"
             },
             "description": "List of application roles associated with this entity type"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetGroupsByApplicationRoleAndEntityTypeResponse": {
+        "required": [
+          "groups"
+        ],
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroupRepresentation"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GroupRepresentation": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
         "additionalProperties": false

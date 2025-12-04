@@ -2,6 +2,7 @@
 using PABC.Data;
 using PABC.Server.Auth;
 using PABC.Server.Helper;
+using PABC.Server.Keycloak;
 
 var isOpenApiSpecGeneration = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
 
@@ -49,8 +50,20 @@ if (!isOpenApiSpecGeneration)
         options.RoleClaimType = builder.Configuration["Oidc:RoleClaimType"];
         options.EmailClaimType = builder.Configuration["Oidc:EmailClaimType"];
         options.RequireHttpsForIdentityProvider = builder.Configuration.GetValue<bool?>("Oidc:RequireHttps");
+        options.LogoutFromIdentityProvider = builder.Configuration.GetValue<bool?>("Oidc:LogoutFromIdentityProvider");
     });
 }
+
+if (builder.Configuration["KeycloakAdmin:ClientId"] is { } keycloakClientId 
+    && builder.Configuration["KeycloakAdmin:ClientSecret"] is { } keycloakClientSecret
+    && !string.IsNullOrWhiteSpace(keycloakClientId) 
+    && !string.IsNullOrWhiteSpace(keycloakClientSecret)
+    )
+{
+    builder.Services.AddKeycloakAdminClient(keycloakClientId, keycloakClientSecret);
+}
+
+
 
 var app = builder.Build();
 
