@@ -159,7 +159,7 @@
             "type": "string",
             "description": "The unique identifier for the application",
             "format": "uuid",
-            "example": "ZAC"
+            "example": "511305f0-d3f0-441c-a517-1c6b5797047a"
           }
         },
         "additionalProperties": false
