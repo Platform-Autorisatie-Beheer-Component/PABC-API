@@ -53,6 +53,6 @@ public class ApplicationRoleModel
     /// <summary>
     /// The unique identifier for the application
     /// </summary>
-    /// <example>ZAC</example>
+    /// <example>511305f0-d3f0-441c-a517-1c6b5797047a</example>
     public required Guid ApplicationId { get; set; }
 }
