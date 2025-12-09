@@ -52,17 +52,11 @@ if (!isOpenApiSpecGeneration)
         options.RequireHttpsForIdentityProvider = builder.Configuration.GetValue<bool?>("Oidc:RequireHttps");
         options.LogoutFromIdentityProvider = builder.Configuration.GetValue<bool?>("Oidc:LogoutFromIdentityProvider");
     });
-}
 
-if (builder.Configuration["KeycloakAdmin:ClientId"] is { } keycloakClientId 
-    && builder.Configuration["KeycloakAdmin:ClientSecret"] is { } keycloakClientSecret
-    && !string.IsNullOrWhiteSpace(keycloakClientId) 
-    && !string.IsNullOrWhiteSpace(keycloakClientSecret)
-    )
-{
-    builder.Services.AddKeycloakAdminClient(keycloakClientId, keycloakClientSecret);
+    builder.Services.AddKeycloakAdminClient(
+        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientId"),
+        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientSecret"));
 }
-
 
 
 var app = builder.Build();
