@@ -23,6 +23,7 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
 
         private GetApplicationRolesPerEntityTypeController CreateController()
         {
+            _dbContext.ChangeTracker.Clear();
             return new GetApplicationRolesPerEntityTypeController(_dbContext);
         }
 
