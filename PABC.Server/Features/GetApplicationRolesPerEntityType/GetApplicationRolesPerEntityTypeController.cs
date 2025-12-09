@@ -25,7 +25,7 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
         {
             var allEntityTypesList = await (
                 from m in db.Mappings
-                    .Include(m => m.ApplicationRole)
+                    .Include(m => m.ApplicationRole).ThenInclude(x=> x.Application)
                     .Include(m => m.FunctionalRole)
                     .Include(m => m.Domain)
                 where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && m.IsAllEntityTypes
@@ -36,7 +36,7 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
             // Fetch domain-specific mappings — apply only to entity types within the domain
             var domainSpecificList = await (
                 from m in db.Mappings
-                    .Include(m => m.ApplicationRole)
+                    .Include(m => m.ApplicationRole).ThenInclude(x => x.Application)
                     .Include(m => m.FunctionalRole)
                     .Include(m => m.Domain)
                 where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && !m.IsAllEntityTypes
