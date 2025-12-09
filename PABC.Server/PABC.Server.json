@@ -168,7 +168,7 @@
           },
           "application": {
             "type": "string",
-            "description": "The unique identifier for the application",
+            "description": "The name of the application",
             "example": "zaakfhandelcomponent"
           }
         },

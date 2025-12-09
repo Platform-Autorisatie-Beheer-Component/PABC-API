@@ -51,7 +51,7 @@ public class ApplicationRoleModel
     public required string Name { get; set; }
 
     /// <summary>
-    /// The unique identifier for the application
+    /// The name of the application
     /// </summary>
     /// <example>zaakfhandelcomponent</example>
     public required string Application { get; set; }
