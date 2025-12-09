@@ -99,6 +99,17 @@
               "example": "melding-klein-kansspel"
             },
             "example": "melding-klein-kansspel"
+          },
+          {
+            "name": "entity-type",
+            "in": "query",
+            "description": "The kind of entity type.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "zaaktype"
+            },
+            "example": "zaaktype"
           }
         ],
         "responses": {
@@ -145,7 +156,7 @@
     "schemas": {
       "ApplicationRoleModel": {
         "required": [
-          "applicationId",
+          "application",
           "name"
         ],
         "type": "object",
@@ -153,13 +164,12 @@
           "name": {
             "type": "string",
             "description": "The name of the application role",
-            "example": "Behandelaar"
+            "example": "behandelaar"
           },
-          "applicationId": {
+          "application": {
             "type": "string",
             "description": "The unique identifier for the application",
-            "format": "uuid",
-            "example": "511305f0-d3f0-441c-a517-1c6b5797047a"
+            "example": "zaakfhandelcomponent"
           }
         },
         "additionalProperties": false
