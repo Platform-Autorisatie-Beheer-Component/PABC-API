@@ -47,12 +47,12 @@ public class ApplicationRoleModel
     /// <summary>
     /// The name of the application role
     /// </summary>
-    /// <example>Behandelaar</example>
+    /// <example>behandelaar</example>
     public required string Name { get; set; }
 
     /// <summary>
-    /// The unique identifier for the application
+    /// The name of the application
     /// </summary>
-    /// <example>511305f0-d3f0-441c-a517-1c6b5797047a</example>
-    public required Guid ApplicationId { get; set; }
+    /// <example>zaakafhandelcomponent</example>
+    public required string Application { get; set; }
 }
