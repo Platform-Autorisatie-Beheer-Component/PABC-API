@@ -270,13 +270,18 @@
         "additionalProperties": false
       },
       "GroupRepresentation": {
+        "required": [
+          "attributes",
+          "name"
+        ],
         "type": "object",
         "properties": {
           "name": {
             "type": "string"
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "attributes": {
             "type": "object",

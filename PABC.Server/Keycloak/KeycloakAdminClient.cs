@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 using Duende.AccessTokenManagement;
 using Microsoft.Extensions.Options;
 using PABC.Server.Auth;
@@ -40,7 +41,15 @@ namespace PABC.Server.Keycloak
     }
 
 
-    public record GroupRepresentation(string Name, string Description, Dictionary<string, string[]> Attributes);
+    public record GroupRepresentation
+    {
+        public required string Name { get; init; }
+        
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] 
+        public string? Description { get; init; }
+        
+        public required Dictionary<string, string[]> Attributes { get; init; }
+    };
 
     public static class KeycloakClientExtensions
     {
