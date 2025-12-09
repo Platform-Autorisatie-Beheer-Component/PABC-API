@@ -25,7 +25,8 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
             var functionalRoles = db.Mappings
                 .Where(m => m.ApplicationRole.Name == request.ApplicationRoleName
                     && m.ApplicationRole.Application.Name == request.ApplicationName
-                    && (m.Domain!.EntityTypes.Any(e => e.EntityTypeId == request.EntityTypeId) || m.IsAllEntityTypes))
+                    && (m.Domain!.EntityTypes.Any(e => e.EntityTypeId == request.EntityTypeId && e.Type == request.EntityType) 
+                        || m.IsAllEntityTypes))
                 .Select(m => m.FunctionalRole.Name)
                 .Distinct()
                 .AsAsyncEnumerable()
@@ -65,6 +66,11 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
         /// <example>melding-klein-kansspel</example>
         [FromQuery(Name = "entity-type-id")]
         public required string EntityTypeId { get; init; }
+
+        /// <summary>The kind of entity type.</summary>
+        /// <example>zaaktype</example>
+        [FromQuery(Name = "entity-type")]
+        public required string EntityType { get; init; }
     }
 
     public record GetGroupsByApplicationRoleAndEntityTypeResponse
