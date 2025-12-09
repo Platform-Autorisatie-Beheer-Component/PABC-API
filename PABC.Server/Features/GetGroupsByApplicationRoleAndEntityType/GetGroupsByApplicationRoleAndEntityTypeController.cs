@@ -32,21 +32,17 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
                 .AsAsyncEnumerable()
                 .WithCancellation(token);
 
-            var uniqueGroupNames = new HashSet<string>();
-            var groups = new List<GroupRepresentation>();
+            var groups = new SortedDictionary<string, GroupRepresentation>(StringComparer.OrdinalIgnoreCase);
 
             await foreach (var role in functionalRoles)
             {
                 await foreach (var group in keycloakClient.GetGroups(role, token))
                 {
-                    if (uniqueGroupNames.Add(group.Name))
-                    {
-                        groups.Add(group);
-                    }
+                    groups[group.Name] = group;
                 }
             }
 
-            return new GetGroupsByApplicationRoleAndEntityTypeResponse { Groups = groups };
+            return new GetGroupsByApplicationRoleAndEntityTypeResponse { Groups = groups.Values };
         }
     }
 
@@ -75,6 +71,6 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
 
     public record GetGroupsByApplicationRoleAndEntityTypeResponse
     {
-        public required IReadOnlyList<GroupRepresentation> Groups { get; init; }
+        public required IReadOnlyCollection<GroupRepresentation> Groups { get; init; }
     }
 }
