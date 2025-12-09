@@ -53,6 +53,6 @@ public class ApplicationRoleModel
     /// <summary>
     /// The name of the application
     /// </summary>
-    /// <example>zaakfhandelcomponent</example>
+    /// <example>zaakafhandelcomponent</example>
     public required string Application { get; set; }
 }
