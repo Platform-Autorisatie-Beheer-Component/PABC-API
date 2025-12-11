@@ -40,7 +40,6 @@ namespace PABC.Server.Keycloak
         }
     }
 
-
     public record GroupRepresentation
     {
         public required string Name { get; init; }
@@ -70,7 +69,9 @@ namespace PABC.Server.Keycloak
                 {
                     var authOptions = services.GetRequiredService<AuthOptions>();
                     var uriBuilder = new UriBuilder(authOptions.Authority);
-                    uriBuilder.Path = "/admin/" + uriBuilder.Path.TrimStart('/');
+                    // ensure the base uri ends with '/'
+                    var trimmedPath = uriBuilder.Path.AsSpan().Trim('/');
+                    uriBuilder.Path = $"/admin/{trimmedPath}/";
                     client.BaseAddress = uriBuilder.Uri;
                 });
 
@@ -83,7 +84,8 @@ namespace PABC.Server.Keycloak
 
             public void Configure(ClientCredentialsClient options)
             {
-                options.TokenEndpoint = new Uri($"{authOptions.Authority}protocol/openid-connect/token");
+                var authority = authOptions.Authority;
+                options.TokenEndpoint = new Uri($"{authority.AsSpan().TrimEnd('/')}/protocol/openid-connect/token");
             }
         }
     }
