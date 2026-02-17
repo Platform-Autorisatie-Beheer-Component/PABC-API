@@ -46,10 +46,10 @@ public class DatasetParser : IDatasetParser
             return result!;
         }
         // the json schema validation errors are a bit hidden in the exception data. we collect them here and throw a custom exception
-        catch (JsonException ex) when (ex.Data.Values.OfType<EvaluationResults>().FirstOrDefault() is { } results)
+        catch (JsonException ex) when (ex.Data.Values.OfType<EvaluationResults>().FirstOrDefault() is { Details: { } } results)
         {
             var errors = results.Details
-                .Where(d => d.HasErrors)
+                .Where(d => d.Errors is { })
                 .Select(x => new JsonSchemaValidationError
                 {
                     Errors = x.Errors!,
@@ -78,8 +78,11 @@ public class DatasetParser : IDatasetParser
             {
                 new ValidatingJsonConverter
                 {
-                    OutputFormat = OutputFormat.List,
-                    RequireFormatValidation = true,
+                    EvaluationOptions = new()
+                    {
+                        OutputFormat = OutputFormat.List,
+                        RequireFormatValidation = true,
+                    },
                 }
             }
         };

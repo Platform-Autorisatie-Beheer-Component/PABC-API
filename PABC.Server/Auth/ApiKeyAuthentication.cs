@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi;
 
 namespace PABC.Server.Auth
 {
     public static class ApiKeyAuthentication
     {
         internal const string API_KEY_HEADER_NAME = "X-API-KEY";
-        internal const string Scheme = "ApiKey";
+        public const string Scheme = "ApiKey";
         public const string Policy = "ApiKeyPolicy";
         public const string ClaimType = "ApiKeyClaim";
 
@@ -25,16 +25,10 @@ namespace PABC.Server.Auth
                     .AddRequirements(new ApiKeyRequirement(apiKeys))
                     );
             services.AddSingleton<IAuthorizationHandler, ApiKeyRequirement.Handler>();
-
-            services.ConfigureSwaggerGen(options =>
+            services.ConfigureAll<OpenApiOptions>(options =>
             {
-                options.AddSecurityDefinition(Scheme, new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.ApiKey,
-                    In = ParameterLocation.Header,
-                    Name = API_KEY_HEADER_NAME,
-                });
-                options.OperationFilter<ApiKeySwaggerOperationFilter>();
+                options.AddOperationTransformer<ApiKeyOperationTransformer>();
+                options.AddDocumentTransformer<ApiKeyDocumentTransformer>();
             });
         }
 
@@ -59,25 +53,41 @@ namespace PABC.Server.Auth
             }
         }
 
-        private class ApiKeySwaggerOperationFilter : IOperationFilter
+        private class ApiKeyOperationTransformer : IOpenApiOperationTransformer
         {
-            private static readonly OpenApiSecurityRequirement s_securityRequirement = new()
-            {
-                [new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = Scheme } }] = []
-            };
+            private static bool HasApiKeyPolicy(OpenApiOperationTransformerContext context) =>
+                context.Description.ActionDescriptor.EndpointMetadata
+                    .OfType<AuthorizeAttribute>()
+                    .Any(x => x.Policy == Policy);
 
-            public void Apply(OpenApiOperation operation, OperationFilterContext context)
+            public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
             {
                 if (HasApiKeyPolicy(context))
                 {
-                    operation.Security.Add(s_securityRequirement);
+                    operation.Security ??= [];
+                    operation.Security.Add(new OpenApiSecurityRequirement
+                    {
+                        [new OpenApiSecuritySchemeReference(Scheme, context.Document)] = []
+                    });
                 }
+                return Task.CompletedTask;
             }
+        }
 
-            private static bool HasApiKeyPolicy(OperationFilterContext context) =>
-                context.ApiDescription.ActionDescriptor.EndpointMetadata
-                    .OfType<AuthorizeAttribute>()
-                    .Any(x => x.Policy == Policy);
+        private class ApiKeyDocumentTransformer : IOpenApiDocumentTransformer
+        {
+            public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
+            {
+                document.Components ??= new();
+                document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+                document.Components.SecuritySchemes[Scheme] = new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header,
+                    Name = API_KEY_HEADER_NAME,
+                };
+                return Task.CompletedTask;
+            }
         }
     }
 
@@ -94,7 +104,7 @@ namespace PABC.Server.Auth
                     context.Succeed(requirement);
                     return Task.CompletedTask;
                 }
-                var invalidKeys = apiKeys.Where(x=> !apiKeys.Contains(x)).ToList();
+                var invalidKeys = apiKeys.Where(x => !apiKeys.Contains(x)).ToList();
                 if (invalidKeys.Count == 0)
                 {
                     logger.LogWarning("Authentication attempt with missing API key");
@@ -111,7 +121,7 @@ namespace PABC.Server.Auth
 
             private static IReadOnlyList<string> GetApiKeyClaimValues(AuthorizationHandlerContext context) => context.User
                 .FindAll(ApiKeyAuthentication.ClaimType)
-                .Select(x=> x.Value)
+                .Select(x => x.Value)
                 .ToList();
         }
     }

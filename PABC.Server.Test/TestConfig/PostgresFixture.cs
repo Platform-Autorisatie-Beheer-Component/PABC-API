@@ -22,7 +22,7 @@ namespace PABC.Server.Test.TestConfig
             _app = appBuilder.Build();
         }
 
-        public async Task InitializeAsync()
+        public async ValueTask InitializeAsync()
         {
             await _app.StartAsync();
             await _app.ResourceNotifications.WaitForResourceHealthyAsync("Pabc");
@@ -36,7 +36,7 @@ namespace PABC.Server.Test.TestConfig
             await DbContext.Database.MigrateAsync();
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             _serviceScope?.Dispose();
             await _app.StopAsync();

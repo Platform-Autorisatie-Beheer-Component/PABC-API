@@ -1,65 +1,11 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.1",
   "info": {
     "title": "Platform Autorisatie Beheer Component API",
     "description": "API for the Platform Autorisatie Beheer Component (PABC)",
     "version": "v1"
   },
   "paths": {
-    "/api/v1/application-roles-per-entity-type": {
-      "post": {
-        "tags": [
-          "GetApplicationRolesPerEntityType"
-        ],
-        "operationId": "Get application roles per entity type",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetApplicationRolesRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetApplicationRolesResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidationProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKey": [ ]
-          }
-        ]
-      }
-    },
     "/api/v1/groups": {
       "get": {
         "tags": [
@@ -70,46 +16,30 @@
           {
             "name": "application-name",
             "in": "query",
-            "description": "The name of the application.",
-            "required": true,
             "schema": {
-              "type": "string",
-              "example": "Zaakafhandelcomponent"
-            },
-            "example": "Zaakafhandelcomponent"
+              "type": "string"
+            }
           },
           {
             "name": "application-role-name",
             "in": "query",
-            "description": "The name of the application role.",
-            "required": true,
             "schema": {
-              "type": "string",
-              "example": "behandelaar"
-            },
-            "example": "behandelaar"
+              "type": "string"
+            }
           },
           {
             "name": "entity-type-id",
             "in": "query",
-            "description": "The ID of the entity type.",
-            "required": true,
             "schema": {
-              "type": "string",
-              "example": "melding-klein-kansspel"
-            },
-            "example": "melding-klein-kansspel"
+              "type": "string"
+            }
           },
           {
             "name": "entity-type",
             "in": "query",
-            "description": "The kind of entity type.",
-            "required": true,
             "schema": {
-              "type": "string",
-              "example": "zaaktype"
-            },
-            "example": "zaaktype"
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -150,14 +80,69 @@
           }
         ]
       }
+    },
+    "/api/v1/application-roles-per-entity-type": {
+      "post": {
+        "tags": [
+          "GetApplicationRolesPerEntityType"
+        ],
+        "operationId": "Get application roles per entity type",
+        "requestBody": {
+          "content": {
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetApplicationRolesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetApplicationRolesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [ ]
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
       "ApplicationRoleModel": {
         "required": [
-          "application",
-          "name"
+          "name",
+          "application"
         ],
         "type": "object",
         "properties": {
@@ -171,8 +156,7 @@
             "description": "The name of the application",
             "example": "zaakafhandelcomponent"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "EntityTypeModel": {
         "required": [
@@ -197,8 +181,7 @@
             "description": "The kind of entity",
             "example": "zaaktype"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "GetApplicationRolesRequest": {
         "required": [
@@ -217,8 +200,7 @@
               "GemeenteRol2"
             ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "GetApplicationRolesResponse": {
         "required": [
@@ -232,8 +214,7 @@
               "$ref": "#/components/schemas/GetApplicationRolesResponseModel"
             }
           }
-        },
-        "additionalProperties": false
+        }
       },
       "GetApplicationRolesResponseModel": {
         "required": [
@@ -242,7 +223,15 @@
         "type": "object",
         "properties": {
           "entityType": {
-            "$ref": "#/components/schemas/EntityTypeModel"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "description": "The entity type details",
+                "$ref": "#/components/schemas/EntityTypeModel"
+              }
+            ]
           },
           "applicationRoles": {
             "type": "array",
@@ -251,8 +240,7 @@
             },
             "description": "List of application roles associated with this entity type"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "GetGroupsByApplicationRoleAndEntityTypeResponse": {
         "required": [
@@ -266,13 +254,12 @@
               "$ref": "#/components/schemas/GroupRepresentation"
             }
           }
-        },
-        "additionalProperties": false
+        }
       },
       "GroupRepresentation": {
         "required": [
-          "attributes",
-          "name"
+          "name",
+          "attributes"
         ],
         "type": "object",
         "properties": {
@@ -280,8 +267,10 @@
             "type": "string"
           },
           "description": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "attributes": {
             "type": "object",
@@ -292,59 +281,81 @@
               }
             }
           }
-        },
-        "additionalProperties": false
+        }
       },
       "ProblemDetails": {
         "type": "object",
         "properties": {
           "type": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "title": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "status": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
           },
           "detail": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "instance": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           }
-        },
-        "additionalProperties": { }
+        }
       },
       "ValidationProblemDetails": {
         "type": "object",
         "properties": {
           "type": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "title": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "status": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
           },
           "detail": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "instance": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "errors": {
             "type": "object",
@@ -355,8 +366,7 @@
               }
             }
           }
-        },
-        "additionalProperties": { }
+        }
       }
     },
     "securitySchemes": {
@@ -366,5 +376,13 @@
         "in": "header"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "GetGroupsByApplicationRoleAndEntityType"
+    },
+    {
+      "name": "GetApplicationRolesPerEntityType"
+    }
+  ]
 }

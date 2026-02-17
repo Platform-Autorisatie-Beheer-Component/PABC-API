@@ -1,21 +1,28 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11408.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.AppHost", "PABC.AppHost\PABC.AppHost.csproj", "{FB81C0F4-5263-4FB4-8A6D-EAFCA3B94520}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PABC.AppHost", "PABC.AppHost\PABC.AppHost.csproj", "{FB81C0F4-5263-4FB4-8A6D-EAFCA3B94520}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Server", "PABC.Server\PABC.Server.csproj", "{4E5FFD47-701B-4D17-ACA6-0045A139B027}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PABC.Server", "PABC.Server\PABC.Server.csproj", "{4E5FFD47-701B-4D17-ACA6-0045A139B027}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.ServiceDefaults", "PABC.ServiceDefaults\PABC.ServiceDefaults.csproj", "{22148183-AA1B-A4B1-5868-6C15978D4EBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PABC.ServiceDefaults", "PABC.ServiceDefaults\PABC.ServiceDefaults.csproj", "{22148183-AA1B-A4B1-5868-6C15978D4EBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.MigrationService", "PABC.MigrationService\PABC.MigrationService.csproj", "{FEB7BCF2-BBB4-FD6C-6FA4-4CAAA4DF555C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PABC.MigrationService", "PABC.MigrationService\PABC.MigrationService.csproj", "{FEB7BCF2-BBB4-FD6C-6FA4-4CAAA4DF555C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Data", "PABC.Data\PABC.Data.csproj", "{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PABC.Data", "PABC.Data\PABC.Data.csproj", "{1EC7C69A-5C20-44B8-8C6C-F6B4F12F5D4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PABC.Server.Test", "PABC.Server.Test\PABC.Server.Test.csproj", "{08A91984-FE2C-4493-9BEF-C45B4E91F8EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PABC.Server.Test", "PABC.Server.Test\PABC.Server.Test.csproj", "{08A91984-FE2C-4493-9BEF-C45B4E91F8EF}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "pabc.client", "pabc.client\pabc.client.esproj", "{F91AA147-0328-15EB-8C51-411832E27B61}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ECF884E7-0BB1-40F7-82B5-3B6FF73C4A0B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		DECISION-RECORD.md = DECISION-RECORD.md
+		Directory.Packages.props = Directory.Packages.props
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

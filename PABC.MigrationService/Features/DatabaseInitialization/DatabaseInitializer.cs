@@ -56,12 +56,7 @@ namespace PABC.MigrationService.Features.DatabaseInitialization
         private static async Task RunWithinTransactionAsync(DbContext dbContext, Func<Task> handler, CancellationToken cancellationToken)
         {
             var strategy = dbContext.Database.CreateExecutionStrategy();
-            await strategy.ExecuteAsync(async () =>
-            {
-                await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-                await handler();
-                await transaction.CommitAsync(cancellationToken);
-            });
+            await strategy.ExecuteAsync(handler);
         }
     }
 }

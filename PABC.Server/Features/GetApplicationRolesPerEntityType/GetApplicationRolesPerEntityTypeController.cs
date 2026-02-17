@@ -10,11 +10,11 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
 {
     [ApiController]
     [Route("/api/v1/application-roles-per-entity-type")]
-    [Authorize(Policy = ApiKeyAuthentication.Policy)]
+    [Authorize(Policy = ApiKeyAuthentication.Policy, AuthenticationSchemes = ApiKeyAuthentication.Scheme)]
     public class GetApplicationRolesPerEntityTypeController(PabcDbContext db) : ControllerBase
     {
         [HttpPost(Name = "Get application roles per entity type")]
-        [Consumes(MediaTypeNames.Application.Json)]
+        [Consumes("application/*+json")]
         [ProducesResponseType<GetApplicationRolesResponse>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
         [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest,
             MediaTypeNames.Application.ProblemJson)]

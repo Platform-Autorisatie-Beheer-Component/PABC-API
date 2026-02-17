@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using PABC.Data.Entities;
 
 namespace PABC.Data;
@@ -74,6 +75,8 @@ public class PabcDbContext(DbContextOptions options) : DbContext(options)
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<string>().UseCollation("nl_case_insensitive");
+        // workaround to prevent pluralizing table names, introduced in ef core 9 for some reason
+        configurationBuilder.Conventions.Remove<TableNameFromDbSetConvention>();
     }
 
     public required DbSet<Application> Applications { get; set; }

@@ -95,10 +95,10 @@ namespace PABC.Server.Test.Data
 
             var snapshotModel = migrationsAssembly.ModelSnapshot?.Model;
 
-            if (snapshotModel is IMutableModel mutableModel)
-            {
-                snapshotModel = mutableModel.FinalizeModel();
-            }
+            //if (snapshotModel is IMutableModel mutableModel)
+            //{
+            //    snapshotModel = mutableModel.FinalizeModel();
+            //}
 
             if (snapshotModel != null)
             {
@@ -114,12 +114,9 @@ namespace PABC.Server.Test.Data
             Assert.Equal(0, differences.Count);
         }
 
-        public Task InitializeAsync()
-        {
-            return Task.CompletedTask;
-        }
+        public ValueTask InitializeAsync() => ValueTask.CompletedTask;
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             await ClearDatabaseAsync();
         }

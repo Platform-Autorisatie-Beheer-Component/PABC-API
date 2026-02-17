@@ -6,9 +6,9 @@ using PABC.Server.Test.TestConfig;
 
 namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
 {
-    public class DatabaseInitializerTests(PostgresFixture fixture) : IClassFixture<PostgresFixture>, IAsyncLifetime
+    public sealed class DatabaseInitializerTests(PostgresFixture fixture) : IClassFixture<PostgresFixture>, IAsyncLifetime
     {
-        public async Task InitializeAsync()
+        public async ValueTask InitializeAsync()
         {
             await ClearDatabaseAsync();
             await fixture.DbContext.AddRangeAsync(new FunctionalRole
@@ -18,9 +18,9 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
             await fixture.DbContext.SaveChangesAsync();
         }
 
-        public Task DisposeAsync()
+        public ValueTask DisposeAsync()
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         private async Task ClearDatabaseAsync()

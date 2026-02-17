@@ -6,19 +6,19 @@ using PABC.Server.Test.TestConfig;
 
 namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
 {
-    public class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fixture)
+    public sealed class GetApplicationRolesPerEntityTypeControllerTests(PostgresFixture fixture)
         : IClassFixture<PostgresFixture>, IAsyncLifetime
     {
         private readonly PabcDbContext _dbContext = fixture.DbContext;
 
-        public async Task InitializeAsync()
+        public async ValueTask InitializeAsync()
         {
             await ClearDatabaseAsync();
         }
 
-        public Task DisposeAsync()
+        public ValueTask DisposeAsync()
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         private GetApplicationRolesPerEntityTypeController CreateController()
