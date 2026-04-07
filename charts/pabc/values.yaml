@@ -138,8 +138,8 @@ azureVaultSecret:
   secretName: "{{ .Values.existingSecret }}"
 
 initContainers:
-  # -- Wait for PostgreSQL initContainer configuration
-  waitForPostgresql:
+  # -- Wait-for initContainer image (used by both deployment and migrations job)
+  waitFor:
     image:
       repository: "ghcr.io/groundnuty/k8s-wait-for"
       tag: "v2.0"

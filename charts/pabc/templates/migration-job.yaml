@@ -36,8 +36,8 @@ spec:
     {{- if .Values.postgresql.enabled }}
       initContainers:
       - name: "{{ .Chart.Name }}-wait-for-postgresql"
-        image: "{{ .Values.initContainers.waitForPostgresql.image.repository }}:{{ .Values.initContainers.waitForPostgresql.image.tag }}"
-        imagePullPolicy: {{ .Values.initContainers.waitForPostgresql.image.pullPolicy }}
+        image: "{{ .Values.initContainers.waitFor.image.repository }}:{{ .Values.initContainers.waitFor.image.tag }}"
+        imagePullPolicy: {{ .Values.initContainers.waitFor.image.pullPolicy }}
         args: 
         - "service"
         - "{{ .Release.Name }}-postgresql"
