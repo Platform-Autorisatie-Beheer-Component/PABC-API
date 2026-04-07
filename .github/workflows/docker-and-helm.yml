@@ -2,12 +2,12 @@ name: Build & Release PABC
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "release-*"]
     tags: ["v*.*.*"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "release-*"]
     types: [ opened, synchronize, reopened, edited ]
-  workflow_dispatch:   
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
