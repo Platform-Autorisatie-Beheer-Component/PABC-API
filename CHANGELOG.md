@@ -21,5 +21,5 @@
 ## [1.1.0] - 2026-04-07
 
 ### Helm chart improvements
-- Support configurable initContainer image for PostgreSQL wait-for in migrations job (enables ACR compatibility for restricted registry environments)
+- Support configurable initContainer image for wait-for containers in both API deployment and migrations job (enables ACR compatibility for restricted registry environments)
 - Add nodeSelector support to migrations job for custom node scheduling
