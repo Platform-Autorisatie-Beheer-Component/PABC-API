@@ -137,6 +137,14 @@ azureVaultSecret:
   # You must set .Values.existingSecret
   secretName: "{{ .Values.existingSecret }}"
 
+initContainers:
+  # -- Wait for PostgreSQL initContainer configuration
+  waitForPostgresql:
+    image:
+      repository: "ghcr.io/groundnuty/k8s-wait-for"
+      tag: "v2.0"
+      pullPolicy: IfNotPresent
+
 settings:
   database:
     host: ""
@@ -186,6 +194,8 @@ migrations:
     pullPolicy: IfNotPresent
     tag: ""
   restartPolicy: Never
+  # -- Node selector for scheduling the migrations job
+  nodeSelector: {}
   # -- Optionally specify a path to a data set json file to insert into the database. <details> <summary>More information</summary>You can use the extraVolumes and extraVolumeMounts values to mount a data set file into the running container. The file needs to be valid according to <a href="../../PABC.MigrationService/dataset.schema.json">the json schema</a></details>
   dataSetPath: null
   # -- Optionally specify extra list of additional volumes, for example to mount a dataset file.
