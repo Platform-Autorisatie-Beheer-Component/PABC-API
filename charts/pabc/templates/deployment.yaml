@@ -36,8 +36,8 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
       - name: "{{ .Chart.Name }}-wait-for-migrations"
-        image: "ghcr.io/groundnuty/k8s-wait-for:v2.0"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: "{{ .Values.initContainers.waitFor.image.repository }}:{{ .Values.initContainers.waitFor.image.tag }}"
+        imagePullPolicy: {{ .Values.initContainers.waitFor.image.pullPolicy }}
         args: 
         - "job"
         - "{{ include "pabc.fullname" . }}-migrations-{{ .Release.Revision }}"

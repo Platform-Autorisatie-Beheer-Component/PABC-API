@@ -17,3 +17,9 @@
 
 ### Maintenance
 - [Use snake_case naming convention in postgres table and column names](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/43)
+
+## [1.1.0] - 2026-04-07
+
+### Helm chart improvements
+- Support configurable initContainer image for wait-for containers in both API deployment and migrations job (enables ACR compatibility for restricted registry environments)
+- Add nodeSelector support to migrations job for custom node scheduling

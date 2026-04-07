@@ -12,6 +12,10 @@ spec:
         {{- include "pabc.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "pabc.serviceAccountName" . }}
+      {{- if .Values.migrations.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.migrations.nodeSelector | nindent 8 }}
+      {{- end }}
       containers:
       - name: {{ .Chart.Name }}-migrations
         image: "{{ .Values.migrations.image.repository }}:{{ .Values.migrations.image.tag | default .Chart.AppVersion }}"
@@ -32,8 +36,8 @@ spec:
     {{- if .Values.postgresql.enabled }}
       initContainers:
       - name: "{{ .Chart.Name }}-wait-for-postgresql"
-        image: "ghcr.io/groundnuty/k8s-wait-for:v2.0"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: "{{ .Values.initContainers.waitFor.image.repository }}:{{ .Values.initContainers.waitFor.image.tag }}"
+        imagePullPolicy: {{ .Values.initContainers.waitFor.image.pullPolicy }}
         args: 
         - "service"
         - "{{ .Release.Name }}-postgresql"

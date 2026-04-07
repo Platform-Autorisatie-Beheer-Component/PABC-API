@@ -38,6 +38,7 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts | list | `[]` | ingress hosts |
 | ingress.tls | list | `[]` |  |
+| initContainers.waitFor | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/groundnuty/k8s-wait-for","tag":"v2.0"}}` | Wait-for initContainer image (used by both deployment and migrations job) |
 | livenessProbe.failureThreshold | int | `6` |  |
 | livenessProbe.initialDelaySeconds | int | `60` |  |
 | livenessProbe.periodSeconds | int | `10` |  |
@@ -49,6 +50,7 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | migrations.image.pullPolicy | string | `"IfNotPresent"` |  |
 | migrations.image.repository | string | `"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"` |  |
 | migrations.image.tag | string | `""` |  |
+| migrations.nodeSelector | object | `{}` | Node selector for scheduling the migrations job |
 | migrations.restartPolicy | string | `"Never"` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
