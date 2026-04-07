@@ -38,7 +38,7 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts | list | `[]` | ingress hosts |
 | ingress.tls | list | `[]` |  |
-| initContainers.waitForPostgresql | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/groundnuty/k8s-wait-for","tag":"v2.0"}}` | Wait for PostgreSQL initContainer configuration |
+| initContainers.waitFor | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/groundnuty/k8s-wait-for","tag":"v2.0"}}` | Wait-for initContainer image (used by both deployment and migrations job) |
 | livenessProbe.failureThreshold | int | `6` |  |
 | livenessProbe.initialDelaySeconds | int | `60` |  |
 | livenessProbe.periodSeconds | int | `10` |  |
