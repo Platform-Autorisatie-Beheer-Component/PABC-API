@@ -38,8 +38,8 @@ spec:
       - name: "{{ .Chart.Name }}-wait-for-migrations"
         image: "{{ .Values.initContainers.waitFor.image.repository }}:{{ .Values.initContainers.waitFor.image.tag }}"
         imagePullPolicy: {{ .Values.initContainers.waitFor.image.pullPolicy }}
-        args: 
-        - "job"
+        args:
+        - "job-wr"
         - "{{ include "pabc.fullname" . }}-migrations-{{ .Release.Revision }}"
       containers:
         - name: {{ .Chart.Name }}
