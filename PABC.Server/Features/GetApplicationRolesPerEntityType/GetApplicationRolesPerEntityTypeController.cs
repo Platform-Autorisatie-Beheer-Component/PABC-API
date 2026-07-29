@@ -23,41 +23,48 @@ namespace PABC.Server.Features.GetApplicationRolesPerEntityType
         public async Task<ActionResult<GetApplicationRolesResponse>> Post([FromBody] GetApplicationRolesRequest request,
             CancellationToken token = default)
         {
-            var allEntityTypesList = await (
-                from m in db.Mappings
-                    .Include(m => m.ApplicationRole).ThenInclude(x=> x.Application)
-                    .Include(m => m.FunctionalRole)
-                    .Include(m => m.Domain)
-                where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && m.IsAllEntityTypes
-                from e in db.EntityTypes
-                select new { EntityType = e, m.ApplicationRole }
-            ).ToListAsync(token);
+            var records = await db.Mappings
+                .Where(m => request.FunctionalRoleNames.Contains(m.FunctionalRole.Name))
+                // left join with Domain, then left join with EntityType
+                .SelectMany(x => x.Domain!.EntityTypes.DefaultIfEmpty(), (x, e) => new
+                {
+                    ApplicationName = x.ApplicationRole.Application.Name,
+                    ApplicationRole = x.ApplicationRole.Name,
+                    EntityType = e,
+                    x.IsAllEntityTypes
+                })
+                .ToListAsync(token);
 
-            // Fetch domain-specific mappings — apply only to entity types within the domain
-            var domainSpecificList = await (
-                from m in db.Mappings
-                    .Include(m => m.ApplicationRole).ThenInclude(x => x.Application)
-                    .Include(m => m.FunctionalRole)
-                    .Include(m => m.Domain)
-                where request.FunctionalRoleNames.Contains(m.FunctionalRole.Name) && !m.IsAllEntityTypes
-                from e in m.Domain!.EntityTypes.DefaultIfEmpty()
-                select new { EntityType = (EntityType?)e, m.ApplicationRole }
-            ).ToListAsync(token);
+            // performance: don't get all entity types from db if not necessary
+            var allEntityTypes = records.Any(x => x.IsAllEntityTypes)
+                ? await db.EntityTypes.ToArrayAsync(token)
+                : [];
 
-            // Combine results
-            var rawResults = allEntityTypesList.Concat(domainSpecificList).ToList();
+            // For records with IsAllEntityTypes = true, create a record for each entity type
+            var allEntityTypeRecords = records.Where(x => x.IsAllEntityTypes)
+                .SelectMany(x => allEntityTypes, (x, e) => new
+                {
+                    x.ApplicationName,
+                    x.ApplicationRole,
+                    EntityType = (EntityType?)e,
+                    x.IsAllEntityTypes
+                });
 
-            // Group by EntityType and project
-            var groupedResults = rawResults
+            var regularRecords = records.Where(x => !x.IsAllEntityTypes);
+
+            var groupedResults = regularRecords
+                .Concat(allEntityTypeRecords)
                 .GroupBy(x => x.EntityType)
                 .Select(g => new GetApplicationRolesResponseModel
                 {
-                    EntityType = g.Key == null ? null : new EntityTypeModel { Id = g.Key.EntityTypeId, Type = g.Key.Type, Name = g.Key.Name },
+                    EntityType = g.Key == null
+                        ? null
+                        : new EntityTypeModel { Id = g.Key.EntityTypeId, Type = g.Key.Type, Name = g.Key.Name },
                     ApplicationRoles = g
                         .Select(x => new ApplicationRoleModel
                         {
-                            Name = x.ApplicationRole.Name, 
-                            Application = x.ApplicationRole.Application.Name,
+                            Name = x.ApplicationRole,
+                            Application = x.ApplicationName,
                         })
                         .DistinctBy(ar => new { ar.Name, ar.Application })
                         .ToList()
