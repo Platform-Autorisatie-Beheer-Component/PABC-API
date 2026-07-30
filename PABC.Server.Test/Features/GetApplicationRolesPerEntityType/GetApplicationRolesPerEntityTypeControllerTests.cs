@@ -224,6 +224,51 @@ namespace PABC.Server.Test.Features.GetApplicationRolesPerEntityType
         }
 
         [Fact]
+        public async Task Post_GroupsApplicationRoles_WhenEntityTypeAppearsInBothRegularAndAllEntityTypesMapping()
+        {
+            // ARRANGE
+            var sharedEntityType = RandomEntityType();
+            var extraEntityType = RandomEntityType();
+
+            // A regular mapping that targets sharedEntityType via its domain
+            var regularMapping = InsertTestMapping(
+                RandomFunctionalRole(),
+                RandomApplicationRole(await fixture.CreateTestApplicationAsync()),
+                RandomDomain(sharedEntityType),
+                isAllEntityTypes: false);
+
+            // An IsAllEntityTypes mapping that will expand to include both entity types
+            var domain2 = RandomDomain(extraEntityType);
+            _dbContext.Add(domain2);
+            _dbContext.SaveChanges();
+
+            var allEntityTypesMapping = InsertTestMapping(
+                RandomFunctionalRole(),
+                RandomApplicationRole(await fixture.CreateTestApplicationAsync()),
+                domain: null,
+                isAllEntityTypes: true);
+
+            // ACT
+            var result = await CreateController().Post(CreateRequest(
+                regularMapping.FunctionalRole.Name,
+                allEntityTypesMapping.FunctionalRole.Name));
+
+            // ASSERT
+            var response = Assert.IsType<GetApplicationRolesResponse>(result.Value);
+
+            // sharedEntityType should appear once, with both application roles grouped together
+            var sharedGroup = Assert.Single(response.Results, r => r.EntityType!.Id == sharedEntityType.EntityTypeId);
+            Assert.Equal(2, sharedGroup.ApplicationRoles.Count);
+            Assert.Contains(sharedGroup.ApplicationRoles, ar => ar.Name == regularMapping.ApplicationRole.Name);
+            Assert.Contains(sharedGroup.ApplicationRoles, ar => ar.Name == allEntityTypesMapping.ApplicationRole.Name);
+
+            // extraEntityType should have only the allEntityTypes mapping's role
+            var extraGroup = Assert.Single(response.Results, r => r.EntityType!.Id == extraEntityType.EntityTypeId);
+            var singleAppRole = Assert.Single(extraGroup.ApplicationRoles);
+            Assert.Equal(allEntityTypesMapping.ApplicationRole.Name, singleAppRole.Name);
+        }
+
+        [Fact]
         public async Task Post_ReturnsNullEntityType_WhenMappingIsNotAllEntityTypesAndDomainIsNull()
         {
             // ARRANGE
