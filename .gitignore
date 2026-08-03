@@ -399,3 +399,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 charts/pabc/charts
+
+# Copilot instructions
+.github/copilot-instructions.md
