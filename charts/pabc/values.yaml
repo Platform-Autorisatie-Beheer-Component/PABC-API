@@ -183,6 +183,19 @@ settings:
     # -- Client secret for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details>
     clientSecret: ""
 
+  # -- Optional ZGW zaakregister integration for importing zaaktypes as entity types.
+  zgwZaakregister:
+    # -- Enable or disable the ZGW zaakregister import feature. When enabled, a button to import zaaktypes is shown in the UI.
+    enabled: false
+    # -- Base URL of the ZGW zaakregister API. <details> <summary>More information</summary> For example: `https://openzaak.gemeente.nl` </details>
+    apiUrl: ""
+    # -- Client ID for ZGW API authentication (used to generate JWT tokens).
+    clientId: ""
+    # -- Client secret for ZGW API authentication (used to sign JWT tokens).
+    clientSecret: ""
+    # -- Domain name of the zaaktype catalogus to import from.
+    catalogusDomein: ""
+
   aspnetcore:
     forwardedHeadersEnabled: true
     environment: ""
