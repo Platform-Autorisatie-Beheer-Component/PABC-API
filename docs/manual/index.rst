@@ -6,3 +6,4 @@ Handleiding
    :caption: Lees meer
 
    API-toegang.md
+   zaaktypes-importeren.md

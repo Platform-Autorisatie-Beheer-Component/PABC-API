@@ -2,6 +2,7 @@
 
 ## latest
 - Refactor query implementation for GetApplicationRolesPerEntityType to be more readable
+- [Zaaktypes uit Open Zaak importeren #148](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/148)
 
 ## v1.1.1
 
