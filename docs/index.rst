@@ -14,3 +14,4 @@ Het Platform Autorisatie Beheer Component (PABC) stelt gemeenten in staat om op 
    installation/index
    manual/index
    api/index
+   changelog/changelog.md
