@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace PABC.Server.ZgwZaakregister;
 
@@ -48,7 +48,7 @@ public class ZgwCatalogiClient(HttpClient httpClient, ZgwZaakregisterOptions opt
     private async Task<List<ZgwZaaktype>> GetAllZaaktypes(string catalogusUrl, CancellationToken token)
     {
         var allZaaktypes = new List<ZgwZaaktype>();
-        string? nextUrl = $"zaaktypen?catalogus={Uri.EscapeDataString(catalogusUrl)}&status=definitief";
+        var nextUrl = $"zaaktypen?catalogus={Uri.EscapeDataString(catalogusUrl)}&status=definitief";
 
         while (nextUrl is not null)
         {
@@ -74,9 +74,9 @@ public class ZgwCatalogiClient(HttpClient httpClient, ZgwZaakregisterOptions opt
     /// </summary>
     private static string? GetRelativeUrl(string? absoluteUrl)
     {
-        if (string.IsNullOrEmpty(absoluteUrl)) return null;
-        if (!Uri.TryCreate(absoluteUrl, UriKind.Absolute, out var uri)) return absoluteUrl;
-        return uri.PathAndQuery;
+        return string.IsNullOrEmpty(absoluteUrl)
+            ? null
+            : !Uri.TryCreate(absoluteUrl, UriKind.Absolute, out var uri) ? absoluteUrl : uri.PathAndQuery;
     }
 }
 
