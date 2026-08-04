@@ -5,10 +5,12 @@
     <alert-inline v-if="listError">{{ listError }}</alert-inline>
 
     <template v-else>
-      <p>
+      <p class="actions">
         <button type="button" class="button secondary" @click="openCreateDialog">
-          <icon-container icon="plus" /> Toevoegen
+          Toevoegen <icon-container icon="plus" />
         </button>
+
+        <slot name="actions" :refresh="fetchItems"></slot>
       </p>
 
       <small-spinner v-if="listLoading" />
@@ -124,5 +126,10 @@ h3 {
 
 .lowercase {
   text-transform: lowercase;
+}
+
+.actions {
+  display: flex;
+  column-gap: var(--spacing-default);
 }
 </style>

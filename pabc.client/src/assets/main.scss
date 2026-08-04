@@ -128,25 +128,6 @@ details {
   }
 }
 
-form menu {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-default);
-
-  button,
-  .button {
-    text-align: center;
-    inline-size: 100%;
-    margin-block-end: 0;
-  }
-
-  @media (min-width: variables.$breakpoint-md) {
-    & {
-      flex-direction: row;
-    }
-  }
-}
-
 dialog {
   position: relative;
   inline-size: min(90vw, var(--section-width-medium));
@@ -169,7 +150,7 @@ dialog {
     border: none;
   }
 
-  h2:first-child {
+  h2 {
     font-size: var(--font-large);
     margin-block-start: 0;
     padding-block-end: var(--spacing-default);
@@ -178,7 +159,23 @@ dialog {
   }
 
   menu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-default);
     margin-block-start: var(--spacing-default);
+
+    button,
+    .button {
+      text-align: center;
+      inline-size: 100%;
+      margin-block-end: 0;
+    }
+
+    @media (min-width: variables.$breakpoint-md) {
+      & {
+        flex-direction: row;
+      }
+    }
   }
 }
 
