@@ -3,6 +3,11 @@
 ## latest
 - Refactor query implementation for GetApplicationRolesPerEntityType to be more readable
 
+## v1.1.1
+
+### Helm chart improvements
+- fix: wait-for-migrations gebruikt job-wr i.p.v. job
+
 ## v1.1.0
 
 ### Helm chart improvements
