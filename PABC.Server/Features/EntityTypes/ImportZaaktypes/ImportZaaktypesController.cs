@@ -24,7 +24,7 @@ namespace PABC.Server.Features.EntityTypes.ImportZaaktypes
                 var zaaktypeOmschrijvingen = await zgwClient.GetZaaktypeOmschrijvingen(token);
 
                 var existingZaaktypes = await db.EntityTypes
-                    .Where(e => e.Type == ZaaktypeType)
+                    .Where(e => e.Type == ZaaktypeType) // matched case-insensitive due to nl_case_insensitive collation
                     .Select(e => e.EntityTypeId)
                     .ToListAsync(token);
 
@@ -57,16 +57,15 @@ namespace PABC.Server.Features.EntityTypes.ImportZaaktypes
 
                 var zaaktypeSet = new HashSet<string>(zaaktypeOmschrijvingen);
 
-                var notInZaakregister = existingSet
+                var stale = existingSet
                     .Where(id => !zaaktypeSet.Contains(id))
                     .ToList();
 
                 return Ok(new ImportZaaktypesResponse
                 {
-                    CreatedCount = created.Count,
                     Created = created,
                     Skipped = skipped,
-                    NotInZaakregister = notInZaakregister
+                    Stale = stale
                 });
             }
             catch (Exception ex) when (ex is HttpRequestException or InvalidOperationException)
@@ -82,9 +81,8 @@ namespace PABC.Server.Features.EntityTypes.ImportZaaktypes
 
     public class ImportZaaktypesResponse
     {
-        public int CreatedCount { get; init; }
         public required List<string> Created { get; init; }
         public required List<string> Skipped { get; init; }
-        public required List<string> NotInZaakregister { get; init; }
+        public required List<string> Stale { get; init; }
     }
 }
