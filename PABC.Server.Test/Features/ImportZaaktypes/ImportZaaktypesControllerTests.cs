@@ -185,5 +185,22 @@ namespace PABC.Server.Test.Features.ImportZaaktypes
             var problem = Assert.IsType<ProblemDetails>(statusResult.Value);
             Assert.Contains("Connection refused", problem.Detail);
         }
+
+        [Fact]
+        public async Task ImportZaaktypes_Returns500_WhenZgwIntegrationIsDisabled()
+        {
+            // Arrange — use the real DisabledZgwCatalogiClient instead of mock
+            _dbContext.ChangeTracker.Clear();
+            var controller = new ImportZaaktypesController(_dbContext, new DisabledZgwCatalogiClient());
+
+            // Act
+            var result = await controller.ImportZaaktypes();
+
+            // Assert
+            var statusResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(500, statusResult.StatusCode);
+            var problem = Assert.IsType<ProblemDetails>(statusResult.Value);
+            Assert.Contains("niet ingeschakeld", problem.Detail);
+        }
     }
 }

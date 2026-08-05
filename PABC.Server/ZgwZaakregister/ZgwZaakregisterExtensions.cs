@@ -9,7 +9,11 @@ public static class ZgwZaakregisterExtensions
 
         services.AddSingleton(options);
 
-        if (!options.Enabled) return;
+        if (!options.Enabled)
+        {
+            services.AddSingleton<IZgwCatalogiClient, DisabledZgwCatalogiClient>();
+            return;
+        }
 
         services.AddSingleton(new ZgwTokenProvider(options));
         services.AddTransient<ZgwTokenHandler>();
