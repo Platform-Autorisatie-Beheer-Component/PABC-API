@@ -24,10 +24,11 @@ namespace PABC.Server.Features.EntityTypes.ImportZaaktypes
                 var zaaktypeOmschrijvingen = await zgwClient.GetZaaktypeOmschrijvingen(token);
 
                 var existingZaaktypes = await db.EntityTypes
-                    .Where(e => e.Type == ZaaktypeType) // matched case-insensitive due to nl_case_insensitive collation
+                    .Where(e => e.Type == ZaaktypeType) // matching Type case-insensitive (nl_case_insensitive collation)
                     .Select(e => e.EntityTypeId)
                     .ToListAsync(token);
 
+                // matching EntityTypeId to omschrijving case-sensitive, so we use a HashSet for lookups
                 var existingSet = new HashSet<string>(existingZaaktypes);
 
                 var created = new List<string>();
