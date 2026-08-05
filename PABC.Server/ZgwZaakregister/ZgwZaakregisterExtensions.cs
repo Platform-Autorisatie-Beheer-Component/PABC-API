@@ -22,8 +22,9 @@ public static class ZgwZaakregisterExtensions
             .AddHttpMessageHandler<ZgwTokenHandler>()
             .ConfigureHttpClient(client =>
             {
-                var baseUrl = options.ApiUrl.TrimEnd('/');
-                client.BaseAddress = new Uri($"{baseUrl}/catalogi/api/v1/");
+                if (string.IsNullOrWhiteSpace(options.ApiUrl) || !Uri.TryCreate(options.ApiUrl, UriKind.Absolute, out var apiUri))
+                    throw new InvalidOperationException("ZgwZaakregister:ApiUrl must be an absolute URL when Enabled=true.");
+                client.BaseAddress = new Uri(apiUri, "/catalogi/api/v1/");
             });
     }
 }
