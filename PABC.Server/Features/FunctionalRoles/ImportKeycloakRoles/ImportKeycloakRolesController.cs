@@ -26,14 +26,16 @@ namespace PABC.Server.Features.FunctionalRoles.ImportKeycloakRoles
                     .Select(r => r.Name)
                     .ToListAsync(token);
 
-                var existingSet = new HashSet<string>(existingRoles);
+                // Case-insensitive: FunctionalRole.Name has a unique index with nl_case_insensitive collation
+                var existingSet = new HashSet<string>(existingRoles, StringComparer.OrdinalIgnoreCase);
 
                 var created = new List<string>();
                 var skipped = new List<string>();
 
                 foreach (var roleName in roleNames)
                 {
-                    if (existingSet.Contains(roleName))
+                    // Add returns false if already present; also prevents duplicates within the same batch
+                    if (!existingSet.Add(roleName))
                     {
                         skipped.Add(roleName);
                         continue;
@@ -50,7 +52,7 @@ namespace PABC.Server.Features.FunctionalRoles.ImportKeycloakRoles
 
                 await db.SaveChangesAsync(token);
 
-                var keycloakSet = new HashSet<string>(roleNames);
+                var keycloakSet = new HashSet<string>(roleNames, StringComparer.OrdinalIgnoreCase);
 
                 var stale = existingSet
                     .Where(name => !keycloakSet.Contains(name))

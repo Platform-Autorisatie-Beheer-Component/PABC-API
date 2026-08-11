@@ -93,6 +93,38 @@ namespace PABC.Server.Test.Features.ImportKeycloakRoles
         }
 
         [Fact]
+        public async Task ImportKeycloakRoles_SkipsCaseInsensitiveDuplicate_WhenRoleExistsWithDifferentCasing()
+        {
+            // Arrange — "Behandelaar" exists in PABC, Keycloak returns "behandelaar" (different casing)
+            _dbContext.FunctionalRoles.Add(new FunctionalRole
+            {
+                Id = Guid.NewGuid(),
+                Name = "Behandelaar"
+            });
+            await _dbContext.SaveChangesAsync();
+
+            _keycloakClientMock.Setup(c => c.GetRealmRoles(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<RoleRepresentation>
+                {
+                    new() { Name = "behandelaar" },
+                    new() { Name = "Recordbeheerder" }
+                });
+
+            // Act
+            var result = await CreateController().ImportKeycloakRoles();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var response = Assert.IsType<ImportKeycloakRolesResponse>(okResult.Value);
+
+            Assert.Single(response.Created);
+            Assert.Contains("Recordbeheerder", response.Created);
+            Assert.Single(response.Skipped);
+            Assert.Contains("behandelaar", response.Skipped);
+            Assert.Empty(response.Stale);
+        }
+
+        [Fact]
         public async Task ImportKeycloakRoles_DetectsStale_WhenRoleNoLongerInKeycloak()
         {
             // Arrange
