@@ -45,10 +45,15 @@ namespace PABC.Server.Keycloak
             using var response = await httpClient.GetAsync("roles?briefRepresentation=true", HttpCompletionOption.ResponseHeadersRead, token);
             response.EnsureSuccessStatusCode();
 
-            var roles = await response.Content.ReadFromJsonAsync<List<RoleRepresentation>>(cancellationToken: token)
-                ?? throw new InvalidOperationException("Ongeldig antwoord van Keycloak bij ophalen realm roles");
-
-            return roles;
+            try
+            {
+                return await response.Content.ReadFromJsonAsync<List<RoleRepresentation>>(cancellationToken: token)
+                    ?? throw new InvalidOperationException("Ongeldig antwoord van Keycloak bij ophalen realm roles");
+            }
+            catch (System.Text.Json.JsonException ex)
+            {
+                throw new InvalidOperationException("Ongeldig antwoord van Keycloak bij ophalen realm roles", ex);
+            }
         }
     }
 
