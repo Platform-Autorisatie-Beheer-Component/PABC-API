@@ -48,6 +48,12 @@ export type ImportZaaktypesResponse = {
   stale: string[];
 };
 
+export type ImportKeycloakRolesResponse = {
+  created: string[];
+  skipped: string[];
+  stale: string[];
+};
+
 const createPabcService = <T extends Item>(endpoint: string, createEmpty: () => T) => ({
   getAll: (): Promise<T[]> => get<T[]>(`/api/v1/${endpoint}`),
   getById: (id: string): Promise<T> => get<T>(`/api/v1/${endpoint}/${id}`),
@@ -110,4 +116,9 @@ export const importZaaktypesService = {
     get<{ enabled: boolean }>("/api/v1/entity-types/import-zaaktypes/enabled"),
   import: (): Promise<ImportZaaktypesResponse> =>
     post<ImportZaaktypesResponse>("/api/v1/entity-types/import-zaaktypes", undefined)
+};
+
+export const importKeycloakRolesService = {
+  import: (): Promise<ImportKeycloakRolesResponse> =>
+    post<ImportKeycloakRolesResponse>("/api/v1/functional-roles/import-keycloak", undefined)
 };
