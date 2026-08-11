@@ -7,3 +7,4 @@ Handleiding
 
    API-toegang.md
    zaaktypes-importeren.md
+   functionele-rollen-importeren.md
