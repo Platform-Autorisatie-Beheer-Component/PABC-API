@@ -30,7 +30,7 @@ data:
   {{- end}}
   {{- if .Values.settings.zgwZaakregister }}
   ZgwZaakregister__Enabled: {{ .Values.settings.zgwZaakregister.enabled | toString | quote }}
-  ZgwZaakregister__ApiUrl: {{ .Values.settings.zgwZaakregister.apiUrl }}
+  ZgwZaakregister__CatalogiBaseUrl: {{ .Values.settings.zgwZaakregister.catalogiBaseUrl }}
   ZgwZaakregister__ClientId: {{ .Values.settings.zgwZaakregister.clientId }}
   ZgwZaakregister__CatalogusDomein: {{ .Values.settings.zgwZaakregister.catalogusDomein }}
   {{- end}}

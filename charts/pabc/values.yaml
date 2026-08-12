@@ -187,8 +187,8 @@ settings:
   zgwZaakregister:
     # -- Enable or disable the ZGW zaakregister import feature. When enabled, a button to import zaaktypes is shown in the UI.
     enabled: false
-    # -- Base URL of the ZGW zaakregister API. <details> <summary>More information</summary> For example: `https://openzaak.gemeente.nl` </details>
-    apiUrl: ""
+    # -- Full base URL of the ZGW Catalogi API. <details> <summary>More information</summary> For example: `https://openzaak.gemeente.nl/catalogi/api/v1/`. This may differ per zaakregister implementation. </details>
+    catalogiBaseUrl: ""
     # -- Client ID for ZGW API authentication (used to generate JWT tokens).
     clientId: ""
     # -- Client secret for ZGW API authentication (used to sign JWT tokens).

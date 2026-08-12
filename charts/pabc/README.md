@@ -112,8 +112,8 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | settings.oidc.nameClaimType | string | `""` | The name of the claim in the JWT token from the OpenID Connect Provider that contains the full name of the logged-in user. <br/> (default value is `name`) |
 | settings.oidc.requireHttps | bool | `true` | Optional setting to allow an OpenID Connect Identity Provider running on HTTP. <details> <summary>More information</summary> Add this variable with the value `false` if the identity provider communicates over an HTTP connection. This can be useful in a local development environment. If the provider uses HTTPS, you may omit this variable or set it to `true`. </details> |
 | settings.oidc.roleClaimType | string | `""` | The name of the claim in the JWT token from the OpenID Connect Provider that contains the roles of the logged-in user. <br/> (default value is `roles`) |
-| settings.zgwZaakregister | object | `{"apiUrl":"","catalogusDomein":"","clientId":"","clientSecret":"","enabled":false}` | Optional ZGW zaakregister integration for importing zaaktypes as entity types. |
-| settings.zgwZaakregister.apiUrl | string | `""` | Base URL of the ZGW zaakregister API. <details> <summary>More information</summary> For example: `https://openzaak.gemeente.nl` </details> |
+| settings.zgwZaakregister | object | `{"catalogiBaseUrl":"","catalogusDomein":"","clientId":"","clientSecret":"","enabled":false}` | Optional ZGW zaakregister integration for importing zaaktypes as entity types. |
+| settings.zgwZaakregister.catalogiBaseUrl | string | `""` | Full base URL of the ZGW Catalogi API. <details> <summary>More information</summary> For example: `https://openzaak.gemeente.nl/catalogi/api/v1/`. This may differ per zaakregister implementation. </details> |
 | settings.zgwZaakregister.catalogusDomein | string | `""` | Domain name of the zaaktype catalogus to import from. |
 | settings.zgwZaakregister.clientId | string | `""` | Client ID for ZGW API authentication (used to generate JWT tokens). |
 | settings.zgwZaakregister.clientSecret | string | `""` | Client secret for ZGW API authentication (used to sign JWT tokens). |
