@@ -228,6 +228,21 @@ migrations:
   #    subPath: my-dataset
   #    mountPath: /app/dataset.json
 
+  # -- Optionally specify applications and their roles to pre-fill on startup (only created if they don't already exist).
+  # @default -- `[]` (no pre-fill)
+  prefill:
+    applications: []
+    # e.g:
+    # applications:
+    #   - name: zaakafhandelcomponent
+    #     roles:
+    #       - raadpleger
+    #       - behandelaar
+    #       - coordinator
+    #       - recordmanager
+    #       - beheerder
+    #       - brp_zoeken
+
 #####################
 # Postgres subchart #
 #####################
