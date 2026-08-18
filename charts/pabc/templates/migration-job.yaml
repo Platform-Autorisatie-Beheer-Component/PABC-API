@@ -29,9 +29,25 @@ spec:
         volumeMounts:
           {{- include "pabc.tplvalues.render" ( dict "value" .Values.migrations.extraVolumeMounts "context" $ ) | nindent 10 }}
       {{- end }}
-    {{- if .Values.migrations.extraVolumes }}
+      {{- if .Values.migrations.prefill.applications }}
+        {{- if not .Values.migrations.extraVolumeMounts }}
+        volumeMounts:
+        {{- end }}
+          - name: prefill
+            mountPath: /app/prefill.json
+            subPath: prefill.json
+            readOnly: true
+      {{- end }}
+    {{- if or .Values.migrations.extraVolumes .Values.migrations.prefill.applications }}
       volumes:
+        {{- if .Values.migrations.extraVolumes }}
         {{- include "pabc.tplvalues.render" ( dict "value" .Values.migrations.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.migrations.prefill.applications }}
+        - name: prefill
+          configMap:
+            name: {{ include "pabc.fullname" . }}-prefill
+        {{- end }}
     {{- end }}
     {{- if .Values.postgresql.enabled }}
       initContainers:
