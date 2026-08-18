@@ -1,5 +1,5 @@
 <template>
-  <search class="filter">
+  <search class="filter" role="search">
     <input
       v-model="model"
       name="filter"
@@ -29,7 +29,7 @@ const { label, maxlength = 256 } = defineProps<{
   maxlength?: number;
 }>();
 
-const inputRef = ref<HTMLInputElement>();
+const inputRef = ref<HTMLInputElement | null>(null);
 
 const clear = () => {
   model.value = "";
