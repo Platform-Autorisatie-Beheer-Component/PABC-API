@@ -47,11 +47,11 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | migrations.dataSetPath | string | `nil` | Optionally specify a path to a data set json file to insert into the database. <details> <summary>More information</summary>You can use the extraVolumes and extraVolumeMounts values to mount a data set file into the running container. The file needs to be valid according to <a href="../../PABC.MigrationService/dataset.schema.json">the json schema</a></details> |
 | migrations.extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts, for example to mount a dataset file. |
 | migrations.extraVolumes | list | `[]` | Optionally specify extra list of additional volumes, for example to mount a dataset file. |
-| migrations.prefill.applications | list | `[]` | Applications and their roles to pre-fill on startup. Only created if they don't already exist. <details> <summary>More information</summary>Example: `[{name: "zaakafhandelcomponent", roles: ["raadpleger", "behandelaar", "coordinator"]}]`</details> |
 | migrations.image.pullPolicy | string | `"IfNotPresent"` |  |
 | migrations.image.repository | string | `"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"` |  |
 | migrations.image.tag | string | `""` |  |
 | migrations.nodeSelector | object | `{}` | Node selector for scheduling the migrations job |
+| migrations.prefill | object | `[]` (no pre-fill) | Optionally specify applications and their roles to pre-fill on startup (only created if they don't already exist). |
 | migrations.restartPolicy | string | `"Never"` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
