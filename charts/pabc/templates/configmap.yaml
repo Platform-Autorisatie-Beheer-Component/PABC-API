@@ -34,3 +34,6 @@ data:
   ZgwZaakregister__ClientId: {{ .Values.settings.zgwZaakregister.clientId }}
   ZgwZaakregister__CatalogusDomein: {{ .Values.settings.zgwZaakregister.catalogusDomein }}
   {{- end}}
+  {{- if .Values.migrations.prefill.applications }}
+  PREFILL_PATH: "/app/prefill.json"
+  {{- end}}

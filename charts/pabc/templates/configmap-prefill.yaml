@@ -1,0 +1,10 @@
+{{- if .Values.migrations.prefill.applications }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pabc.fullname" . }}-prefill
+  labels:
+    {{- include "pabc.labels" . | nindent 4 }}
+data:
+  prefill.json: {{ .Values.migrations.prefill.applications | toJson | quote }}
+{{- end }}
