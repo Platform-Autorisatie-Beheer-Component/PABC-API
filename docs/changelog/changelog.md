@@ -5,6 +5,7 @@
 - [Zaaktypes uit Open Zaak importeren #148](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/148)
 - [Functionele rollen importeren vanuit Keycloak #147](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/147)
 - [Tekstfilter voor domeinen en functionele rollen #150](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/150)
+- [Pre-fill applicaties en applicatierollen bij opstarten #149](https://github.com/Platform-Autorisatie-Beheer-Component/PABC-API/issues/149)
 
 ## v1.1.1
 
