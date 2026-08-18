@@ -1,5 +1,5 @@
 <template>
-  <search class="filter">
+  <search class="filter" role="search">
     <input
       v-model="model"
       name="filter"
