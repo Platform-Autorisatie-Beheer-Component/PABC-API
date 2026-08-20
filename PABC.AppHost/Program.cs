@@ -19,7 +19,7 @@ var migrations = builder.AddProject<Projects.PABC_MigrationService>("migrations"
 
 builder.AddProject<Projects.PABC_Server>("pabc-server")
     .WithEnvironment("API_KEY__0", "unsafe-test-api-key")
-    .WithEnvironment("Oidc__Authority", "http://localhost:61046/realms/pabc/")
+    .WithEnvironment("Oidc__Authority", $"{keycloak.GetEndpoint("http")}/realms/pabc/")
     .WithEnvironment("Oidc__ClientId", "pabc")
     .WithEnvironment("Oidc__ClientSecret", "unsafe-test-secret")
     .WithEnvironment("Oidc__RequireHttps", "false")
