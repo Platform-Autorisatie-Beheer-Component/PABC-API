@@ -1,7 +1,7 @@
 name: Generate and Commit Swagger JSON
 on:
   push:
-    branches: [ main ]
+    branches: [ main, test ]
     paths-ignore:
       - 'PABC.Server/PABC.Server.json'
       - 'PABC.MigrationService/dataset.schema.json'

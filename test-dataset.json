@@ -87,7 +87,7 @@
     {
       "id": "49a3a65e-85d5-483f-94ef-cacde9b46392",
       "entityTypeId": "melding-klein-kansspel",
-      "type": "zaaktype",
+      "type": "ZAAKTYPE",
       "name": "Melding klein kansspel",
       "description": null,
       "uri": null
@@ -95,7 +95,7 @@
     {
       "id": "df414340-ccc8-4538-b627-8f030d3fce5a",
       "entityTypeId": "4e082abc-128b-47fa-8d1d-4a215cd602d2",
-      "type": "zaaktype",
+      "type": "ZAAKTYPE",
       "name": "Aanvraag ontheffing bedrijfsvoertuigen behandelen",
       "description": null,
       "uri": null
@@ -103,7 +103,7 @@
     {
       "id": "f644f9df-aa70-4046-a278-2069e23818f2",
       "entityTypeId": "1c59fbc4-e8cd-4ab0-92d1-5aa023a7c1c8",
-      "type": "zaaktype",
+      "type": "ZAAKTYPE",
       "name": "Aanvraag subsidieregeling Energieneutraal Ten Post behandelen",
       "description": null,
       "uri": null
@@ -111,7 +111,7 @@
     {
       "id": "48634eaf-741c-4bc0-9ade-03886f08cb36",
       "entityTypeId": "a3469fab-dc42-4034-ac92-95d5682e78b9",
-      "type": "zaaktype",
+      "type": "ZAAKTYPE",
       "name": "Melding flyeren en samplen behandelen",
       "description": null,
       "uri": null

@@ -87,6 +87,10 @@
       item-name-singular="Entiteitstype"
       item-name-plural="Entiteitstypes"
     >
+      <template #actions="{ refresh }">
+        <import-zaaktypes @refresh="refresh" />
+      </template>
+
       <template #item="{ item: entityType }">
         <h3>{{ entityType.type }}</h3>
         <p>{{ entityType.name }}</p>
@@ -118,6 +122,7 @@ import FunctionalRoleForm from "@/components/item/forms/FunctionalRoleForm.vue";
 import EntityTypeForm from "@/components/item/forms/EntityTypeForm.vue";
 import ApplicationRoleForm from "@/components/item/forms/ApplicationRoleForm.vue";
 import ApplicationForm from "@/components/item/forms/ApplicationForm.vue";
+import ImportZaaktypes from "@/components/item/ImportZaaktypes.vue";
 
 const {
   items: applications,
