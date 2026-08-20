@@ -4,16 +4,11 @@ using PABC.Data.Entities;
 
 public record DataSet
 {
-    public required IReadOnlyList<Application> Applications { get; init; }
-    public required IReadOnlyList<ApplicationRole> ApplicationRoles { get; init; }
-    public required IReadOnlyList<FunctionalRole> FunctionalRoles { get; init; }
-    public required IReadOnlyList<EntityType> EntityTypes { get; init; }
-    public required IReadOnlyList<DataSetDomain> Domains { get; init; }
-    public required IReadOnlyList<Mapping> Mappings { get; init; }
+    public required IReadOnlyCollection<Application> Applications { get; init; }
+    public required IReadOnlyCollection<ApplicationRole> ApplicationRoles { get; init; }
+    public required IReadOnlyCollection<FunctionalRole> FunctionalRoles { get; init; }
+    public required IReadOnlyCollection<EntityType> EntityTypes { get; init; }
+    public required IReadOnlyCollection<Domain> Domains { get; init; }
+    public required IReadOnlyCollection<Mapping> Mappings { get; init; }
 };
-
-public class DataSetDomain : Domain
-{
-    public required IReadOnlyList<Guid> EntityTypeIds { get; init; }
-}
 

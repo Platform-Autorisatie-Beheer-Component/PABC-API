@@ -7,6 +7,5 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="EFCore.NamingConventions" />
-    <PackageReference Include="JsonSchema.Net.Generation" />
   </ItemGroup>
 </Project>

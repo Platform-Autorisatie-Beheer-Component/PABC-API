@@ -37,15 +37,6 @@ namespace PABC.MigrationService.Features.DatabaseInitialization
             await dbContext.EntityTypes.AddRangeAsync(dataSet.EntityTypes, cancellationToken);
             await dbContext.Mappings.AddRangeAsync(dataSet.Mappings, cancellationToken);
 
-            // correct the DomainEntityType n-to-n-table
-            foreach (var item in dataSet.Domains)
-            {
-                foreach (var entityId in item.EntityTypeIds)
-                {
-                    item.EntityTypes.Add(dataSet.EntityTypes.Single(e => e.Id == entityId));
-                }
-            }
-
             await dbContext.SaveChangesAsync(cancellationToken);
         }
 

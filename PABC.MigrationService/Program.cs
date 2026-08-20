@@ -1,14 +1,6 @@
-using PABC.Data;
+﻿using PABC.Data;
 using PABC.MigrationService;
 using PABC.MigrationService.Features.DatabaseInitialization;
-
-// use `dotnet run generate` to generate the json schema. we do this in a github action
-
-if (args.Contains("generate"))
-{
-    await DatasetParser.WriteSchemaToFile(CancellationToken.None);
-    return;
-}
 
 var builder = Host.CreateApplicationBuilder(args);
 

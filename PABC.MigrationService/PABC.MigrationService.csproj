@@ -7,8 +7,16 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Corvus.Text.Json" />
+    <PackageReference Include="Corvus.Text.Json.SourceGenerator">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="dataset.schema.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PABC.Data\PABC.Data.csproj" />

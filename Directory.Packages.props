@@ -11,7 +11,8 @@
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="Duende.AccessTokenManagement.OpenIdConnect" Version="4.2.0" />
     <PackageVersion Include="EFCore.NamingConventions" Version="10.0.1" />
-    <PackageVersion Include="JsonSchema.Net.Generation" Version="7.3.11" />
+    <PackageVersion Include="Corvus.Text.Json" Version="5.3.2" />
+    <PackageVersion Include="Corvus.Text.Json.SourceGenerator" Version="5.3.2" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaProxy" Version="10.0.11" />

@@ -144,7 +144,7 @@ namespace PABC.Server.Test.MigrationService.Features.DatabaseInitialization
             } 
             """);
             Assert.Equal("const", error.Key);
-            Assert.Equal("Expected \"null\"", error.Value);
+            Assert.Equal("Expected the value to be 'null'", error.Value);
         }
 
         private static async Task<DataSet> Test([StringSyntax("json")] string input)
