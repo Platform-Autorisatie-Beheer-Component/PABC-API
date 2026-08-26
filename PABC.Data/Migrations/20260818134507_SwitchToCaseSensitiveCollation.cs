@@ -12,18 +12,11 @@ namespace PABC.Data.Migrations
         {
             // Drop unique indexes that depend on the nl_case_insensitive collation.
             // These must be dropped before the collation can be removed.
-
             migrationBuilder.DropIndex(name: "ix_application_name", table: "application");
             migrationBuilder.DropIndex(name: "ix_application_role_application_id_name", table: "application_role");
             migrationBuilder.DropIndex(name: "ix_domain_name", table: "domain");
             migrationBuilder.DropIndex(name: "ix_entity_type_type_entity_type_id", table: "entity_type");
             migrationBuilder.DropIndex(name: "ix_functional_role_name", table: "functional_role");
-
-            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_application_name;");
-            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_application_role_application_id_name;");
-            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_domain_name;");
-            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_entity_type_type_entity_type_id;");
-            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_functional_role_name;");
 
             migrationBuilder.AlterColumn<string>(
                 name: "name",
@@ -150,11 +143,12 @@ namespace PABC.Data.Migrations
             ");
 
             // Drop case-sensitive indexes before altering columns
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_application_name;");
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_application_role_application_id_name;");
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_domain_name;");
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_entity_type_type_entity_type_id;");
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_functional_role_name;");
+            migrationBuilder.DropIndex(name: "ix_application_name", table: "application");
+            migrationBuilder.DropIndex(name: "ix_application_role_application_id_name", table: "application_role");
+            migrationBuilder.DropIndex(name: "ix_domain_name", table: "domain");
+            migrationBuilder.DropIndex(name: "ix_entity_type_type_entity_type_id", table: "entity_type");
+            migrationBuilder.DropIndex(name: "ix_functional_role_name", table: "functional_role");
+
 
             // Recreate the collation definition first (columns will reference it)
             migrationBuilder.AlterDatabase()
