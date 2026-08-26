@@ -24,7 +24,7 @@ namespace PABC.Server.Features.EntityTypes.ImportZaaktypes
                 var zaaktypeOmschrijvingen = await zgwClient.GetZaaktypeOmschrijvingen(token);
 
                 var existingZaaktypes = await db.EntityTypes
-                    .Where(e => e.Type == ZaaktypeType) // matching Type case-insensitive (nl_case_insensitive collation)
+                    .Where(e => e.Type == ZaaktypeType)
                     .Select(e => e.EntityTypeId)
                     .ToListAsync(token);
 

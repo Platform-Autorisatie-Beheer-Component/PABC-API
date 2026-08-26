@@ -9,6 +9,7 @@ namespace PABC.Server.Keycloak
     public interface IKeycloakAdminClient
     {
         IAsyncEnumerable<GroupRepresentation> GetGroups(string role, CancellationToken token);
+        Task<IReadOnlyList<RoleRepresentation>> GetRealmRoles(CancellationToken token);
     }
 
     public class KeycloakAdminClient(HttpClient httpClient, ILogger<KeycloakAdminClient> logger) : IKeycloakAdminClient
@@ -38,6 +39,22 @@ namespace PABC.Server.Keycloak
                 }
             }
         }
+
+        public async Task<IReadOnlyList<RoleRepresentation>> GetRealmRoles(CancellationToken token)
+        {
+            using var response = await httpClient.GetAsync("roles?briefRepresentation=true", HttpCompletionOption.ResponseHeadersRead, token);
+            response.EnsureSuccessStatusCode();
+
+            try
+            {
+                return await response.Content.ReadFromJsonAsync<List<RoleRepresentation>>(cancellationToken: token)
+                    ?? throw new InvalidOperationException("Ongeldig antwoord van Keycloak bij ophalen realm roles");
+            }
+            catch (System.Text.Json.JsonException ex)
+            {
+                throw new InvalidOperationException("Ongeldig antwoord van Keycloak bij ophalen realm roles", ex);
+            }
+        }
     }
 
     public record GroupRepresentation
@@ -48,6 +65,11 @@ namespace PABC.Server.Keycloak
         public string? Description { get; init; }
         
         public required Dictionary<string, string[]> Attributes { get; init; }
+    };
+
+    public record RoleRepresentation
+    {
+        public required string Name { get; init; }
     };
 
     public static class KeycloakClientExtensions
