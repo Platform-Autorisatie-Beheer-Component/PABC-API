@@ -12,11 +12,18 @@ namespace PABC.Data.Migrations
         {
             // Drop unique indexes that depend on the nl_case_insensitive collation.
             // These must be dropped before the collation can be removed.
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_application_name;");
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_application_role_application_id_name;");
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_domain_name;");
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_entity_type_type_entity_type_id;");
-            migrationBuilder.Sql("DROP INDEX IF EXISTS ix_functional_role_name;");
+
+            migrationBuilder.DropIndex(name: "ix_application_name", table: "application");
+            migrationBuilder.DropIndex(name: "ix_application_role_application_id_name", table: "application_role");
+            migrationBuilder.DropIndex(name: "ix_domain_name", table: "domain");
+            migrationBuilder.DropIndex(name: "ix_entity_type_type_entity_type_id", table: "entity_type");
+            migrationBuilder.DropIndex(name: "ix_functional_role_name", table: "functional_role");
+
+            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_application_name;");
+            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_application_role_application_id_name;");
+            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_domain_name;");
+            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_entity_type_type_entity_type_id;");
+            //migrationBuilder.Sql("DROP INDEX IF EXISTS ix_functional_role_name;");
 
             migrationBuilder.AlterColumn<string>(
                 name: "name",
@@ -111,11 +118,11 @@ namespace PABC.Data.Migrations
                 .OldAnnotation("Npgsql:CollationDefinition:nl_case_insensitive", "nl-NL-u-ks-primary,nl-NL-u-ks-primary,icu,False");
 
             // Recreate unique indexes with default (case-sensitive) collation
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_application_name ON application (name);");
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_application_role_application_id_name ON application_role (application_id, name);");
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_domain_name ON domain (name);");
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_entity_type_type_entity_type_id ON entity_type (type, entity_type_id);");
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_functional_role_name ON functional_role (name);");
+            migrationBuilder.CreateIndex(name: "ix_application_name", table: "application", column: "name", unique: true);
+            migrationBuilder.CreateIndex(name: "ix_application_role_application_id_name", table: "application_role", columns: new[] { "application_id", "name" }, unique: true);
+            migrationBuilder.CreateIndex(name: "ix_domain_name", table: "domain", column: "name", unique: true);
+            migrationBuilder.CreateIndex(name: "ix_entity_type_type_entity_type_id", table: "entity_type", columns: new[] { "type", "entity_type_id" }, unique: true);
+            migrationBuilder.CreateIndex(name: "ix_functional_role_name", table: "functional_role", column: "name", unique: true);
         }
 
         /// <inheritdoc />
@@ -242,11 +249,11 @@ namespace PABC.Data.Migrations
                 oldMaxLength: 256);
 
             // Recreate indexes (they inherit the collation from the columns)
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_application_name ON application (name);");
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_application_role_application_id_name ON application_role (application_id, name);");
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_domain_name ON domain (name);");
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_entity_type_type_entity_type_id ON entity_type (type, entity_type_id);");
-            migrationBuilder.Sql("CREATE UNIQUE INDEX ix_functional_role_name ON functional_role (name);");
+            migrationBuilder.CreateIndex(name: "ix_application_name", table: "application", column: "name", unique: true);
+            migrationBuilder.CreateIndex(name: "ix_application_role_application_id_name", table: "application_role", columns: new[] { "application_id", "name" }, unique: true);
+            migrationBuilder.CreateIndex(name: "ix_domain_name", table: "domain", column: "name", unique: true);
+            migrationBuilder.CreateIndex(name: "ix_entity_type_type_entity_type_id", table: "entity_type", columns: new[] { "type", "entity_type_id" }, unique: true);
+            migrationBuilder.CreateIndex(name: "ix_functional_role_name", table: "functional_role", column: "name", unique: true);
         }
     }
 }
