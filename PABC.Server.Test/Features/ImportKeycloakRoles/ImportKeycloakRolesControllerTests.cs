@@ -93,9 +93,10 @@ namespace PABC.Server.Test.Features.ImportKeycloakRoles
         }
 
         [Fact]
-        public async Task ImportKeycloakRoles_SkipsCaseInsensitiveDuplicate_WhenRoleExistsWithDifferentCasing()
+        public async Task ImportKeycloakRoles_TreatsDifferentCasingAsDistinct()
         {
             // Arrange — "Behandelaar" exists in PABC, Keycloak returns "behandelaar" (different casing)
+            // With case-sensitive matching, these are treated as distinct roles
             _dbContext.FunctionalRoles.Add(new FunctionalRole
             {
                 Id = Guid.NewGuid(),
@@ -117,11 +118,12 @@ namespace PABC.Server.Test.Features.ImportKeycloakRoles
             var okResult = Assert.IsType<OkObjectResult>(result);
             var response = Assert.IsType<ImportKeycloakRolesResponse>(okResult.Value);
 
-            Assert.Single(response.Created);
+            Assert.Equal(2, response.Created.Count);
+            Assert.Contains("behandelaar", response.Created);
             Assert.Contains("Recordbeheerder", response.Created);
-            Assert.Single(response.Skipped);
-            Assert.Contains("behandelaar", response.Skipped);
-            Assert.Empty(response.Stale);
+            Assert.Empty(response.Skipped);
+            Assert.Single(response.Stale);
+            Assert.Contains("Behandelaar", response.Stale);
         }
 
         [Fact]

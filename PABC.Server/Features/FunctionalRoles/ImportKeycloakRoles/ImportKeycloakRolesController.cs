@@ -26,8 +26,8 @@ namespace PABC.Server.Features.FunctionalRoles.ImportKeycloakRoles
                     .Select(r => r.Name)
                     .ToListAsync(token);
 
-                // Case-insensitive: FunctionalRole.Name has a unique index with nl_case_insensitive collation
-                var existingSet = new HashSet<string>(existingRoles, StringComparer.OrdinalIgnoreCase);
+                // Case-sensitive: matching is exact on role name
+                var existingSet = new HashSet<string>(existingRoles);
 
                 var created = new List<string>();
                 var skipped = new List<string>();
@@ -52,7 +52,7 @@ namespace PABC.Server.Features.FunctionalRoles.ImportKeycloakRoles
 
                 await db.SaveChangesAsync(token);
 
-                var keycloakSet = new HashSet<string>(roleNames, StringComparer.OrdinalIgnoreCase);
+                var keycloakSet = new HashSet<string>(roleNames);
 
                 var stale = existingSet
                     .Where(name => !keycloakSet.Contains(name))
