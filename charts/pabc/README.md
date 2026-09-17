@@ -51,6 +51,7 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | migrations.image.repository | string | `"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"` |  |
 | migrations.image.tag | string | `""` |  |
 | migrations.nodeSelector | object | `{}` | Node selector for scheduling the migrations job |
+| migrations.prefill | object | `[]` (no pre-fill) | Optionally specify applications and their roles to pre-fill on startup (only created if they don't already exist). |
 | migrations.restartPolicy | string | `"Never"` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |

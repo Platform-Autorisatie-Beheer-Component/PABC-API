@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using PABC.MigrationService.Features.DatabaseInitialization;
+using PABC.MigrationService.Features.Prefill;
 
 namespace PABC.MigrationService;
 
@@ -17,7 +18,7 @@ public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime h
 
     /// <summary>
     /// Entry point of the background worker.
-    /// Runs the database migration and loads the dataset within a transaction.
+    /// Runs the database migration, loads the dataset, and applies prefill configuration.
     /// If any error occurs, logs the exception and halts the application startup.
     /// </summary>
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -29,6 +30,8 @@ public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime h
             await using var scope = serviceProvider.CreateAsyncScope();
             var initializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
             await initializer.Initialize(dataSet, cancellationToken);
+
+            await RunPrefill(scope.ServiceProvider, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -51,5 +54,28 @@ public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime h
 
         await using var file = File.OpenRead(dataSetPath);
         return await datasetParser.Parse(file, cancellationToken);
+    }
+
+    private async Task RunPrefill(IServiceProvider scopedProvider, CancellationToken cancellationToken)
+    {
+        var prefillPath = configuration["PREFILL_PATH"];
+        if (string.IsNullOrWhiteSpace(prefillPath)) return;
+
+        if (!File.Exists(prefillPath))
+        {
+            logger.LogWarning("Prefill bestand niet gevonden op pad: {Path}", prefillPath);
+            return;
+        }
+
+        var parser = scopedProvider.GetRequiredService<IPrefillParser>();
+        var prefillService = scopedProvider.GetRequiredService<IPrefillService>();
+
+        await using var file = File.OpenRead(prefillPath);
+        var applications = await parser.Parse(file, cancellationToken);
+
+        if (applications.Count == 0) return;
+
+        logger.LogInformation("Prefill: {Count} applicatie(s) geconfigureerd", applications.Count);
+        await prefillService.Prefill(applications, cancellationToken);
     }
 }
