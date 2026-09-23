@@ -13,6 +13,7 @@ namespace PABC.Server.Test.Features.ImportKeycloakRoles
     {
         private readonly PabcDbContext _dbContext = fixture.DbContext;
         private readonly Mock<IKeycloakAdminClient> _keycloakClientMock = new();
+        private IReadOnlySet<string> _excludedRoles = new HashSet<string>();
 
         public async Task InitializeAsync()
         {
@@ -26,7 +27,8 @@ namespace PABC.Server.Test.Features.ImportKeycloakRoles
         private ImportKeycloakRolesController CreateController()
         {
             _dbContext.ChangeTracker.Clear();
-            return new ImportKeycloakRolesController(_dbContext, _keycloakClientMock.Object);
+            var importOptions = new KeycloakImportOptions { ExcludedRoles = _excludedRoles };
+            return new ImportKeycloakRolesController(_dbContext, _keycloakClientMock.Object, importOptions);
         }
 
         [Fact]
@@ -191,6 +193,92 @@ namespace PABC.Server.Test.Features.ImportKeycloakRoles
             Assert.Equal(500, statusResult.StatusCode);
             var problem = Assert.IsType<ProblemDetails>(statusResult.Value);
             Assert.Contains("Connection refused", problem.Detail);
+        }
+
+        [Fact]
+        public async Task ImportKeycloakRoles_IgnoresExcludedRoles()
+        {
+            // Arrange
+            _excludedRoles = new HashSet<string> { "default-roles-podiumd", "offline_access", "uma_authorization" };
+
+            _keycloakClientMock.Setup(c => c.GetRealmRoles(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<RoleRepresentation>
+                {
+                    new() { Name = "default-roles-podiumd" },
+                    new() { Name = "offline_access" },
+                    new() { Name = "uma_authorization" },
+                    new() { Name = "Behandelaar" }
+                });
+
+            // Act
+            var result = await CreateController().ImportKeycloakRoles();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var response = Assert.IsType<ImportKeycloakRolesResponse>(okResult.Value);
+
+            Assert.Single(response.Created);
+            Assert.Contains("Behandelaar", response.Created);
+            Assert.Empty(response.Skipped);
+            Assert.Empty(response.Stale);
+
+            _dbContext.ChangeTracker.Clear();
+            var savedRoles = _dbContext.FunctionalRoles.Select(r => r.Name).ToList();
+            Assert.Single(savedRoles);
+            Assert.Contains("Behandelaar", savedRoles);
+        }
+
+        [Fact]
+        public async Task ImportKeycloakRoles_ExcludedRoleMatch_IsExactIncludingSpaces()
+        {
+            // Arrange — the exclude list entry has no surrounding spaces, so a role name with spaces
+            // must not match it, while the exact match (with spaces) must.
+            _excludedRoles = new HashSet<string> { "Technische rol" };
+
+            _keycloakClientMock.Setup(c => c.GetRealmRoles(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<RoleRepresentation>
+                {
+                    new() { Name = "Technische rol" },
+                    new() { Name = "Technische rol " },
+                    new() { Name = "Behandelaar" }
+                });
+
+            // Act
+            var result = await CreateController().ImportKeycloakRoles();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var response = Assert.IsType<ImportKeycloakRolesResponse>(okResult.Value);
+
+            Assert.Equal(2, response.Created.Count);
+            Assert.Contains("Behandelaar", response.Created);
+            Assert.Contains("Technische rol ", response.Created);
+            Assert.DoesNotContain("Technische rol", response.Created);
+        }
+
+        [Fact]
+        public async Task ImportKeycloakRoles_BehavesAsBefore_WhenExcludeListIsEmpty()
+        {
+            // Arrange
+            _excludedRoles = new HashSet<string>();
+
+            _keycloakClientMock.Setup(c => c.GetRealmRoles(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<RoleRepresentation>
+                {
+                    new() { Name = "default-roles-podiumd" },
+                    new() { Name = "Behandelaar" }
+                });
+
+            // Act
+            var result = await CreateController().ImportKeycloakRoles();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var response = Assert.IsType<ImportKeycloakRolesResponse>(okResult.Value);
+
+            Assert.Equal(2, response.Created.Count);
+            Assert.Contains("default-roles-podiumd", response.Created);
+            Assert.Contains("Behandelaar", response.Created);
         }
     }
 }

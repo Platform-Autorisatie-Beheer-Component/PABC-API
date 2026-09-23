@@ -1,4 +1,4 @@
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PABC.Data;
@@ -10,7 +10,7 @@ namespace PABC.Server.Features.FunctionalRoles.ImportKeycloakRoles
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/api/v1/functional-roles/import-keycloak")]
-    public class ImportKeycloakRolesController(PabcDbContext db, IKeycloakAdminClient keycloakClient) : Controller
+    public class ImportKeycloakRolesController(PabcDbContext db, IKeycloakAdminClient keycloakClient, KeycloakImportOptions importOptions) : Controller
     {
         [HttpPost]
         [ProducesResponseType<ImportKeycloakRolesResponse>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
@@ -20,7 +20,11 @@ namespace PABC.Server.Features.FunctionalRoles.ImportKeycloakRoles
             try
             {
                 var realmRoles = await keycloakClient.GetRealmRoles(token);
-                var roleNames = realmRoles.Select(r => r.Name).ToList();
+                var roleNames = realmRoles
+                    .Select(r => r.Name)
+                    // excluded roles (e.g. Keycloak's own technical roles) are not treated as functional roles
+                    .Where(name => !importOptions.ExcludedRoles.Contains(name))
+                    .ToList();
 
                 var existingRoles = await db.FunctionalRoles
                     .Select(r => r.Name)
