@@ -56,7 +56,12 @@ if (!isOpenApiSpecGeneration)
 
     builder.Services.AddKeycloakAdminClient(
         builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientId"),
-        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientSecret"));
+        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientSecret"),
+        builder.Configuration.GetSection("KeycloakAdmin:ExcludedRoles")
+            .AsEnumerable()
+            .Select(x => x.Value)
+            .OfType<string>()
+            .ToArray());
 
     builder.Services.AddZgwZaakregister(builder.Configuration);
 }

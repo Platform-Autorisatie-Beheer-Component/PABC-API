@@ -72,12 +72,19 @@ namespace PABC.Server.Keycloak
         public required string Name { get; init; }
     };
 
+    public class KeycloakImportOptions
+    {
+        public IReadOnlySet<string> ExcludedRoles { get; init; } = new HashSet<string>();
+    }
+
     public static class KeycloakClientExtensions
     {
         private static readonly ClientCredentialsClientName s_keycloakAdminClientName = ClientCredentialsClientName.Parse("KeycloakAdmin");
 
-        public static void AddKeycloakAdminClient(this IServiceCollection services, string clientId, string clientSecret)
+        public static void AddKeycloakAdminClient(this IServiceCollection services, string clientId, string clientSecret, IReadOnlyList<string>? excludedRoles = null)
         {
+            services.AddSingleton(new KeycloakImportOptions { ExcludedRoles = new HashSet<string>(excludedRoles ?? []) });
+
             services.AddClientCredentialsTokenManagement()
                 .AddClient(s_keycloakAdminClientName, client =>
                 {
