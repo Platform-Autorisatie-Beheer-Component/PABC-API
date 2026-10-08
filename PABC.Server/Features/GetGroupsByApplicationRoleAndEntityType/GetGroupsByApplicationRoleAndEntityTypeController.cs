@@ -32,7 +32,7 @@ namespace PABC.Server.Features.GetGroupsByApplicationRoleAndEntityType
                 .AsAsyncEnumerable()
                 .WithCancellation(token);
 
-            var groups = new SortedDictionary<string, GroupRepresentation>(StringComparer.OrdinalIgnoreCase);
+            var groups = new SortedDictionary<string, GroupRepresentation>();
 
             await foreach (var role in functionalRoles)
             {

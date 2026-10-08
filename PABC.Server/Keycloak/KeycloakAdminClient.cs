@@ -9,6 +9,7 @@ namespace PABC.Server.Keycloak
     public interface IKeycloakAdminClient
     {
         IAsyncEnumerable<GroupRepresentation> GetGroups(string role, CancellationToken token);
+        Task<IReadOnlyList<RoleRepresentation>> GetRealmRoles(CancellationToken token);
     }
 
     public class KeycloakAdminClient(HttpClient httpClient, ILogger<KeycloakAdminClient> logger) : IKeycloakAdminClient
@@ -38,6 +39,22 @@ namespace PABC.Server.Keycloak
                 }
             }
         }
+
+        public async Task<IReadOnlyList<RoleRepresentation>> GetRealmRoles(CancellationToken token)
+        {
+            using var response = await httpClient.GetAsync("roles?briefRepresentation=true", HttpCompletionOption.ResponseHeadersRead, token);
+            response.EnsureSuccessStatusCode();
+
+            try
+            {
+                return await response.Content.ReadFromJsonAsync<List<RoleRepresentation>>(cancellationToken: token)
+                    ?? throw new InvalidOperationException("Ongeldig antwoord van Keycloak bij ophalen realm roles");
+            }
+            catch (System.Text.Json.JsonException ex)
+            {
+                throw new InvalidOperationException("Ongeldig antwoord van Keycloak bij ophalen realm roles", ex);
+            }
+        }
     }
 
     public record GroupRepresentation
@@ -50,12 +67,24 @@ namespace PABC.Server.Keycloak
         public required Dictionary<string, string[]> Attributes { get; init; }
     };
 
+    public record RoleRepresentation
+    {
+        public required string Name { get; init; }
+    };
+
+    public class KeycloakImportOptions
+    {
+        public IReadOnlySet<string> ExcludedRoles { get; init; } = new HashSet<string>();
+    }
+
     public static class KeycloakClientExtensions
     {
         private static readonly ClientCredentialsClientName s_keycloakAdminClientName = ClientCredentialsClientName.Parse("KeycloakAdmin");
 
-        public static void AddKeycloakAdminClient(this IServiceCollection services, string clientId, string clientSecret)
+        public static void AddKeycloakAdminClient(this IServiceCollection services, string clientId, string clientSecret, IReadOnlyList<string>? excludedRoles = null)
         {
+            services.AddSingleton(new KeycloakImportOptions { ExcludedRoles = new HashSet<string>(excludedRoles ?? []) });
+
             services.AddClientCredentialsTokenManagement()
                 .AddClient(s_keycloakAdminClientName, client =>
                 {

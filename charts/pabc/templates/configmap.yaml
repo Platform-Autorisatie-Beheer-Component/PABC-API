@@ -27,4 +27,16 @@ data:
   {{- end }}
   {{- if .Values.settings.keycloakAdmin }}
   KeycloakAdmin__ClientId: {{ .Values.settings.keycloakAdmin.clientId }}
+  {{- range $index, $role := .Values.settings.keycloakAdmin.excludedRoles }}
+  KeycloakAdmin__ExcludedRoles__{{ $index }}: {{ $role | quote }}
+  {{- end }}
+  {{- end}}
+  {{- if .Values.settings.zgwZaakregister }}
+  ZgwZaakregister__Enabled: {{ .Values.settings.zgwZaakregister.enabled | toString | quote }}
+  ZgwZaakregister__CatalogiBaseUrl: {{ .Values.settings.zgwZaakregister.catalogiBaseUrl }}
+  ZgwZaakregister__ClientId: {{ .Values.settings.zgwZaakregister.clientId }}
+  ZgwZaakregister__CatalogusDomein: {{ .Values.settings.zgwZaakregister.catalogusDomein }}
+  {{- end}}
+  {{- if .Values.migrations.prefill.applications }}
+  PREFILL_PATH: "/app/prefill.json"
   {{- end}}

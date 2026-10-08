@@ -3,6 +3,7 @@ using PABC.Data;
 using PABC.Server.Auth;
 using PABC.Server.Helper;
 using PABC.Server.Keycloak;
+using PABC.Server.ZgwZaakregister;
 
 var isOpenApiSpecGeneration = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
 
@@ -55,7 +56,14 @@ if (!isOpenApiSpecGeneration)
 
     builder.Services.AddKeycloakAdminClient(
         builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientId"),
-        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientSecret"));
+        builder.Configuration.GetRequiredConfigValue("KeycloakAdmin:ClientSecret"),
+        builder.Configuration.GetSection("KeycloakAdmin:ExcludedRoles")
+            .AsEnumerable()
+            .Select(x => x.Value)
+            .OfType<string>()
+            .ToArray());
+
+    builder.Services.AddZgwZaakregister(builder.Configuration);
 }
 
 

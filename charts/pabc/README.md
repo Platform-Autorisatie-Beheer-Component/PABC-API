@@ -51,6 +51,7 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | migrations.image.repository | string | `"ghcr.io/platform-autorisatie-beheer-component/pabc-migrations"` |  |
 | migrations.image.tag | string | `""` |  |
 | migrations.nodeSelector | object | `{}` | Node selector for scheduling the migrations job |
+| migrations.prefill | object | `[]` (no pre-fill) | Optionally specify applications and their roles to pre-fill on startup (only created if they don't already exist). |
 | migrations.restartPolicy | string | `"Never"` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
@@ -103,6 +104,7 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | settings.database.username | string | `""` |  |
 | settings.keycloakAdmin.clientId | string | `""` | Client ID for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `pabc-admin-client`. This client needs the following roles in Keycloak: `view-realm`, `view-groups`, `view-users`. </details> |
 | settings.keycloakAdmin.clientSecret | string | `""` | Client secret for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details> |
+| settings.keycloakAdmin.excludedRoles | list | `[]` | List of Keycloak realm role names that must never be imported as functional roles. <details> <summary>More information</summary> Matching is done on the exact role name (spaces are supported). For a PodiumD realm named `<REALM_NAME>`, this should at least contain the realm's technical roles: `default-roles-<REALM_NAME>`, `offline_access` and `uma_authorization`. </details> |
 | settings.oidc.authority | string | `""` | URL of the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `https://login.microsoftonline.com/ce1a3f2d-2265-4517-a8b4-3e4f381461ab/v2.0` </details> |
 | settings.oidc.clientId | string | `""` | Client ID for accessing the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `54f66f54-71e5-45f1-8634-9158c41f602a` </details> |
 | settings.oidc.clientSecret | string | `""` | Secret for the OpenID Connect Identity Provider. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details> |
@@ -112,6 +114,12 @@ A helm chart for the Platform Autorisatie Beheer Component.
 | settings.oidc.nameClaimType | string | `""` | The name of the claim in the JWT token from the OpenID Connect Provider that contains the full name of the logged-in user. <br/> (default value is `name`) |
 | settings.oidc.requireHttps | bool | `true` | Optional setting to allow an OpenID Connect Identity Provider running on HTTP. <details> <summary>More information</summary> Add this variable with the value `false` if the identity provider communicates over an HTTP connection. This can be useful in a local development environment. If the provider uses HTTPS, you may omit this variable or set it to `true`. </details> |
 | settings.oidc.roleClaimType | string | `""` | The name of the claim in the JWT token from the OpenID Connect Provider that contains the roles of the logged-in user. <br/> (default value is `roles`) |
+| settings.zgwZaakregister | object | `{"catalogiBaseUrl":"","catalogusDomein":"","clientId":"","clientSecret":"","enabled":false}` | Optional ZGW zaakregister integration for importing zaaktypes as entity types. |
+| settings.zgwZaakregister.catalogiBaseUrl | string | `""` | Full base URL of the ZGW Catalogi API. <details> <summary>More information</summary> For example: `https://openzaak.gemeente.nl/catalogi/api/v1/`. This may differ per zaakregister implementation. </details> |
+| settings.zgwZaakregister.catalogusDomein | string | `""` | Domain name of the zaaktype catalogus to import from. |
+| settings.zgwZaakregister.clientId | string | `""` | Client ID for ZGW API authentication (used to generate JWT tokens). |
+| settings.zgwZaakregister.clientSecret | string | `""` | Client secret for ZGW API authentication (used to sign JWT tokens). |
+| settings.zgwZaakregister.enabled | bool | `false` | Enable or disable the ZGW zaakregister import feature. When enabled, a button to import zaaktypes is shown in the UI. |
 | tolerations | list | `[]` |  |
 
 ----------------------------------------------

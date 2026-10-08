@@ -182,6 +182,21 @@ settings:
     clientId: ""
     # -- Client secret for accessing Keycloak Admin API. <details> <summary>More information</summary> For example: `VM2B!ccnebNe.M*gxH63*NXc8iTiAGhp` </details>
     clientSecret: ""
+    # -- List of Keycloak realm role names that must never be imported as functional roles. <details> <summary>More information</summary> Matching is done on the exact role name (spaces are supported). For a PodiumD realm named `<REALM_NAME>`, this should at least contain the realm's technical roles: `default-roles-<REALM_NAME>`, `offline_access` and `uma_authorization`. </details>
+    excludedRoles: []
+
+  # -- Optional ZGW zaakregister integration for importing zaaktypes as entity types.
+  zgwZaakregister:
+    # -- Enable or disable the ZGW zaakregister import feature. When enabled, a button to import zaaktypes is shown in the UI.
+    enabled: false
+    # -- Full base URL of the ZGW Catalogi API. <details> <summary>More information</summary> For example: `https://openzaak.gemeente.nl/catalogi/api/v1/`. This may differ per zaakregister implementation. </details>
+    catalogiBaseUrl: ""
+    # -- Client ID for ZGW API authentication (used to generate JWT tokens).
+    clientId: ""
+    # -- Client secret for ZGW API authentication (used to sign JWT tokens).
+    clientSecret: ""
+    # -- Domain name of the zaaktype catalogus to import from.
+    catalogusDomein: ""
 
   aspnetcore:
     forwardedHeadersEnabled: true
@@ -214,6 +229,21 @@ migrations:
   #    readOnly: true
   #    subPath: my-dataset
   #    mountPath: /app/dataset.json
+
+  # -- Optionally specify applications and their roles to pre-fill on startup (only created if they don't already exist).
+  # @default -- `[]` (no pre-fill)
+  prefill:
+    applications: []
+    # e.g:
+    # applications:
+    #   - name: zaakafhandelcomponent
+    #     roles:
+    #       - raadpleger
+    #       - behandelaar
+    #       - coordinator
+    #       - recordmanager
+    #       - beheerder
+    #       - brp_zoeken
 
 #####################
 # Postgres subchart #

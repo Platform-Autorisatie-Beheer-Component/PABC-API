@@ -42,6 +42,18 @@ export type MappingResponse = Required<Item> & {
   isAllEntityTypes: boolean;
 };
 
+export type ImportZaaktypesResponse = {
+  created: string[];
+  skipped: string[];
+  stale: string[];
+};
+
+export type ImportKeycloakRolesResponse = {
+  created: string[];
+  skipped: string[];
+  stale: string[];
+};
+
 const createPabcService = <T extends Item>(endpoint: string, createEmpty: () => T) => ({
   getAll: (): Promise<T[]> => get<T[]>(`/api/v1/${endpoint}`),
   getById: (id: string): Promise<T> => get<T>(`/api/v1/${endpoint}/${id}`),
@@ -97,4 +109,16 @@ export const functionalRoleMappingsService = {
     post<void>(`/api/v1/functional-roles/${payload.functionalRoleId}/mappings`, payload),
   remove: (functionalRoleId: string, mappingId: string): Promise<void> =>
     del(`/api/v1/functional-roles/${functionalRoleId}/mappings/${mappingId}`)
+};
+
+export const importZaaktypesService = {
+  isEnabled: (): Promise<{ enabled: boolean }> =>
+    get<{ enabled: boolean }>("/api/v1/entity-types/import-zaaktypes/enabled"),
+  import: (): Promise<ImportZaaktypesResponse> =>
+    post<ImportZaaktypesResponse>("/api/v1/entity-types/import-zaaktypes", undefined)
+};
+
+export const importKeycloakRolesService = {
+  import: (): Promise<ImportKeycloakRolesResponse> =>
+    post<ImportKeycloakRolesResponse>("/api/v1/functional-roles/import-keycloak", undefined)
 };

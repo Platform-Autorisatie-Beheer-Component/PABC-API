@@ -6,3 +6,6 @@ Handleiding
    :caption: Lees meer
 
    API-toegang.md
+   zaaktypes-importeren.md
+   functionele-rollen-importeren.md
+   prefill-applicaties.md

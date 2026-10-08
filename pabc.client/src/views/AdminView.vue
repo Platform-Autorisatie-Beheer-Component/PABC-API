@@ -63,6 +63,10 @@
       <template #form="{ form }">
         <functional-role-form :functional-role="form" />
       </template>
+
+      <template #actions="{ refresh }">
+        <import-keycloak-roles @refresh="refresh" />
+      </template>
     </item-details>
 
     <h2>Overige lijsten</h2>
@@ -87,6 +91,10 @@
       item-name-singular="Entiteitstype"
       item-name-plural="Entiteitstypes"
     >
+      <template #actions="{ refresh }">
+        <import-zaaktypes @refresh="refresh" />
+      </template>
+
       <template #item="{ item: entityType }">
         <h3>{{ entityType.type }}</h3>
         <p>{{ entityType.name }}</p>
@@ -115,9 +123,11 @@ import { useItemList } from "@/composables/use-item-list";
 import ItemDetails from "@/components/item/ItemDetails.vue";
 import DomainForm from "@/components/item/forms/DomainForm.vue";
 import FunctionalRoleForm from "@/components/item/forms/FunctionalRoleForm.vue";
+import ImportKeycloakRoles from "@/components/item/ImportKeycloakRoles.vue";
 import EntityTypeForm from "@/components/item/forms/EntityTypeForm.vue";
 import ApplicationRoleForm from "@/components/item/forms/ApplicationRoleForm.vue";
 import ApplicationForm from "@/components/item/forms/ApplicationForm.vue";
+import ImportZaaktypes from "@/components/item/ImportZaaktypes.vue";
 
 const {
   items: applications,

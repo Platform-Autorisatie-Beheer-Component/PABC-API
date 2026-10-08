@@ -2,10 +2,10 @@ name: Build & Release PABC
 
 on:
   push:
-    branches: ["main", "release-*"]
+    branches: ["main", "test", "release-*"]
     tags: ["v*.*.*"]
   pull_request:
-    branches: ["main", "release-*"]
+    branches: ["main", "test", "release-*"]
     types: [ opened, synchronize, reopened, edited ]
   workflow_dispatch:
 
